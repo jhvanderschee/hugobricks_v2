@@ -41,7 +41,8 @@ function setGallery(el) {
     elements.forEach(element => {
         element.classList.remove('gallery');
     });
-    var link_elements = el.parentNode.querySelectorAll("a[class*='lightbox-']");
+    var scope = el.closest('ul, p') || el.parentNode;
+    var link_elements = scope.querySelectorAll("a[class*='lightbox-']");
     link_elements.forEach(link_element => {
         link_element.classList.remove('current');
     });
