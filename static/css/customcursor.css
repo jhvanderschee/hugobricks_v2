@@ -4,26 +4,30 @@
    A small dot that trails the pointer on a damped path, drawn in difference
    blend so it reads on any ground. It swells into a ring over anything the
    pointer cursor marks as clickable, and fades away while the mouse rests or
-   the page scrolls. `js/customcursor.js` steers it: the `customcursor` class,
-   the `--x`/`--y` position and the state classes are all its work, so when
-   the script does not run — or declines to, on touch or under
-   `prefers-reduced-motion` — none of this draws.
+   the page scrolls. `js/customcursor.js` steers it: it puts the `.cursordot`
+   element in the page, moves it by transform — its own compositor layer, so
+   following the mouse never restyles or relays the page — and flips the
+   state classes on body. When the script does not run — or declines to, on
+   touch or under `prefers-reduced-motion` — none of this exists.
+
+   The blend has to sit on the moved element itself: a transform makes an
+   isolated group, so on a child of the moving element `difference` would
+   only ever see its transparent parent.
    ========================================================================== */
 
-body.customcursor::before {
-    content: "";
+body.customcursor .cursordot {
     position: fixed;
-    inset-block-start: var(--y);
-    inset-inline-start: var(--x);
+    inset-block-start: 0;
+    inset-inline-start: 0;
     z-index: 999;
     inline-size: 0.8rem;
     block-size: 0.8rem;
     background: #fff;
     border: 0.12rem solid #fff;
     border-radius: 50%;
-    transform: translate(-50%, -50%);
     mix-blend-mode: difference;
     pointer-events: none;
+    will-change: transform;
     opacity: 0.35;
     transition:
         opacity 0.5s ease-in-out,
@@ -31,9 +35,9 @@ body.customcursor::before {
         block-size 0.25s ease-in-out,
         background 0.25s ease-in-out;
 }
-body.customcursor.hidecursor::before { opacity: 0; }
+body.customcursor.hidecursor .cursordot { opacity: 0; }
 /* Over something clickable: the dot opens into a ring. */
-body.customcursor.cursorpointer::before {
+body.customcursor.cursorpointer .cursordot {
     inline-size: 3rem;
     block-size: 3rem;
     background: transparent;
