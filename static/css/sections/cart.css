@@ -3,16 +3,20 @@
    submit row are shared with the `checkout` brick — the same furniture on
    the next page of the same flow.                                         */
 
-section.cart table :is(th, td):last-child { text-align: end; white-space: nowrap; }
+section.cart table :is(th, td) {
+    padding-block: 0.8rem;
+    padding-right: 2rem;
+}
+section.cart table tr:last-child td {border-block-end-width: 0.0625rem;}
+section.cart table :is(th, td):last-child { text-align: end; white-space: nowrap; padding-right: 0;}
 section.cart tbody td[colspan] { text-align: center; }
-section.cart table :is(td) {border-color: var(--borderMedium);}
 
 /* The avatar column stays at the avatar's width — a zero preferred size
    makes the auto layout give any spare room to the other columns — and the
    product column claims all of that room, so the amount and total columns
    sit at their content's width. The stacked product lines read at caption
    size, and the cell's one link wraps them all. */
-section.cart tbody td:first-child { inline-size: 0; }
+section.cart tbody td:first-child { inline-size: 0; padding-right: 1rem;}
 section.cart tbody td:nth-child(2) {
     inline-size: 100%;
     font-size: 0.9rem;
@@ -33,6 +37,7 @@ section.cart input[type="number"] {
     text-align: center;
     -moz-appearance: textfield;
     appearance: textfield;
+    margin: 0;
 }
 section.cart input[type="number"]::-webkit-outer-spin-button,
 section.cart input[type="number"]::-webkit-inner-spin-button {

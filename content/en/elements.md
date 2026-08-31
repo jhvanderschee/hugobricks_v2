@@ -67,11 +67,11 @@ Donec rutrum felis dignissim nisl tincidunt, sit amet interdum dolor ornare. Cra
 
 A normal image:
 
-![Unsplash - Ryan Quintal](/uploads/photos/lego.jpg){:.inline}
+![Unsplash - Ryan Quintal](/uploads/photos/lego.jpg)
 
 A toned image, the same treatment the review and team portraits get:
 
-![Photo by S. Tsuchiya on Unsplash](/uploads/photos/bricks2.jpg){:.colorize.inline}
+![Photo by S. Tsuchiya on Unsplash](/uploads/photos/bricks2.jpg){:.colorize}
 
 -
 

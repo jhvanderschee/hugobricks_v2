@@ -173,7 +173,7 @@ address { font-style: normal; }
    cannot drift apart, and the list needs two resets on top: its indent, and
    the marker an empty `<li>` would otherwise still show. */
 hr,
-ul:has(> li:only-child:empty) { block-size: 1px; border: 0; background: var(--borderMedium); margin-block: 3.5rem; }
+ul:has(> li:only-child:empty) { block-size: 1px; border: 0; background: var(--borderLight); margin-block: 3.5rem; }
 ul:has(> li:only-child:empty) { padding: 0; list-style: none; }
 
 blockquote {
@@ -201,8 +201,10 @@ pre {
 table { width: 100%; border-collapse: collapse; }
 caption { text-align: start; color: var(--textDark); padding-block-end: 0.5rem; }
 th { text-align: start; color: var(--textDark); }
-:is(th, td) { padding: 0.8rem 0.5rem; border-block-end: 0.0625rem solid var(--borderLight); }
-thead th { border-block-end-width: 0.125rem; border-block-end-color: var(--borderMedium); }
+:is(th, td) { padding: 0.5rem 0.5rem 0.5rem 0; border-block-end: 0.0625rem solid var(--borderMedium); }
+:is(th, td):last-child {padding-right: 0;}
+tr:last-child td { border-block-end-width: 0; }
+thead th { border-block-end-width: 0.0625rem; border-block-end-color: var(--borderMedium); }
 
 
 /* ==========================================================================
