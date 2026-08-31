@@ -46,8 +46,6 @@ section.cart input[type="number"]::-webkit-inner-spin-button {
 }
 section.cart .carttotal { display: block; text-align: end; font-size: 1.7rem; padding-block-start: 1rem; }
 
-/* `flex-direction` spelled out: inside the checkout form this row is a
-   `form > div`, and the form's own field rule stacks those in a column. */
 :is(section.cart, section.checkout) .submitbutton {
     display: flex;
     flex-direction: row;
