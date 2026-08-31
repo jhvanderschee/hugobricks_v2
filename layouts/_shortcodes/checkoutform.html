@@ -17,8 +17,11 @@
   `ordernumber` is stamped on submit.
 
   The form posts to the handler named in `webshop.yaml` (`form_handler`),
-  which mails the order and sends the visitor on to `_next` — the payment
-  page, where the Usecue POS takes over. `_token` is a timer against spam:
+  which mails the order. `webshop.js` sends that post in the background and
+  walks the visitor to the payment page itself (`data-payment-link`), where
+  the Usecue POS embeds — the handler's own redirect only honours a `_next`
+  on its own domain and would carry the visitor off this site. `_next` still
+  rides along for the day the handler honours it. `_token` is a timer against spam:
   `webshop.js` fetches it from the handler the moment the checkout opens,
   and the handler will not take a form younger than a few seconds. It
   replaces a session cookie, which the handler's domain cannot set from this
@@ -31,7 +34,7 @@
 */ -}}
 {{- $w := (partial "data.html" .Page).webshop -}}
 {{- $sym := $w.currency_symbol -}}
-<form id="checkoutform" method="post" action="{{ $w.form_handler }}" data-currency="{{ $sym }}">
+<form id="checkoutform" method="post" action="{{ $w.form_handler }}" data-currency="{{ $sym }}" data-payment-link="{{ $w.payment_link }}/">
     <input type="hidden" name="_next" value="{{ $w.payment_link | absURL }}/">
     <input type="hidden" name="_token" value="">
     <input type="hidden" name="ordernumber" value="">

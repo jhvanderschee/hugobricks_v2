@@ -288,11 +288,32 @@
 
         /* The order number: the moment of submission in tenths of a second,
            folded to 30 years' worth of digits — the original theme's scheme.
-           Stored for the payment page to reference. */
-        checkout.addEventListener("submit", function () {
+           Stored for the payment page to reference.
+
+           The order is posted from here and the visitor is walked to this
+           site's own payment page, where the POS embeds. Letting the form
+           navigate would hand the visitor to the handler's redirect, which
+           only honours a `_next` on its own domain and strands them there.
+           Without fetch the form posts the normal way, and that redirect is
+           what there is — the order still arrives. */
+        checkout.addEventListener("submit", function (event) {
             var ordernumber = Math.round(Date.now() / 100) % 6307200000;
             checkout.querySelector("input[name='ordernumber']").value = ordernumber;
             write("ordernumber", ordernumber);
+
+            var paymentlink = checkout.getAttribute("data-payment-link");
+            if (!paymentlink || !window.fetch) return;
+            event.preventDefault();
+            /* keepalive lets the post outlive this page; the response is
+               opaque (no-cors) and beside the point — the payment page is
+               not going to wait for a mail server. */
+            fetch(checkout.action, {
+                method: "POST",
+                body: new FormData(checkout),
+                mode: "no-cors",
+                keepalive: true
+            }).catch(function () { /* nothing to do from here */ });
+            window.location.href = paymentlink;
         });
 
         /* The spam timer: the form handler hands out a token and will not
