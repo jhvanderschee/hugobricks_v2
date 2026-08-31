@@ -151,7 +151,7 @@ Sed lectus neque, efficitur id velit eget, feugiat ultricies mauris. Aliquam et 
 
 Sed lectus neque, efficitur id velit eget, feugiat ultricies mauris. Aliquam et dictum sem. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam elementum bibendum augue quis hendrerit.
 
-{{< video src="/uploads/video/flowers.mp4" poster="/uploads/gallery/01.jpg" >}}
+{{< video src="/uploads/video/flowers.mp4" poster="/uploads/gallery/02.jpg" >}}
 
 Sed lectus neque, efficitur id velit eget, feugiat ultricies mauris. Aliquam et dictum sem. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 
