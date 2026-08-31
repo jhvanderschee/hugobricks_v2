@@ -12,15 +12,4 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc feugiat, nulla et 
 
 {{< ctaform >}}
 
----
-
-![](/uploads/map.png){:.map}
-
-## Contact us
-
-Usecue BV\
-Soetendaal 7\
-1081BL Amsterdam\
-The Netherlands
-
-{{< contactbuttons >}}
+---.map

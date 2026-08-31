@@ -65,15 +65,4 @@ Don't just take our word for it — hear from some of our satisfied users! Check
 
 {{< ctaform >}}
 
----
-
-![](/uploads/map.png){:.map}
-
-## Contact us
-
-Usecue BV\
-Soetendaal 7\
-1081BL Amsterdam\
-The Netherlands
-
-{{< contactbuttons >}}
+---.map

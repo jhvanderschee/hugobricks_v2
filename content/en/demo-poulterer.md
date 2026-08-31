@@ -56,15 +56,4 @@ Hugobricks is a free website theme for Hugo. It makes building Hugo websites chi
 
 {{< ctaform >}}
 
----
-
-![](/uploads/map.png){:.map}
-
-## Contact us
-
-Usecue BV\
-Soetendaal 7\
-1081BL Amsterdam\
-The Netherlands
-
-{{< contactbuttons >}}
+---.map

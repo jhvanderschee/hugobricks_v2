@@ -44,6 +44,20 @@
   the first section. The typographer writes such a line into the html as
   `<p>&mdash;.small</p>`, which is what the normalisation below looks for.
 
+  A named divider that opens an *empty* section is an include:
+
+      ---.cta
+
+      ---
+
+  pulls in `content/<lang>/bricks/cta.md` and renders it as the `cta` brick —
+  shared furniture like the closing call to action or the address card,
+  written once per language and dropped into any page. The section count and
+  the `is` positions are settled before the pull, so an include is one
+  section like any other. A name with no page behind it warns and renders
+  the empty section it wrote, where the gap is easier to spot than a page
+  that quietly shortened itself.
+
   Call it through `partialCached` — the page renders it twice.
 
   @context {page} .
@@ -81,6 +95,17 @@
     {{- $html = trim (strings.TrimPrefix (printf "<!--brick:%s-->" $name) $html) "\n\r\t " -}}
     {{- $matched = true -}}
     {{- $forced = true -}}
+
+    {{- /* Named but empty: an include. The shared page's markdown has not
+           been through the hoisting this page's own content got at the top,
+           so it gets its own pass. */ -}}
+    {{- if not $html -}}
+      {{- with site.GetPage (printf "/bricks/%s" $name) -}}
+        {{- $html = trim (partial "inline_attributes.html" .Content) "\n\r\t " -}}
+      {{- else -}}
+        {{- warnf "section_map: `---.%s` opens an empty section and there is no content/<lang>/bricks/%s.md to fill it" $name $name -}}
+      {{- end -}}
+    {{- end -}}
   {{- end -}}
 
   {{- range $rule := $rules -}}

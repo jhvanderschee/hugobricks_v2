@@ -58,12 +58,4 @@ Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis illum nesciunt
 
 {{< pricing >}}
 
----
-
-## Get started with Hugobricks today!
-
-Experience the future of web development with Hugo and stackable content bricks. Build lightning-fast static sites with ease and flexibility.
-
-![](/uploads/illustrations/cuate/server.svg)
-
-[Get started now](/get-started/){:.button}
+---.cta

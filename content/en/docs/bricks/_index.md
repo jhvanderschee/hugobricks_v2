@@ -71,7 +71,19 @@ Experience the future of web development with Hugo and stackable content bricks.
 
 ## Brick content
 
-All of a brick's content lives in the page itself. There is no separate 'default content' file any more: what used to sit in `content/en/bricks/cta.md` is now written straight into the page, and everything that is not page content — reviews, team members, features, pricing, form fields — comes from `data/<lang>/`.
+All of a brick's content lives in the page itself, and everything that is not page content — reviews, team members, features, pricing, form fields — comes from `data/<lang>/`.
+
+## Shared bricks
+
+Some furniture appears on many pages but should be written only once: the closing call to action, the address card with the map. Those live in `content/<lang>/bricks/` — currently `cta.md` and `map.md` — and any page pulls one in with a named divider that opens an empty section:
+
+```
+---.map
+```
+
+The shared page's content renders there as the brick the divider names. Edit `content/en/bricks/map.md` and every page showing the address card follows; add `content/nl/bricks/map.md` and the Dutch pages get their own.
+
+A named divider with content after it does something different: it still splits, but forces that section to the brick it names, skipping the routing rules — `---.small` in front of a long text renders it at the narrow measure anyway.
 
 ## Page-specific content
 
