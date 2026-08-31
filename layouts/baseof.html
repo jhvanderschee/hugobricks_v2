@@ -25,6 +25,7 @@
     {{ partial "site/footer.html" . }}
 
     <script src="/js/site.js" defer></script>
+    <script src="/js/lightbox.js" defer></script>
     {{ if and $s.enable_webshop $d.webshop.show_cart_icon }}<script src="/js/webshop.js" defer></script>{{ end }}
     {{ if $s.customcursor }}<script src="/js/customcursor.js" defer></script>{{ end }}
 
