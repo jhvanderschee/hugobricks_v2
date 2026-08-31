@@ -38,9 +38,9 @@
     {{- $trail = first (sub (len $trail) 1) $trail -}}
 {{- end -}}
 
-<nav aria-label="Breadcrumb">
+<nav aria-label="{{ i18n "Breadcrumb" }}">
     <ol>
-        <li><a href="{{ "/" | relLangURL }}">Home</a></li>
+        <li><a href="{{ "/" | relLangURL }}">{{ i18n "Home" }}</a></li>
         {{- range $trail -}}
             <li>
                 {{- if eq . $ -}}

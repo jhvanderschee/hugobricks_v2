@@ -1,0 +1,51 @@
+Read more: Read more
+Load more posts: Load more posts
+Filter tags: Filter tags
+services: Services
+posts: Blog
+products: Shop
+First name: First name
+Last name: Last name
+Email address: Email address
+Address: Address
+Zipcode: Zipcode
+City: City
+Shipping: Shipping
+Country: Country
+Gift wrapping: Gift wrapping
+Not gift wrapped: Not gift wrapped
+Gift wrapped: Gift wrapped
+Message: Message
+back to cart: Back to cart
+Payment total: Payment total
+Shopping cart: Shopping cart
+Proceed to payment: Proceed to payment
+Your shopping cart is currently empty: Your shopping cart is currently empty
+Amount: Amount
+Price: Price
+Continue shopping: Continue shopping
+Continue to checkout: Continue to checkout
+Cart: Cart
+Checkout: Checkout
+Payment: Payment
+Play the video on YouTube: Play the video on YouTube
+Play the video on Vimeo: Play the video on Vimeo
+Your browser does not support HTML5 video: Your browser does not support HTML5 video.
+Download the video: Download the video
+Skip to main content: Skip to main content
+Add to cart: Add to cart
+Menu: Menu
+Home: Home
+Filter posts by tag: Filter posts by tag
+Filter services by tag: Filter services by tag
+Call: "Call {{ . }}"
+Email: "Email {{ . }}"
+Website of: "Website of {{ . }}"
+Footer: Footer
+Main: Main
+Breadcrumb: Breadcrumb
+Documentation: Documentation
+Change language: Change language
+Social media: Social media
+Leave this field empty: Leave this field empty
+Stop filtering on: Stop filtering on

@@ -18,7 +18,7 @@
 {{- $langs := partial "site/languages.html" .Page -}}
 {{- if gt (len $langs) 1 -}}
     <span class="languageswitch">
-        <select aria-label="Change language" data-languageswitch>
+        <select aria-label="{{ i18n "Change language" }}" data-languageswitch>
             <option value="" disabled selected hidden>{{ .Label }}</option>
             {{- range $langs -}}
                 <option value="{{ .Url }}" lang="{{ .Lang }}"{{ if .Current }} disabled{{ end }}>{{ .Name }}</option>

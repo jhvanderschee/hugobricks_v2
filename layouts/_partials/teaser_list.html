@@ -49,7 +49,7 @@
             </a>
             {{ if $.Dates }}{{ with .Date }}<p class="meta"><span class="icon" style="--icon: url('{{ $icons }}/calendar_month-fill.svg')"></span><time datetime="{{ .Format "2006-01-02" }}">{{ . | time.Format ":date_medium" }}</time></p>{{ end }}{{ end }}
             {{ with $summary }}<p>{{ . | truncate 190 }}</p>{{ end }}
-            <p><a class="button ghost smaller" href="{{ .RelPermalink }}">Read more</a></p>
+            <p><a class="button ghost smaller" href="{{ .RelPermalink }}">{{ i18n "Read more" }}</a></p>
         </li>
     {{- end -}}
 </ul>

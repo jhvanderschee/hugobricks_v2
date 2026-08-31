@@ -9,12 +9,12 @@
     <title>{{ with .Params.seo.title }}{{ . }}{{ else }}{{ .Title | safeHTML }} | {{ $d.general.title }}{{ end }}</title>
     <meta name="description" content="{{ if .Summary }}{{ substr (htmlUnescape (.Summary | plainify)) 0 160 }}{{ else }}{{ substr $d.general.description 0 160 }}{{ end }}">
     <link rel="canonical" href="{{ .Permalink }}">
-    {{ with $s.favicon_image }}<link rel="icon" href="{{ . }}">{{ end }}
+    {{ partial "site/favicon.html" . }}
     {{ partial "site/styles.html" . }}
 </head>
 <body id="top" data-mobile-width="{{ $d.header.mobile_view_width | default 1100 }}">
 
-    <a class="skiplink" href="#main">Skip to main content</a>
+    <a class="skiplink" href="#main">{{ i18n "Skip to main content" }}</a>
 
     {{ partial "site/header.html" . }}
 
@@ -25,7 +25,7 @@
     {{ partial "site/footer.html" . }}
 
     <script src="/js/site.js" defer></script>
-    {{ if $d.webshop.show_cart_icon }}<script src="/js/webshop.js" defer></script>{{ end }}
+    {{ if and $s.enable_webshop $d.webshop.show_cart_icon }}<script src="/js/webshop.js" defer></script>{{ end }}
     {{ if $s.customcursor }}<script src="/js/customcursor.js" defer></script>{{ end }}
 
     <script>

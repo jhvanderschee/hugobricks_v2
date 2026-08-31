@@ -13,7 +13,7 @@
 */ -}}
 {{- $label := partial "section_label.html" .Content -}}
 {{- $w := (partial "data.html" .Page).webshop -}}
-<section class="cart"{{ with $label }} aria-labelledby="{{ . }}"{{ end }} data-currency="{{ $w.currency_symbol }}">
+<section class="cart"{{ with $label }} aria-labelledby="{{ . }}"{{ end }} data-currency="{{ $w.currency_symbol }}" data-label-amount="{{ i18n "Amount" }}">
     <div class="container medium">
         {{ .Content }}
     </div>

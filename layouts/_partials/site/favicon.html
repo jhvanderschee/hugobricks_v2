@@ -1,0 +1,51 @@
+{{- /*
+  Favicon links for the document head.
+
+  The `favicon` block in `data/settings.yaml` drives the full set: a 96x96
+  PNG resized from `asset`, the SVG and ICO variants, a 180x180
+  apple-touch-icon and a generated site.webmanifest. Without that block the
+  partial falls back to a single <link rel="icon"> from `favicon_image`.
+*/ -}}
+{{- $s := site.Data.settings -}}
+{{- with $s.favicon -}}
+    {{- $asset := "" -}}
+    {{- with .asset }}{{ $asset = resources.Get . }}{{ end -}}
+    {{- with $asset -}}
+        {{- $resized := .Resize "96x96" | resources.Copy "favicon-96x96.png" -}}
+    <link rel="icon" type="image/png" href="{{ $resized.RelPermalink }}" sizes="96x96">
+    {{ end -}}
+    {{- with .svg_image }}<link rel="icon" type="image/svg+xml" href="{{ . }}">
+    {{ end -}}
+    {{- with .ico_image }}<link rel="shortcut icon" href="{{ . }}">
+    {{ else }}{{ with $s.favicon_image }}<link rel="shortcut icon" href="{{ . }}">
+    {{ end }}{{ end -}}
+    {{- with $asset -}}
+        {{- $resized := .Resize "180x180" | resources.Copy "apple-touch-icon.png" -}}
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ $resized.RelPermalink }}">
+    {{ end -}}
+    {{- with .apple_mobile_web_app_title }}<meta name="apple-mobile-web-app-title" content="{{ . }}">
+    {{ end -}}
+    {{- with .site_webmanifest -}}
+        {{- $icons := slice -}}
+        {{- with $asset -}}
+            {{- $icon192 := .Resize "192x192" | resources.Copy "web-app-manifest-192x192.png" -}}
+            {{- $icon512 := .Resize "512x512" | resources.Copy "web-app-manifest-512x512.png" -}}
+            {{- $icons = slice
+                (dict "src" $icon192.RelPermalink "sizes" "192x192" "type" "image/png" "purpose" "maskable")
+                (dict "src" $icon512.RelPermalink "sizes" "512x512" "type" "image/png" "purpose" "maskable")
+            -}}
+        {{- end -}}
+        {{- $manifest := dict
+            "name" .name
+            "short_name" .shortname
+            "icons" $icons
+            "theme_color" .theme_color
+            "background_color" .background_color
+            "display" "standalone"
+        -}}
+        {{- $r := resources.FromString "site.webmanifest" ($manifest | jsonify (dict "indent" "  ")) -}}
+    <link rel="manifest" href="{{ $r.RelPermalink }}">
+    {{- end -}}
+{{- else -}}
+    {{- with $s.favicon_image }}<link rel="icon" href="{{ . }}">{{ end -}}
+{{- end -}}

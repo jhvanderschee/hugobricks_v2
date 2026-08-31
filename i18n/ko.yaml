@@ -1,0 +1,51 @@
+Read more: 읽어보기
+Load more posts: 더보기
+Filter tags: 태그 선택
+services: Services
+posts: Blog
+products: Shop
+First name: 이름
+Last name: 성
+Email address: 이메일 주소
+Address: 주소
+Zipcode: 우편번호
+City: 도시
+Shipping: 배송
+Country: 국가
+Gift wrapping: 선물 포장
+Not gift wrapped: 선물 포장 없음
+Gift wrapped: 선물 포장됨
+Message: 메시지
+back to cart: 장바구니로 돌아가기
+Payment total: 결제 금액
+Shopping cart: 장바구니
+Proceed to payment: 결제 진행
+Your shopping cart is currently empty: 장바구니가 비어 있습니다
+Amount: 수량
+Price: 가격
+Continue shopping: 쇼핑 계속하기
+Continue to checkout: 결제 계속하기
+Cart: 장바구니
+Checkout: 결제
+Payment: 결제
+Play the video on YouTube: YouTube에서 동영상 재생
+Play the video on Vimeo: Vimeo에서 동영상 재생
+Your browser does not support HTML5 video: 브라우저가 HTML5 동영상을 지원하지 않습니다.
+Download the video: 동영상 다운로드
+Skip to main content: 본문으로 건너뛰기
+Add to cart: 장바구니에 추가
+Menu: 메뉴
+Home: 홈
+Filter posts by tag: 태그로 글 필터링
+Filter services by tag: 태그로 서비스 필터링
+Call: "{{ . }}에게 전화"
+Email: "{{ . }}에게 이메일"
+Website of: "{{ . }}의 웹사이트"
+Footer: 푸터
+Main: 주 메뉴
+Breadcrumb: 탐색 경로
+Documentation: 문서
+Change language: 언어 변경
+Social media: 소셜 미디어
+Leave this field empty: 이 필드를 비워 두세요
+Stop filtering on: 필터 해제

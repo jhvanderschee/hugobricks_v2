@@ -1,0 +1,51 @@
+Read more: Erfahre mehr
+Load more posts: Weitere Posts anzeigen
+Filter tags: Filter-Tags
+services: Dienste
+posts: Blog
+products: Shop
+First name: Vorname
+Last name: Nachname
+Email address: E-Mail-Adresse
+Address: Adresse
+Zipcode: Postleitzahl
+City: Stadt
+Shipping: Versand
+Country: Land
+Gift wrapping: Geschenkverpackung
+Not gift wrapped: Ohne Geschenkverpackung
+Gift wrapped: Mit Geschenkverpackung
+Message: Nachricht
+back to cart: Zurück zum Warenkorb
+Payment total: Gesamtbetrag
+Shopping cart: Warenkorb
+Proceed to payment: Weiter zur Zahlung
+Your shopping cart is currently empty: Dein Warenkorb ist derzeit leer
+Amount: Anzahl
+Price: Preis
+Continue shopping: Weiter einkaufen
+Continue to checkout: Weiter zur Kasse
+Cart: Warenkorb
+Checkout: Kasse
+Payment: Zahlung
+Play the video on YouTube: Video auf YouTube abspielen
+Play the video on Vimeo: Video auf Vimeo abspielen
+Your browser does not support HTML5 video: Dein Browser unterstützt kein HTML5-Video.
+Download the video: Video herunterladen
+Skip to main content: Zum Inhalt springen
+Add to cart: In den Warenkorb
+Menu: Menü
+Home: Startseite
+Filter posts by tag: Beiträge nach Tag filtern
+Filter services by tag: Dienste nach Tag filtern
+Call: "{{ . }} anrufen"
+Email: "E-Mail an {{ . }}"
+Website of: "Website von {{ . }}"
+Footer: Fußzeile
+Main: Hauptnavigation
+Breadcrumb: Brotkrumennavigation
+Documentation: Dokumentation
+Change language: Sprache ändern
+Social media: Soziale Medien
+Leave this field empty: Dieses Feld leer lassen
+Stop filtering on: Nicht mehr filtern nach

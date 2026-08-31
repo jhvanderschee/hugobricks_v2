@@ -1,0 +1,51 @@
+Read more: Lees verder
+Load more posts: Laad meer berichten
+Filter tags: Tags filteren
+services: Diensten
+posts: Blog
+products: Winkel
+First name: Voornaam
+Last name: Achternaam
+Email address: E-mailadres
+Address: Adres
+Zipcode: Postcode
+City: Plaats
+Shipping: Verzending
+Country: Land
+Gift wrapping: Cadeauverpakking
+Not gift wrapped: Niet als cadeau verpakt
+Gift wrapped: Als cadeau verpakt
+Message: Bericht
+back to cart: Terug naar winkelwagen
+Payment total: Totaalbedrag
+Shopping cart: Winkelwagen
+Proceed to payment: Doorgaan naar betaling
+Your shopping cart is currently empty: Je winkelwagen is momenteel leeg
+Amount: Aantal
+Price: Prijs
+Continue shopping: Verder winkelen
+Continue to checkout: Doorgaan naar afrekenen
+Cart: Winkelwagen
+Checkout: Afrekenen
+Payment: Betaling
+Play the video on YouTube: Bekijk de video op YouTube
+Play the video on Vimeo: Bekijk de video op Vimeo
+Your browser does not support HTML5 video: Je browser ondersteunt geen HTML5-video.
+Download the video: Download de video
+Skip to main content: Direct naar de inhoud
+Add to cart: In winkelwagen
+Menu: Menu
+Home: Home
+Filter posts by tag: Berichten filteren op tag
+Filter services by tag: Diensten filteren op tag
+Call: "Bel {{ . }}"
+Email: "E-mail {{ . }}"
+Website of: "Website van {{ . }}"
+Footer: Voettekst
+Main: Hoofdnavigatie
+Breadcrumb: Kruimelpad
+Documentation: Documentatie
+Change language: Taal wijzigen
+Social media: Sociale media
+Leave this field empty: Laat dit veld leeg
+Stop filtering on: Stop met filteren op

@@ -18,7 +18,7 @@
     <div class="container">
 
         <aside class="docsmenu">
-            <nav aria-label="Documentation">
+            <nav aria-label="{{ i18n "Documentation" }}">
                 {{ partial "site/nestedmenu.html" (dict "Page" $page "Root" (site.GetPage "/docs")) }}
             </nav>
         </aside>

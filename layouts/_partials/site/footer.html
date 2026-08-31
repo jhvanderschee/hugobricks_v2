@@ -28,7 +28,7 @@
         {{ partial "site/logo.html" (dict "Page" . "Logo" (or $d.footer.logo_image $s.favicon_image)) }}
 
         {{ with $d.footer.menuitems }}
-            <nav aria-label="Footer">
+            <nav aria-label="{{ i18n "Footer" }}">
                 {{ partial "site/menu.html" (dict "Page" $ "Items" .) }}
             </nav>
         {{ end }}

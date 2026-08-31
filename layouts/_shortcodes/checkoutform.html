@@ -34,7 +34,7 @@
 */ -}}
 {{- $w := (partial "data.html" .Page).webshop -}}
 {{- $sym := $w.currency_symbol -}}
-<form id="checkoutform" method="post" action="{{ $w.form_handler }}" data-currency="{{ $sym }}" data-payment-link="{{ $w.payment_link }}/">
+<form id="checkoutform" method="post" action="{{ $w.form_handler }}" data-currency="{{ $sym }}" data-payment-link="{{ $w.payment_link }}/" data-label-cart="{{ i18n "Shopping cart" }}" data-label-total="{{ i18n "Payment total" }}">
     <input type="hidden" name="_next" value="{{ $w.payment_link | absURL }}/">
     <input type="hidden" name="_token" value="">
     <input type="hidden" name="ordernumber" value="">
@@ -42,32 +42,32 @@
     <input type="hidden" name="checkout" value="">
     <fieldset>
         <div class="half">
-            <label for="checkout-firstname">First name <span aria-hidden="true">*</span></label>
+            <label for="checkout-firstname">{{ i18n "First name" }} <span aria-hidden="true">*</span></label>
             <input type="text" id="checkout-firstname" name="firstname" autocomplete="given-name" required>
         </div>
         <div class="half">
-            <label for="checkout-lastname">Last name <span aria-hidden="true">*</span></label>
+            <label for="checkout-lastname">{{ i18n "Last name" }} <span aria-hidden="true">*</span></label>
             <input type="text" id="checkout-lastname" name="lastname" autocomplete="family-name" required>
         </div>
         <div>
-            <label for="checkout-email">Email address <span aria-hidden="true">*</span></label>
+            <label for="checkout-email">{{ i18n "Email address" }} <span aria-hidden="true">*</span></label>
             <input type="email" id="checkout-email" name="email" autocomplete="email" required>
         </div>
         <div>
-            <label for="checkout-address">Address <span aria-hidden="true">*</span></label>
+            <label for="checkout-address">{{ i18n "Address" }} <span aria-hidden="true">*</span></label>
             <input type="text" id="checkout-address" name="address" autocomplete="street-address" required>
         </div>
         <div class="half">
-            <label for="checkout-zipcode">Zipcode <span aria-hidden="true">*</span></label>
+            <label for="checkout-zipcode">{{ i18n "Zipcode" }} <span aria-hidden="true">*</span></label>
             <input type="text" id="checkout-zipcode" name="zipcode" autocomplete="postal-code" required>
         </div>
         <div class="half">
-            <label for="checkout-city">City <span aria-hidden="true">*</span></label>
+            <label for="checkout-city">{{ i18n "City" }} <span aria-hidden="true">*</span></label>
             <input type="text" id="checkout-city" name="city" autocomplete="address-level2" required>
         </div>
         {{- if $w.shipping.active }}
         <div>
-            <label for="checkout-shipping">Shipping <span aria-hidden="true">*</span></label>
+            <label for="checkout-shipping">{{ i18n "Shipping" }} <span aria-hidden="true">*</span></label>
             <select id="checkout-shipping" name="shipping" data-always required>
                 <option value=""></option>
                 {{- range $w.shipping.options }}
@@ -77,7 +77,7 @@
         </div>
         {{- end }}
         <div>
-            <label for="checkout-country">Country <span aria-hidden="true">*</span></label>
+            <label for="checkout-country">{{ i18n "Country" }} <span aria-hidden="true">*</span></label>
             <input type="text" id="checkout-country" name="country" autocomplete="country-name" required>
         </div>
     </fieldset>
@@ -94,19 +94,19 @@
     </div>
     {{- end }}
     <div>
-        <label for="checkout-message">Message</label>
+        <label for="checkout-message">{{ i18n "Message" }}</label>
         <textarea id="checkout-message" name="message" rows="4"></textarea>
     </div>
     <div hidden aria-hidden="true">
-        <label for="checkout-website">Leave this field empty</label>
+        <label for="checkout-website">{{ i18n "Leave this field empty" }}</label>
         <input type="text" id="checkout-website" name="_gotcha" tabindex="-1" autocomplete="off">
     </div>
     <div class="submitbutton">
-        <a href="{{ $w.cart_link }}/">Back to cart</a>
-        <button type="submit" class="button">Proceed to payment</button>
+        <a href="{{ $w.cart_link }}/">{{ i18n "back to cart" }}</a>
+        <button type="submit" class="button">{{ i18n "Proceed to payment" }}</button>
     </div>
 </form>
 <div class="summary">
-    <p class="calculation"><span>Shopping cart:</span> {{ $sym }} 0.00</p>
+    <p class="calculation"><span>{{ i18n "Shopping cart" }}:</span> {{ $sym }} 0.00</p>
     {{- with .Inner }}<p>{{ . | markdownify }}</p>{{ end }}
 </div>

@@ -1,0 +1,51 @@
+Read more: Číst dále
+Load more posts: Načíst více článků
+Filter tags: Filtrovat tagy
+services: Služby
+posts: Blog
+products: Obchod
+First name: Jméno
+Last name: Příjmení
+Email address: E-mail
+Address: Adresa
+Zipcode: Směrovací číslo
+City: Město
+Shipping: Doprava
+Country: Země
+Gift wrapping: Dárkové balení
+Not gift wrapped: Bez dárkového balení
+Gift wrapped: S dárkovým balením
+Message: Zpráva
+back to cart: Zpět do košíku
+Payment total: Platba celkově
+Shopping cart: Košík
+Proceed to payment: Pokračovat k platbě
+Your shopping cart is currently empty: Váš košík je prázdný
+Amount: Počet
+Price: Cena
+Continue shopping: Pokračovat v nakupování
+Continue to checkout: Pokračovat k platbě
+Cart: Košík
+Checkout: Platba
+Payment: Platba
+Play the video on YouTube: Přehrát video na YouTube
+Play the video on Vimeo: Přehrát video na Vimeu
+Your browser does not support HTML5 video: Váš prohlížeč nepodporuje HTML5 video.
+Download the video: Stáhnout video
+Skip to main content: Přeskočit na obsah
+Add to cart: Přidat do košíku
+Menu: Menu
+Home: Domů
+Filter posts by tag: Filtrovat články podle tagu
+Filter services by tag: Filtrovat služby podle tagu
+Call: "Zavolat {{ . }}"
+Email: "Napsat e-mail {{ . }}"
+Website of: "Web {{ . }}"
+Footer: Patička
+Main: Hlavní navigace
+Breadcrumb: Drobečková navigace
+Documentation: Dokumentace
+Change language: Změnit jazyk
+Social media: Sociální sítě
+Leave this field empty: Toto pole nechte prázdné
+Stop filtering on: Zrušit filtrování podle

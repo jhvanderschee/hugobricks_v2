@@ -131,7 +131,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 
 Sed lectus neque, efficitur id velit eget, feugiat ultricies mauris. Aliquam et dictum sem. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam elementum bibendum augue quis hendrerit.
 
-[![Play the Youtube video](/uploads/youtubeposter.jpg){:.inline}](https://www.youtube.com/watch?v=qtIqKaDlqXo)
+{{< youtube "qtIqKaDlqXo" "/uploads/youtubeposter.jpg" >}}
 
 Sed lectus neque, efficitur id velit eget, feugiat ultricies mauris. Aliquam et dictum sem. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 
@@ -141,7 +141,7 @@ Sed lectus neque, efficitur id velit eget, feugiat ultricies mauris. Aliquam et 
 
 Sed lectus neque, efficitur id velit eget, feugiat ultricies mauris. Aliquam et dictum sem. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam elementum bibendum augue quis hendrerit.
 
-[![Play the Vimeo video](/uploads/gallery/01.jpg){:.inline}](https://vimeo.com/727145223)
+{{< vimeo id="727145223" image="/uploads/gallery/01.jpg" >}}
 
 Sed lectus neque, efficitur id velit eget, feugiat ultricies mauris. Aliquam et dictum sem. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 
@@ -151,12 +151,7 @@ Sed lectus neque, efficitur id velit eget, feugiat ultricies mauris. Aliquam et 
 
 Sed lectus neque, efficitur id velit eget, feugiat ultricies mauris. Aliquam et dictum sem. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam elementum bibendum augue quis hendrerit.
 
-<figure>
-    <video controls preload="metadata" poster="/uploads/gallery/01.jpg">
-        <source src="/uploads/video/flowers.mp4" type="video/mp4">
-        <p>Your browser does not support HTML5 video. Here is <a href="/uploads/video/flowers.mp4">a link to download the video</a>.</p>
-    </video>
-</figure>
+{{< video src="/uploads/video/flowers.mp4" poster="/uploads/gallery/01.jpg" >}}
 
 Sed lectus neque, efficitur id velit eget, feugiat ultricies mauris. Aliquam et dictum sem. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 

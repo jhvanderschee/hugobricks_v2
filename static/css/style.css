@@ -319,6 +319,51 @@ p > img { border-radius: var(--radius); margin-block: 2.25rem; }
 
 .avatar, img[src*="avatar"] { border-radius: 50%; aspect-ratio: 1; object-fit: cover; }
 
+/* -- video shortcodes ----------------------------------------------------- */
+
+/* The `youtube` and `vimeo` shortcodes emit a plain link around a poster
+   image; everything that makes it read as a video — the play button and the
+   wordmark in the corner — is painted here, on the link's own overlays, so
+   the page embeds nothing from either platform until the visitor clicks. */
+.shortcode-youtube, .shortcode-vimeo {
+    position: relative;
+    display: block;
+    border-radius: var(--radius);
+    overflow: clip;
+}
+.shortcode-youtube::before, .shortcode-youtube::after, .shortcode-vimeo::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+}
+.shortcode-youtube::before { background: url('/img/youtube_button.svg') center / auto 4rem no-repeat; }
+.shortcode-youtube:hover::before { background-image: url('/img/youtube_button_hover.svg'); }
+.shortcode-youtube::after { background: url('/img/youtube_text.svg') calc(100% - 1rem) calc(100% - 1rem) / auto 2rem no-repeat; }
+.shortcode-vimeo::after { background: url('/img/vimeo_text.svg') calc(100% - 1rem) calc(100% - 1rem) / auto 2rem no-repeat; }
+.shortcode-vimeo .playbutton {
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-start: 50%;
+    transform: translate(-50%, -50%);
+    inline-size: 6rem;
+    block-size: 4rem;
+    border-radius: 0.65rem;
+    background: rgba(0, 0, 0, 0.6) url('/img/vimeo_play.svg') 55% center / auto 1.9rem no-repeat;
+}
+.shortcode-vimeo:hover .playbutton { background-color: #00adef; }
+.shortcode-youtube img, .shortcode-vimeo img {
+    display: block;
+    margin: 0;
+    inline-size: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+}
+@media (max-width: 45rem) {
+    .shortcode-youtube::before { background-size: auto 12vw; }
+    .shortcode-youtube::after, .shortcode-vimeo::after { background-position: calc(100% - 3vw) calc(100% - 3vw); background-size: auto 6vw; }
+    .shortcode-vimeo .playbutton { inline-size: 16.5vw; block-size: 11vw; background-size: 5.3vw; border-radius: 1.78vw; }
+}
+
 /* -- forms --------------------------------------------------------------- */
 
 /* Every form lays its rows out on the same two-column grid, whether the rows

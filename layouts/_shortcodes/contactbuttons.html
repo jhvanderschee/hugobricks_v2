@@ -12,9 +12,9 @@
 {{- $c := $d.general.contact -}}
 <ul class="buttons">
     {{- with $c.phone -}}
-        <li><a class="button icon" href="tel:{{ replaceRE `[^+0-9]` "" . }}"><img src="/img/phone.svg" alt="" width="20" height="20"><span class="sr-only">Call {{ . }}</span></a></li>
+        <li><a class="button icon" href="tel:{{ replaceRE `[^+0-9]` "" . }}"><img src="/img/phone.svg" alt="" width="20" height="20"><span class="sr-only">{{ i18n "Call" . }}</span></a></li>
     {{- end -}}
     {{- with $c.email -}}
-        <li><a class="button icon" href="mailto:{{ . }}"><img src="/img/email.svg" alt="" width="20" height="20"><span class="sr-only">Email {{ . }}</span></a></li>
+        <li><a class="button icon" href="mailto:{{ . }}"><img src="/img/email.svg" alt="" width="20" height="20"><span class="sr-only">{{ i18n "Email" . }}</span></a></li>
     {{- end -}}
 </ul>

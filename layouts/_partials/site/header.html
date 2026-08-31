@@ -85,15 +85,15 @@
 
             {{ partial "site/logo.html" (dict "Page" . "Logo" (or $d.header.logo_image $s.favicon_image)) }}
 
-            <nav id="mainnav" class="mainnav" aria-label="Main">
+            <nav id="mainnav" class="mainnav" aria-label="{{ i18n "Main" }}">
                 {{ partial "site/menu.html" (dict "Page" . "Items" $d.header.menuitems) }}
             </nav>
 
             <div class="actions">
-                {{ if $d.webshop.show_cart_icon }}
+                {{ if and $s.enable_webshop $d.webshop.show_cart_icon }}
                     <a class="cart" href="{{ $d.webshop.cart_link }}">
                         <img src="/img/shopping-cart.svg" alt="" width="20" height="20">
-                        <span class="sr-only">Shopping cart</span>
+                        <span class="sr-only">{{ i18n "Shopping cart" }}</span>
                         <output class="itemcount" aria-live="polite" hidden>0</output>
                     </a>
                 {{ end }}
@@ -102,7 +102,7 @@
                     <a class="button smaller" href="{{ $d.header.cta.link }}">{{ $d.header.cta.title }}</a>
                 {{ end }}
                 <button type="button" id="togglemenu" aria-controls="mainnav" aria-expanded="false">
-                    <span>Menu</span>
+                    <span>{{ i18n "Menu" }}</span>
                 </button>
             </div>
 

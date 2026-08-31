@@ -183,7 +183,7 @@
                 var drop = document.createElement("button");
                 drop.type = "button";
                 drop.textContent = tag;
-                drop.setAttribute("aria-label", "Stop filtering on " + tag);
+                drop.setAttribute("aria-label", (select.getAttribute("data-label-stop") || "Stop filtering on") + " " + tag);
                 drop.addEventListener("click", function () {
                     chosen = chosen.filter(function (name) { return name !== tag; });
                     shown = pagesize;

@@ -26,10 +26,10 @@
                 {{ with .function }}<p class="function">{{ . | safeHTML }}</p>{{ end }}
                 {{ with .description }}<p>{{ . | safeHTML }}</p>{{ end }}
                 <ul class="buttons">
-                    {{ with .phone }}<li><a class="button icon" href="tel:{{ replaceRE `[^+0-9]` "" . }}"><img src="/img/phone.svg" alt="" width="20" height="20"><span class="sr-only">Call {{ $person }}</span></a></li>{{ end }}
-                    {{ with .email }}<li><a class="button icon" href="mailto:{{ . }}"><img src="/img/email.svg" alt="" width="20" height="20"><span class="sr-only">Email {{ $person }}</span></a></li>{{ end }}
+                    {{ with .phone }}<li><a class="button icon" href="tel:{{ replaceRE `[^+0-9]` "" . }}"><img src="/img/phone.svg" alt="" width="20" height="20"><span class="sr-only">{{ i18n "Call" $person }}</span></a></li>{{ end }}
+                    {{ with .email }}<li><a class="button icon" href="mailto:{{ . }}"><img src="/img/email.svg" alt="" width="20" height="20"><span class="sr-only">{{ i18n "Email" $person }}</span></a></li>{{ end }}
                     {{ with .linkedin }}<li><a class="button icon" href="{{ . }}" rel="noopener"><img src="/img/linkedin.svg" alt="" width="20" height="20"><span class="sr-only">{{ $person }} on LinkedIn</span></a></li>{{ end }}
-                    {{ with .website }}<li><a class="button icon" href="{{ . }}" rel="noopener"><img src="/img/world.svg" alt="" width="20" height="20"><span class="sr-only">Website of {{ $person }}</span></a></li>{{ end }}
+                    {{ with .website }}<li><a class="button icon" href="{{ . }}" rel="noopener"><img src="/img/world.svg" alt="" width="20" height="20"><span class="sr-only">{{ i18n "Website of" $person }}</span></a></li>{{ end }}
                 </ul>
             </article>
         </li>

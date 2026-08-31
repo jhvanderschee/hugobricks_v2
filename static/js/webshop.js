@@ -159,7 +159,7 @@
                 var label = document.createElement("label");
                 label.className = "sr-only";
                 label.htmlFor = "amount-" + item.sku;
-                label.textContent = "Amount of " + item.title;
+                label.textContent = (cartSection.getAttribute("data-label-amount") || "Amount") + ": " + item.title;
                 var amount = document.createElement("input");
                 amount.id = "amount-" + item.sku;
                 amount.type = "number";
@@ -240,11 +240,11 @@
             write("addons", addons);
 
             /* The summary, redrawn: cart, extras, total. */
-            var lines = [["Shopping cart:", cartTotal()]];
+            var lines = [[(checkout.getAttribute("data-label-cart") || "Shopping cart") + ":", cartTotal()]];
             addons.forEach(function (addon) {
                 lines.push([addon.title + ":", parseFloat(addon.price)]);
             });
-            lines.push(["Payment total:", cartTotal() + addonTotal()]);
+            lines.push([(checkout.getAttribute("data-label-total") || "Payment total") + ":", cartTotal() + addonTotal()]);
 
             if (calculation) {
                 calculation.textContent = "";
