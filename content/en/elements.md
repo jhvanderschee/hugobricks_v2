@@ -186,10 +186,6 @@ Sed lectus neque, efficitur id velit eget, feugiat ultricies mauris. Aliquam et 
 
 Sed lectus neque, efficitur id velit eget, feugiat ultricies mauris. Aliquam et dictum sem. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam elementum bibendum augue quis hendrerit.
 
-- [![](/uploads/gallery/01.jpg){:.inline}](/uploads/gallery/01.jpg)
-- [![](/uploads/gallery/02.jpg){:.inline}](/uploads/gallery/02.jpg)
-- [![](/uploads/gallery/03.jpg){:.inline}](/uploads/gallery/03.jpg)
-- [![](/uploads/gallery/04.jpg){:.inline}](/uploads/gallery/04.jpg)
-- [![](/uploads/gallery/05.jpg){:.inline}](/uploads/gallery/05.jpg)
+{{< gallery dir="/uploads/gallery/" >}}
 
 Sed lectus neque, efficitur id velit eget, feugiat ultricies mauris. Aliquam et dictum sem. Lorem ipsum dolor sit amet, consectetur adipiscing elit.

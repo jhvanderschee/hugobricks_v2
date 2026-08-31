@@ -1,0 +1,30 @@
+{{- /*
+  A thumbnail grid of every image in a directory.
+
+      {{< gallery dir="/uploads/gallery/" >}}
+
+  Each thumbnail links to a large rendition of the same image, and links to
+  images are exactly what the lightbox turns into an overlay — several in one
+  list get prev/next arrows and arrow-key navigation for free. The grid
+  itself is styled in style.css, "image gallery".
+
+  Files in the directory that are not images are skipped rather than
+  rendered broken.
+
+  @param {string} dir  directory under static/ to list, e.g. /uploads/gallery/
+*/ -}}
+{{- $dir := string (.Get "dir") -}}
+<ul class="image-gallery">
+{{- range os.ReadDir (print "/static" $dir) -}}
+    {{- $title := index (split .Name ".") 0 -}}
+    {{- with resources.Get (printf "%s/%s" $dir .Name) -}}
+        {{- if eq .ResourceType "image" -}}
+    <li>
+        <a href="{{ (.Fit "1600x1600 webp q50").RelPermalink }}">
+            <img src="{{ (.Fill "300x300 webp Center q50").RelPermalink }}" alt="{{ printf "%s %s" (i18n "Image") $title }}" width="300" height="300" loading="lazy" decoding="async">
+        </a>
+    </li>
+        {{- end -}}
+    {{- end -}}
+{{- end }}
+</ul>

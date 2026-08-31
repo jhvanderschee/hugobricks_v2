@@ -364,6 +364,21 @@ p > img { border-radius: var(--radius); margin-block: 2.25rem; }
     .shortcode-vimeo .playbutton { inline-size: 16.5vw; block-size: 11vw; background-size: 5.3vw; border-radius: 1.78vw; }
 }
 
+/* -- image gallery -------------------------------------------------------- */
+
+/* The `gallery` shortcode: a grid of square thumbnails, each a link to the
+   large rendition that the lightbox opens as an overlay. */
+ul.image-gallery {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.5rem;
+    padding: 0;
+    list-style: none;
+}
+ul.image-gallery li { margin: 0; }
+ul.image-gallery a { display: block; }
+ul.image-gallery img { display: block; inline-size: 100%; border-radius: var(--radius); }
+
 /* -- forms --------------------------------------------------------------- */
 
 /* Every form lays its rows out on the same two-column grid, whether the rows
