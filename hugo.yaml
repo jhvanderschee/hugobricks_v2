@@ -25,11 +25,6 @@ params:
       is:
       not_is:
     - title: wide
-      has: 
-      not_has:
-      is: :first-child,:last-child
-      not_is:
-    - title: wide
       has: section.faqgroup
       not_has:
       is:
@@ -108,6 +103,11 @@ params:
       has: img.map
       not_has: 
       is:
+      not_is:
+    - title: wide
+      has: h1
+      not_has: img.background
+      is: :only-child
       not_is:
     - title: intro
       has: h1
