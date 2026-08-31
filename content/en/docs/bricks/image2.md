@@ -17,5 +17,5 @@ The markdown is exactly that of the `image` brick:
 
 Curabitur sit amet laoreet urna. Donec vel lobortis nunc.
 
-![](/uploads/photos/hike/hike3.jpg)
+![](/uploads/photos/hike/hike3.jpg){:.float}
 ```

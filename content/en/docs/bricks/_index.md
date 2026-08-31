@@ -46,7 +46,7 @@ title: Page title
 
 Hugobricks is a free website theme built with Hugo and vanilla CSS.
 
-{{</* button "Get started for free" "/get-started/" */>}}
+[Get started for free](/get-started/){:.button}
 
 ![](/uploads/brick_intro.png)
 
@@ -64,7 +64,7 @@ Hugobricks covers all components you would like to have at hand.
 
 Experience the future of web development with Hugo and stackable content bricks.
 
-{{</* button "Get started now" "/get-started/" */>}}
+[Get started now](/get-started/){:.button}
 
 ![](/uploads/illustrations/cuate/server.svg)
 ```

@@ -24,3 +24,13 @@ The Netherlands
 ```
 
 The `{:.map}` is what routes the section: the `map` rule in `params.sections` matches `img.map`. The pin in the middle of the map is drawn by the stylesheet, so the screenshot itself should not have one.
+
+## The shared address card
+
+One site has one address, so the block above is written once, in `content/<lang>/bricks/map.md`, and every page that wants it pulls it in with an empty named divider:
+
+```
+---.map
+```
+
+That is how the contact page and the demo pages show it: edit the one file and they all follow.

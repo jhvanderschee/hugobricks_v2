@@ -16,13 +16,19 @@ Write it as the last section of the page — a heading, one paragraph, one butto
 Experience the future of web development with Hugo and stackable content bricks.
 Build lightning-fast static sites with ease and flexibility.
 
-{{</* button "Get started now" "/get-started/" */>}}
+[Get started now](/get-started/){:.button}
 
 ![](/uploads/illustrations/cuate/server.svg)
 ```
 
-The `cta` rule in `params.sections` matches a last section that holds both a button and an image, which is what picks this brick.
+The `{:.button}` is a kramdown-style attribute list sitting directly against the link: it lands on the `<a>` as a class and turns it into a button. The `cta` rule in `params.sections` matches a last section that holds both a button and an image, which is what picks this brick.
 
-## Page-specific content
+## The shared closing CTA
 
-The CTA used to live in one file and be repeated on every page. It is now written out per page, so a page that wants a different closing message simply writes a different one.
+Most pages close on the same call to action. That one is written once, in `content/<lang>/bricks/cta.md`, and pulled in with an empty named divider:
+
+```
+---.cta
+```
+
+Blog posts, service pages and documentation pages get it appended automatically. A page that wants a different closing message skips the divider and writes its own last section instead.
