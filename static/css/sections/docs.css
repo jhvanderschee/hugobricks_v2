@@ -21,7 +21,7 @@ section.docs .docsmenu a {
     overflow: hidden;
     text-overflow: ellipsis;
 }
-section.docs .docsmenu a::before { content: "–"; display: inline-block; inline-size: 1.25rem; }
+section.docs .docsmenu a::before { content: "-"; display: inline-block; inline-size: 1.25rem; }
 section.docs .docsmenu li:has(> ul) > a::before { content: "›"; }
 section.docs .docsmenu li:not(:is(.active, .current)) > ul { display: none; }
 section.docs .docsmenu li ul a::before { content: ""; }
