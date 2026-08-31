@@ -34,7 +34,11 @@
                 {{ end }}
                 <blockquote>{{ .description | markdownify }}</blockquote>
                 <figcaption>
-                    {{ with .image }}<img src="{{ . }}" alt="" width="52" height="52" class="avatar">{{ end }}
+                    {{- with .image }}
+                        {{- $src := . -}}
+                        {{- with resources.GetMatch $src }}{{ $src = (.Fill "104x104 webp Center q50").RelPermalink }}{{ end }}
+                        <img src="{{ $src }}" alt="" width="52" height="52" class="avatar">
+                    {{- end }}
                     <span>
                         <strong>{{ .name }}</strong>
                         {{ with .function }}<small>{{ . }}</small>{{ end }}

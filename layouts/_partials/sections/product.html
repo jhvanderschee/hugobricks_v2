@@ -19,10 +19,21 @@
 {{- $p := .Page -}}
 {{- $w := (partial "data.html" $p).webshop -}}
 {{- $id := $p.Title | plainify | anchorize -}}
+{{- /* The photo, its lightbox rendition, and the cart thumbnail stored via
+       `data-image` are all webp renditions of the front-matter image; the raw
+       path only survives when the resource can't be found. */ -}}
+{{- $full := $p.Params.image -}}
+{{- $photo := $full -}}
+{{- $thumb := $full -}}
+{{- with resources.GetMatch $full -}}
+    {{- $full = (.Fit "1600x1600 webp q50").RelPermalink -}}
+    {{- $photo = (.Fit "800x800 webp q50").RelPermalink -}}
+    {{- $thumb = (.Fill "300x300 webp Center q50").RelPermalink -}}
+{{- end -}}
 <section class="product" aria-labelledby="{{ $id }}">
     <article class="container twocols">
         <figure class="media">
-            <a href="{{ $p.Params.image }}"><img src="{{ $p.Params.image }}" alt="{{ $p.Title }}"></a>
+            <a href="{{ $full }}"><img src="{{ $photo }}" alt="{{ $p.Title }}"></a>
         </figure>
         <div class="text">
             <h1 id="{{ $id }}">{{ $p.Title | safeHTML }}</h1>
@@ -31,7 +42,7 @@
                 data-url="{{ $p.RelPermalink }}"
                 data-title="{{ $p.Title }}"
                 data-varianttype="{{ $p.Params.variant_type }}"
-                data-image="{{ $p.Params.image }}"
+                data-image="{{ $thumb }}"
                 data-cart-link="{{ $w.cart_link }}/">
                 <div>
                     <label for="variant">{{ $p.Params.variant_type | humanize }}</label>

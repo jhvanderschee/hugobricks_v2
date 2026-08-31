@@ -9,8 +9,23 @@
 
   See `inline_attributes.html`, which hoists that list into this tag.
 
+  Local raster images are served as resized webp (https://hugocodex.org/blog/
+  resize-all-images/): capped at 1920px wide — wide enough for the full-bleed
+  `{:.background}` headers — and never upscaled. SVGs and remote URLs pass
+  through untouched.
+
   @context {image} .
   @returns {string} one <img>
 */ -}}
-<img src="{{ .Destination | safeURL }}" alt="{{ .PlainText }}"{{ with .Title }} title="{{ . }}"{{ end }}>
+{{- $src := .Destination -}}
+{{- $dims := "" -}}
+{{- with resources.GetMatch $src -}}
+    {{- if ne .MediaType.SubType "svg" -}}
+        {{- $img := . -}}
+        {{- if gt .Width 1920 -}}{{- $img = .Resize "1920x webp q50" -}}{{- else -}}{{- $img = .Process "webp q50" -}}{{- end -}}
+        {{- $src = $img.RelPermalink -}}
+        {{- $dims = printf ` width="%d" height="%d"` $img.Width $img.Height -}}
+    {{- end -}}
+{{- end -}}
+<img src="{{ $src | safeURL }}" alt="{{ .PlainText }}"{{ with .Title }} title="{{ . }}"{{ end }}{{ $dims | safeHTMLAttr }}>
 {{- /* no trailing newline: a render hook writes inline content */ -}}

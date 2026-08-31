@@ -44,7 +44,11 @@
         {{- range .Params.tags -}}{{- with . -}}{{- $tags = $tags | append . -}}{{- end -}}{{- end -}}
         <li{{ with $tags }} data-tags="{{ delimit . " " }}"{{ end }}>
             <a href="{{ .RelPermalink }}">
-                {{ with .Params.image }}<img src="{{ . }}" alt="" width="600" height="300">{{ end }}
+                {{- with .Params.image }}
+                    {{- $src := . -}}
+                    {{- with resources.GetMatch $src }}{{ $src = (.Fill "600x300 webp Center q50").RelPermalink }}{{ end }}
+                    <img src="{{ $src }}" alt="" width="600" height="300">
+                {{- end }}
                 <strong>{{ .Title | safeHTML }}</strong>
             </a>
             {{ if $.Dates }}{{ with .Date }}<p class="meta"><span class="icon" style="--icon: url('{{ $icons }}/calendar_month-fill.svg')"></span><time datetime="{{ .Format "2006-01-02" }}">{{ . | time.Format ":date_medium" }}</time></p>{{ end }}{{ end }}

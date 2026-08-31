@@ -34,6 +34,7 @@
     {{- $preload = .Get 4 | default "metadata" -}}
 {{- end -}}
 <figure{{ with $class }} class="{{ . }}"{{ end }}>
+    {{- with $poster }}{{ with resources.GetMatch . }}{{ $poster = (.Fit "1600x1600 webp q50").RelPermalink }}{{ end }}{{ end -}}
     <video controls playsinline preload="{{ $preload }}"{{ with $poster }} poster="{{ . }}"{{ end }}>
         {{ with $src }}<source src="{{ . }}"{{ with (path.Ext .) }} type="video/{{ strings.TrimPrefix "." . }}"{{ end }}>{{ end }}
         <p>{{ i18n "Your browser does not support HTML5 video" }}{{ with $src }} <a href="{{ . }}">{{ i18n "Download the video" }}</a>{{ end }}</p>

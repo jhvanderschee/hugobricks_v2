@@ -11,8 +11,18 @@
   once the paragraph is html; this file's job is to guarantee the shape that
   pass expects to find.
 
+  A link whose destination is a local raster image — the lightbox pattern,
+  `[![](/photo.jpg)](/photo.jpg)` — gets a resized webp rendition instead of
+  the full-weight original, mirroring what the gallery shortcode links to.
+
   @context {link} .
   @returns {string} one <a>
 */ -}}
-<a href="{{ .Destination | safeURL }}"{{ with .Title }} title="{{ . }}"{{ end }}>{{ .Text }}</a>
+{{- $href := .Destination -}}
+{{- with resources.GetMatch $href -}}
+    {{- if and (eq .ResourceType "image") (ne .MediaType.SubType "svg") -}}
+        {{- $href = (.Fit "1600x1600 webp q50").RelPermalink -}}
+    {{- end -}}
+{{- end -}}
+<a href="{{ $href | safeURL }}"{{ with .Title }} title="{{ . }}"{{ end }}>{{ .Text }}</a>
 {{- /* no trailing newline: a render hook writes inline content */ -}}

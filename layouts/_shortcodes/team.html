@@ -21,7 +21,11 @@
         {{- $person := .name -}}
         <li>
             <article>
-                {{ with .image }}<img src="{{ . }}" alt="" width="128" height="128" class="avatar">{{ end }}
+                {{- with .image }}
+                    {{- $src := . -}}
+                    {{- with resources.GetMatch $src }}{{ $src = (.Fill "256x256 webp Center q50").RelPermalink }}{{ end }}
+                    <img src="{{ $src }}" alt="" width="128" height="128" class="avatar">
+                {{- end }}
                 <h3>{{ $person }}</h3>
                 {{ with .function }}<p class="function">{{ . | safeHTML }}</p>{{ end }}
                 {{ with .description }}<p>{{ . | safeHTML }}</p>{{ end }}

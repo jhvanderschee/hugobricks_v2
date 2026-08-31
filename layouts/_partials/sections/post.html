@@ -47,8 +47,10 @@
         {{ end }}
     </div>
     {{ with $page.Params.image }}
+        {{- $src := . -}}
+        {{- with resources.GetMatch $src }}{{ $src = (.Fill "1600x800 webp Center q50").RelPermalink }}{{ end }}
         <div class="container wide">
-            <img class="featuredimage" src="{{ . }}" alt="" width="1600" height="800">
+            <img class="featuredimage" src="{{ $src }}" alt="" width="1600" height="800">
         </div>
     {{ end }}
     <article class="container">
