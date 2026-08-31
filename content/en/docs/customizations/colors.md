@@ -44,4 +44,4 @@ The icons in this theme are black SVG's. The theme used to tint them with a `fil
 }
 ```
 
-The review stars and the pin on the map are drawn the same way. The one place a `filter` is still used on purpose is the portrait toning in `.avatar`, where the point is to tone a photograph rather than to recolor a glyph.
+The review stars and the pin on the map are drawn the same way. A `filter` is still used in two places on purpose: the portrait toning in `.avatar`, where the point is to tone a photograph rather than to recolor a glyph, and the cart and search glyphs in the banner, which are real `<img>` elements — a mask over an image cuts the picture out rather than colouring it.

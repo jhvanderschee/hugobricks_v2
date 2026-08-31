@@ -21,6 +21,8 @@ languages:
 
 Everything that is not page content lives in `data/<lang>/`, so a language is a content directory plus a data bundle: `general`, `header`, `footer`, `openinghours`, `reviews`, `people`, `features`, `pricing`, `faqs`, `webshop` and the three form definitions. Language-independent switches live in `data/settings.yaml`.
 
+The theme's own interface strings — the 'Read more' buttons, the cart and checkout labels, the screen-reader labels — live in `i18n/<lang>.yaml`, one flat `key: value` per line. Give a new language its own file there; a missing key falls back to the default language. English, Dutch, German, Czech and Korean ship with the theme.
+
 Templates reach the bundle of the language being rendered through one partial:
 
 ```

@@ -13,8 +13,12 @@ static/css/fonts.css          the @font-face rules
 static/css/style.css          the shared core
 static/css/header.css         the banner
 static/css/footer.css         the footer
+static/css/lightbox.css       the image lightbox
+static/css/tabs.css           the tabs shortcode
 static/css/sections/*.css     one file per brick
 ```
+
+Two more ride along only when their switch in `data/settings.yaml` is on: `animations.css` (`intersectionobserver`) and `customcursor.css` (`customcursor`).
 
 Order is the cascade: tokens and faces first, then the shared core, then the chrome, then the bricks. `sections/*.css` comes last so a brick can override the core, and no brick file depends on the order of another. Add a file of your own to `static/css/sections/` and it is picked up automatically; in production the bundle is minified and fingerprinted.
 
