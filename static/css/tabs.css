@@ -1,0 +1,52 @@
+/* The `tabs` shortcode. `site.js` marks a widget `ready` when it has wired
+   the buttons; until then — and without javascript at all — the tablist
+   stays hidden and the panels simply stack under their own headings, so
+   nothing is behind a control that does not work. */
+
+.tabs > [role="tablist"] {
+    display: none;
+    align-items: flex-end;
+    gap: 2rem;
+    margin: 0 0 1.5rem;
+    padding-top: 2rem;
+    border-bottom: 1px solid var(--borderMedium);
+    overflow: auto;
+    width: 100%;
+}
+.tabs.ready > [role="tablist"] { display: flex; }
+.tabs button {letter-spacing: 0!important;}
+.tabs button:hover {transform: none!important;}
+.tabs > [role="tablist"] > [role="tab"] {
+    background: none;
+    border: 0;
+    padding: 0 0 0.5rem;
+    color: var(--textDark);
+    font: inherit;
+    font-size: 1.25rem;
+    font-weight: bold;
+    line-height: 1.15;
+    position: relative;
+    cursor: pointer;
+}
+
+/* The underline slides in, as on the original theme. */
+.tabs > [role="tablist"] > [role="tab"]::after {
+    content: "";
+    width: 100%;
+    height: 0.13rem;
+    background: var(--textDark);
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    transform: scaleX(0) translateY(50%);
+    transition: transform 0.2s ease-in-out;
+}
+.tabs > [role="tablist"] > [role="tab"]:hover::after,
+.tabs > [role="tablist"] > [role="tab"][aria-selected="true"]::after {
+    transform: scaleX(1) translateY(50%);
+}
+
+/* The tab already names the panel, so the ready widget drops the heading
+   the markdown opened on; stacked without the script, it stays. */
+.tabs.ready > [role="tabpanel"] > h2:first-child { display: none; }
+.tabs { margin-bottom: 3.5rem; }

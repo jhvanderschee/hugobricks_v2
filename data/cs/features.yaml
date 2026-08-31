@@ -1,0 +1,34 @@
+# ---------------------------------------------------------------------------
+# The feature grid, rendered by the `{{< features >}}` shortcode into the
+# `features` brick. The section's own heading and intro stay in the markdown;
+# the cards live here.
+#
+# `icon` is any square SVG. It is drawn in the accent colour through a CSS
+# mask, so the file's own fill is ignored — a one-colour glyph is what works.
+# ---------------------------------------------------------------------------
+
+- icon: /img/icons/material-symbols/200/rounded/auto_awesome_mosaic.svg
+  title: Obsahuje všechny komponenty
+  description: 'Snažíme se dodávat následující bricky: intro, titulek, obrázek, cta, kontakt,
+    tým, reference, o nás, ceny, produkty, produkt, usps, statistiky, galerie, citát,
+    faq, značky, video, blogy, příspěvek, související obsah.'
+- icon: /img/icons/material-symbols/200/rounded/performance_max.svg
+  title: 99+ skóre Google Lighthouse
+  description: Bleskurychlý web. Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis
+    illum nesciunt commodi vel nisi ut alias excepturi ipsum.
+- icon: /img/icons/material-symbols/200/rounded/design_services.svg
+  title: Téma s CSS proměnnými
+  description: Snadno přizpůsobíte svému vizuálnímu stylu. Lorem ipsum dolor sit amet consectetur
+    adipisicing elit. Corporis illum nesciunt commodi vel nisi ut alias excepturi ipsum.
+- icon: /img/icons/material-symbols/200/rounded/devices.svg
+  title: Funguje v každé velikosti
+  description: Funguje na každé obrazovce a každém zařízení. Lorem ipsum dolor sit amet consectetur
+    adipisicing elit. Corporis illum nesciunt commodi vel nisi ut alias excepturi ipsum.
+- icon: /img/icons/material-symbols/200/rounded/timer.svg
+  title: Superrychlé sestavení
+  description: Extrémně rychlé. Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis illum
+    nesciunt commodi vel nisi ut alias excepturi ipsum.
+- icon: /img/icons/material-symbols/200/rounded/auto_fix.svg
+  title: 10+ předpřipravených stránek
+  description: Začněte od hotového výsledku. Lorem ipsum dolor sit amet consectetur adipisicing elit.
+    Corporis illum nesciunt commodi vel nisi ut alias excepturi ipsum.

@@ -2,16 +2,17 @@
 title: Youtube
 ---
 
-Youtube is a popular video streaming service, from a company that is known for tracking and profiling. The solution is to host the poster image yourself and link it to Youtube, so nothing is loaded from Youtube until the visitor asks for it. That is a linked image:
+Youtube is a popular video streaming service, from a company that is known for tracking and profiling. The solution is a poster image that links out to Youtube, so nothing is loaded from Youtube until the visitor clicks it. You can see it in action on the [elements page](/elements/). To show the poster, write:
 
 ```
-[![Play the Youtube video](/uploads/youtubeposter.jpg)](https://www.youtube.com/watch?v=qtIqKaDlqXo)
+{{</* youtube qtIqKaDlqXo */>}}
 ```
 
-Vimeo works the same way:
+Give only the video id and the poster comes from Youtube's thumbnail server at build time, processed and served from your own site. To host the poster yourself, pass a local image as well:
 
 ```
-[![Play the Vimeo video](/uploads/gallery/01.jpg)](https://vimeo.com/727145223)
+{{</* youtube "qtIqKaDlqXo" "/uploads/youtubeposter.jpg" */>}}
+{{</* youtube id="qtIqKaDlqXo" image="/uploads/youtubeposter.jpg" */>}}
 ```
 
-You can see both on the [elements page](/elements/).
+The play button and wordmark are painted by the stylesheet, and a remote fetch that fails only costs the poster, never the build. [Vimeo](/docs/shortcodes/vimeo/) works the same way.

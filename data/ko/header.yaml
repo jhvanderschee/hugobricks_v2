@@ -1,0 +1,30 @@
+logo_image:
+logo_subtitle: 궁극의 Hugo 테마 (v2)
+dark_header: false
+mobile_view_width: 1100
+menuitems:
+  - title: Home
+    link: /ko/
+    items:
+      - title:
+        link:
+  - title: Lorem
+    link: /ko/lorem/
+    items:
+      - title:
+        link: /
+  - title: Ipsum
+    link: /ko/ipsum/
+    items:
+      - title:
+        link:
+  - title: Dolor set
+    link: /ko/dolor/
+    items:
+      - title:
+        link:
+cta:
+  active: true
+  title: 지금 시작하기
+  link: /ko/
+preheader: 평일 9시–17시 운영, 주말 휴무

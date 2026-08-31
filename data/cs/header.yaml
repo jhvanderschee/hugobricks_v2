@@ -1,0 +1,30 @@
+logo_image:
+logo_subtitle: Nejlepší téma pro Hugo (v2)
+dark_header: false
+mobile_view_width: 1100
+menuitems:
+  - title: Home
+    link: /cs/
+    items:
+      - title:
+        link:
+  - title: Lorem
+    link: /cs/lorem/
+    items:
+      - title:
+        link: /
+  - title: Ipsum
+    link: /cs/ipsum/
+    items:
+      - title:
+        link:
+  - title: Dolor set
+    link: /cs/dolor/
+    items:
+      - title:
+        link:
+cta:
+  active: true
+  title: Začněte hned
+  link: /cs/
+preheader: otevřeno 9.00–17.00, o víkendu zavřeno

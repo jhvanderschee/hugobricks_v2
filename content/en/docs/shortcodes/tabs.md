@@ -2,16 +2,24 @@
 title: Tabs
 ---
 
-Tabs used to hide two thirds of a section behind a strip of Javascript-driven links. They are gone: the content is written as ordinary headings, which means it is in the page for search engines, printable, linkable and reachable by keyboard without any script.
+The `tabs` shortcode puts runs of markdown behind a tablist: each run opens on an `## Heading`, which becomes its tab, and the runs are separated by `---` — the same separator the bricks use, consumed by the shortcode before the page is split into sections. You can see it in action on the [Elements page](/elements/).
 
 ```
-## These titles
+{{</* tabs */>}}
 
-Nam elementum bibendum augue quis hendrerit.
+## First tab
 
-## Are clickable
+Aliquam et dictum sem.
 
-Sed lectus neque, efficitur id velit eget, feugiat ultricies mauris.
+---
+
+## Second tab
+
+Aliquam et dictum sem.
+
+{{</* /tabs */>}}
 ```
 
-If a set of panels is genuinely long, the FAQ pattern is the accessible way to collapse it — `<details>` and `<summary>`, which is what the [F.A.Q. shortcode](/docs/shortcodes/faq/) renders.
+The tabs are real `role="tab"` buttons with the keyboard behaviour the ARIA pattern asks for — arrow keys move along the tablist, Home and End jump to its ends. Without javascript the panels simply stack under their own headings and the tablist stays hidden, so the content is always in the page for search engines, printable and linkable.
+
+Tabs hide everything but one panel, so use them for content where the reader genuinely picks one variant — installation steps per operating system, code per language. For a long list of questions, the [F.A.Q. shortcode](/docs/shortcodes/faq/) — `<details>` and `<summary>` — is the better way to collapse it.

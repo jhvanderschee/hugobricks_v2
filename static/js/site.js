@@ -211,4 +211,42 @@
         if (wanted && everyTag.indexOf(wanted) !== -1) chosen = [wanted];
         render();
     }
+
+    /* -- tabs ----------------------------------------------------------
+       The `tabs` shortcode. The markup is complete without this file — the
+       panels stack under their own headings and the tablist stays hidden.
+       Wiring it marks the widget `ready`, which is what shows the tablist
+       and collapses the stack to the selected panel. Arrow keys move along
+       the tabs with the roving tabindex the ARIA pattern asks for. */
+    Array.prototype.forEach.call(document.querySelectorAll(".tabs"), function (widget) {
+        var tabs = widget.querySelectorAll("[role='tab']");
+        var panels = widget.querySelectorAll("[role='tabpanel']");
+        if (!tabs.length || tabs.length !== panels.length) return;
+
+        var select = function (chosen) {
+            Array.prototype.forEach.call(tabs, function (tab, i) {
+                tab.setAttribute("aria-selected", i === chosen ? "true" : "false");
+                tab.tabIndex = i === chosen ? 0 : -1;
+                panels[i].hidden = i !== chosen;
+            });
+        };
+
+        Array.prototype.forEach.call(tabs, function (tab, i) {
+            tab.addEventListener("click", function () { select(i); });
+            tab.addEventListener("keydown", function (event) {
+                var to = -1;
+                if (event.key === "ArrowRight") to = (i + 1) % tabs.length;
+                if (event.key === "ArrowLeft") to = (i - 1 + tabs.length) % tabs.length;
+                if (event.key === "Home") to = 0;
+                if (event.key === "End") to = tabs.length - 1;
+                if (to === -1) return;
+                event.preventDefault();
+                select(to);
+                tabs[to].focus();
+            });
+        });
+
+        select(0);
+        widget.classList.add("ready");
+    });
 })();

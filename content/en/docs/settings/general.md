@@ -11,7 +11,7 @@ The title field holds the title of the website. This is used in the SEO title of
 
 ## Description
 
-The description is used for the meta description (SEO field) when the page has no (other) content.
+The description is used for the meta description (SEO field) when the page has no summary of its own to fill it with.
 
 ## Contact
 

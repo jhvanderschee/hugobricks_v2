@@ -1,0 +1,39 @@
+{{- /*
+  Renders the shopping cart: the table with its "cart is empty" row, the
+  total, the way on to the checkout and the progress bar.
+
+      {{< cart >}}
+
+  `webshop.js` replaces the table body and the `.carttotal` with the cart it
+  keeps in localStorage; without javascript the page shows an honest empty
+  cart. The currency symbol and the page links come from
+  `data/<lang>/webshop.yaml`.
+
+  The `<p class="carttotal">` is also what routes the section: the `cart`
+  rule in `params.sections` matches `p.carttotal`.
+*/ -}}
+{{- $w := (partial "data.html" .Page).webshop -}}
+<table>
+    <thead>
+        <tr>
+            <th colspan="2">{{ i18n "Product" }}</th>
+            <th>{{ i18n "Amount" }}</th>
+            <th>{{ i18n "Price" }}</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td colspan="4">{{ i18n "Your shopping cart is currently empty" }}.</td>
+        </tr>
+    </tbody>
+</table>
+
+<p class="carttotal">{{ $w.currency_symbol }} 0.00</p>
+
+<p class="submitbutton"><a href="{{ $w.products_link }}/">{{ i18n "Continue shopping" }}</a> <a class="button" href="{{ $w.checkout_link }}/">{{ i18n "Continue to checkout" }}</a></p>
+
+<ol class="progress">
+    <li class="current"><a href="{{ $w.cart_link }}/" aria-current="step">{{ i18n "Cart" }}</a></li>
+    <li><span>{{ i18n "Checkout" }}</span></li>
+    <li><span>{{ i18n "Payment" }}</span></li>
+</ol>

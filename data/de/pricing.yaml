@@ -1,0 +1,55 @@
+# ---------------------------------------------------------------------------
+# Pricing plans, rendered by the `{{< pricing >}}` shortcode into the `prices`
+# brick. The section's own heading and intro stay in the markdown; everything
+# below them lives here.
+#
+# `featured: true` is the plan that is lifted out of the row. Mark exactly one.
+# ---------------------------------------------------------------------------
+
+currency: $
+period: /Monat
+
+plans:
+  - badge: Budget
+    title: Open-Source
+    description: Voll ausgestatteter Theme-/Pagebuilder für superschnelle und großartige Websites.
+    price: 0
+    features:
+      - Hugobricks-Theme/Code
+      - Alle verfügbaren Bricks
+      - Regelmäßige Updates
+      - Bugfixes und Sicherheitspatches
+    cta:
+      title: Loslegen
+      link: /get-started/
+      style: ghost
+
+  - badge: am beliebtesten
+    title: Gehostet
+    description: Alles-in-einem-Toolkit — wir hosten deine Website auf unserer erstklassigen Infrastruktur.
+    price: 25
+    featured: true
+    features:
+      - Hugobricks-Theme/Code
+      - Alle verfügbaren Bricks
+      - Regelmäßige Updates
+      - Bugfixes und Sicherheitspatches
+      - Formularverarbeitung + Benachrichtigungen
+      - CMS für Redakteure
+    cta:
+      title: Ja, nimm mich!
+      link: /get-started/
+
+  - badge: alles
+    title: Enterprise
+    description: Außergewöhnlicher Mehrwert und Kostenersparnis mit unserer kompletten Produktsuite.
+    price: 75
+    features:
+      - "Alle anderen Funktionen plus:"
+      - Support mit hoher Priorität
+      - Theme-Anpassungen
+      - Individuelle Bricks (auf Anfrage)
+    cta:
+      title: Kontaktiere uns
+      link: /get-started/
+      style: ghost

@@ -90,6 +90,14 @@
             </nav>
 
             <div class="actions">
+                {{ if $s.enable_search }}
+                    {{ with site.GetPage "/search" }}
+                    <a class="search" href="{{ .RelPermalink }}">
+                        <img src="/img/search.svg" alt="" width="20" height="20">
+                        <span class="sr-only">{{ i18n "Search" }}</span>
+                    </a>
+                    {{ end }}
+                {{ end }}
                 {{ if and $s.enable_webshop $d.webshop.show_cart_icon }}
                     <a class="cart" href="{{ $d.webshop.cart_link }}">
                         <img src="/img/shopping-cart.svg" alt="" width="20" height="20">

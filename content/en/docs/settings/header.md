@@ -7,7 +7,7 @@ The header settings live in `data/<lang>/header.yaml`.
 
 ## Logo image
 
-This sets the image in the header. Omitting a value here results in a 'text logo' as you can see on this website. The text logo consists of the `title` field from `general.yaml` and the `logo_subtitle` field from this file.
+This sets the image in the header, shown beside the text logo. The text logo consists of the `title` field from `general.yaml` and the `logo_subtitle` field from this file. Omit `logo_image` and the global `favicon_image` steps in; leave both empty for the pure text logo as on this website.
 
 ## Logo subtitle
 
@@ -19,7 +19,7 @@ When you omit the value for `logo_image` the text logo appears, and this is its 
 
 ## Menuitems
 
-This is an array that holds the main menu. The items consist of a `title` and a `link`, and may hold a nested `items` array for a submenu. Breadcrumbs are based on this menu structure.
+This is an array that holds the main menu. The items consist of a `title` and a `link`, and may hold a nested `items` array for a submenu. The menu only feeds the banner: breadcrumbs are built from where a page sits in the content tree, not from this structure.
 
 ## Call To Action (CTA)
 

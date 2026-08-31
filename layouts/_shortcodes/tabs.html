@@ -1,0 +1,57 @@
+{{- /*
+  A tabbed panel. Each tab is a run of markdown opening on an `## Heading`,
+  separated by `---` — the heading is the tab, the rest is its panel:
+
+      {{< tabs >}}
+
+      ## First tab
+
+      Its content.
+
+      ---
+
+      ## Second tab
+
+      More content.
+
+      {{< /tabs >}}
+
+  The `---` here never reaches `section_map.html`: the shortcode consumes its
+  inner markdown before the page is split, so a tab boundary does not become
+  a brick boundary.
+
+  Revised from the original theme: real `role="tab"` buttons with the roving
+  tabindex and `aria-selected` that `site.js` maintains, instead of `<a
+  href="#…" onclick>`; the script lives there rather than inline, and without
+  it the panels simply stack under their own headings — the tablist only
+  shows once the script has marked the widget `ready`.
+
+  @context {shortcode} .
+*/ -}}
+{{- $ordinal := .Ordinal -}}
+{{- $parts := slice -}}
+{{- range $part := split .Inner "---" -}}
+    {{- with trim $part "\n\r\t " -}}
+        {{- $parts = $parts | append . -}}
+    {{- end -}}
+{{- end -}}
+{{- if not $parts -}}
+    {{- warnf "tabs: the shortcode on %q is empty — write `## Heading` runs separated by `---` inside it" .Page.File.Path -}}
+{{- end -}}
+<div class="tabs">
+    <div role="tablist" aria-label="{{ i18n "Tabs" }}">
+    {{- range $i, $part := $parts -}}
+        {{- $title := replaceRE `<[^>]*>` "" (or (index (findRE `(?s)<h2[^>]*>.*?</h2>` (markdownify $part) 1) 0) "") -}}
+        {{- if not $title -}}
+            {{- $title = printf "Tab %d" (add $i 1) -}}
+            {{- warnf "tabs: a tab on %q has no `## Heading` to name it — labelled %q" $.Page.File.Path $title -}}
+        {{- end -}}
+        <button type="button" role="tab" id="tab-{{ $ordinal }}-{{ $i }}" aria-controls="tabpanel-{{ $ordinal }}-{{ $i }}" aria-selected="{{ eq $i 0 }}">{{ $title | safeHTML }}</button>
+    {{- end -}}
+    </div>
+    {{- range $i, $part := $parts }}
+    <section role="tabpanel" id="tabpanel-{{ $ordinal }}-{{ $i }}" aria-labelledby="tab-{{ $ordinal }}-{{ $i }}" tabindex="0">
+        {{ markdownify $part }}
+    </section>
+    {{- end }}
+</div>

@@ -2,28 +2,17 @@
 title: Team
 ---
 
-The `team` brick is a centred intro above a grid of people. You can see it in action on the [team page](/team/).
+The team brick is a centred intro above a grid of people. You can see it in action on the [team page](/team/).
 
 ## Use this brick
 
-The intro is markdown; the cards come from `data/<lang>/people.yaml` through the `team` shortcode:
+To use this brick you only need the [team shortcode](/docs/shortcodes/team/):
 
 ```
-{{</* breadcrumbs */>}}
-
-# Our team
-
-Lorem dolor sit amet, consectetur adipiscing elit. Nam non laoreet nisi,
-ac hendrerit lacus.
-
 {{</* team */>}}
 ```
 
-The `<ul class="team">` that the shortcode emits is also what routes the section: the `team` rule in `params.sections` matches `ul.team`.
-
-## The data
-
-`data/<lang>/people.yaml` holds one entry per person:
+Anything else you write in the section — typically a heading and a short line of text — becomes the centred intro above the grid. The people come from `data/<lang>/people.yaml`, one entry per person:
 
 ```
 - name: Gitio Hamano
@@ -34,4 +23,8 @@ The `<ul class="team">` that the shortcode emits is also what routes the section
   linkedin: https://www.linkedin.com/
 ```
 
-Each person is an `<article>`, and every contact icon carries the person's name in its accessible name, so a screen reader hears "Email Gitio Hamano" rather than the same address six times down the page.
+You can force the use of this block by writing:
+
+```
+---.team
+```

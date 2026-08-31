@@ -1,0 +1,55 @@
+# ---------------------------------------------------------------------------
+# Pricing plans, rendered by the `{{< pricing >}}` shortcode into the `prices`
+# brick. The section's own heading and intro stay in the markdown; everything
+# below them lives here.
+#
+# `featured: true` is the plan that is lifted out of the row. Mark exactly one.
+# ---------------------------------------------------------------------------
+
+currency: $
+period: /měsíc
+
+plans:
+  - badge: úsporný
+    title: Open source
+    description: Plně vybavený theme/pagebuilder pro tvorbu superrychlých a skvělých webů.
+    price: 0
+    features:
+      - Téma/kód Hugobricks
+      - Všechny dostupné bricky
+      - Pravidelné aktualizace
+      - Opravy chyb a bezpečnostní záplaty
+    cta:
+      title: Začít
+      link: /get-started/
+      style: ghost
+
+  - badge: nejoblíbenější
+    title: Hostované
+    description: Kompletní sada nástrojů — váš web hostujeme na naší prvotřídní infrastruktuře.
+    price: 25
+    featured: true
+    features:
+      - Téma/kód Hugobricks
+      - Všechny dostupné bricky
+      - Pravidelné aktualizace
+      - Opravy chyb a bezpečnostní záplaty
+      - Zpracování formulářů + notifikace
+      - CMS pro editory
+    cta:
+      title: Ano, chci tenhle!
+      link: /get-started/
+
+  - badge: vše
+    title: Enterprise
+    description: Získejte mimořádnou hodnotu a úspory s naší kompletní sadou produktů.
+    price: 75
+    features:
+      - "Všechny ostatní funkce a navíc:"
+      - Podpora s vysokou prioritou
+      - Úpravy tématu
+      - Bricky na míru (na vyžádání)
+    cta:
+      title: Kontaktujte nás
+      link: /get-started/
+      style: ghost

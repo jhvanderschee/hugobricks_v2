@@ -22,7 +22,7 @@ Hugobricks is a comprehensive starter theme that includes everything you need to
 - Fully responsive on all devices
 - SEO-optimized for better search engine rankings
 
-![](/uploads/photos/poulterer/4.jpg)
+![](/uploads/photos/poulterer/4.jpg){:.float}
 
 ---
 
@@ -32,7 +32,7 @@ We aim to provide the following bricks: intro, title, image, cta, contact, team,
 
 We are constantly adding bricks and shortcodes to this theme. Are you missing a brick or a shortcode? [Let us know](/contact/)! We will build it for you!
 
-![](/uploads/photos/poulterer/15.jpg)
+![](/uploads/photos/poulterer/15.jpg){:.float}
 
 ---
 
@@ -40,7 +40,7 @@ We are constantly adding bricks and shortcodes to this theme. Are you missing a 
 
 Hugobricks is a free website theme for Hugo. It makes building Hugo websites child's play due to its stackable (LEGO-like) content bricks. How about this 'intro brick' with a clear call-to-action? Stack it on top of some image bricks and a pricing table and build a complete website in seconds!
 
-![](/uploads/photos/poulterer/16.jpg)
+![](/uploads/photos/poulterer/16.jpg){:.float}
 
 ---
 

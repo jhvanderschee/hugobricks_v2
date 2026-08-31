@@ -1,0 +1,22 @@
+logo_image:
+menuitems:
+  - title: 소개
+    link:  /ko/
+  - title: 요소
+    link:  /ko/
+  - title: 개인정보 처리방침
+    link:  /ko/
+socials:
+  - title: Facebook
+    link: https://facebook.com
+    logo_image: /img/facebook.svg
+  - title: Mastodon
+    link: https://joinmastodon.org
+    logo_image: /img/mastodon.svg
+  - title: Instagram
+    link: https://instagram.com
+    logo_image: /img/instagram.svg
+  - title: Email
+    link: "mailto:?subject:Hugobricks website"
+    logo_image: /img/email.svg
+footer_text: 이 테마는 오픈 소스입니다. 자세한 내용은 [Github](https://github.com/jhvanderschee/hugobricks)에서 확인하세요!

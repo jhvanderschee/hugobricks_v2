@@ -48,7 +48,7 @@ body:not(.mobilemenu) .siteheader.sticky.stuck { animation: slidedown 0.45s ease
 .siteheader.dark { background: var(--textDarker); }
 .siteheader.dark :is(.logo, .logo small, .mainnav > ul > li > a, .languageswitch) { color: #fff; }
 .siteheader.dark .mainnav > ul > li::after { background: #fff; }
-.siteheader.dark :is(.logo img, .cart img, #togglemenu) { filter: invert(1); }
+.siteheader.dark :is(.logo img, .cart img, .search img, #togglemenu) { filter: invert(1); }
 .siteheader.dark .preheader { background: rgb(255 255 255 / 0.06);}
 .siteheader.dark :is(.preheader, .preheader a) { color: rgb(255 255 255 / 0.55); }
 .siteheader.dark .preheader img { filter: invert(1); opacity: 0.55; }
@@ -73,7 +73,7 @@ body:not(.mobilemenu) .siteheader.sticky.stuck { animation: slidedown 0.45s ease
 .siteheader.transparent:not(.stuck) :is(.logo, .logo small, .languageswitch) { color: #fff; }
 body:not(.mobilemenu) .siteheader.transparent:not(.stuck) .mainnav > ul > li > a { color: #fff; }
 body:not(.mobilemenu) .siteheader.transparent:not(.stuck) .mainnav > ul > li::after { background: #fff; }
-.siteheader.transparent:not(.stuck) :is(.logo img, .cart img, #togglemenu) { filter: invert(1); }
+.siteheader.transparent:not(.stuck) :is(.logo img, .cart img, .search img, #togglemenu) { filter: invert(1); }
 .siteheader.transparent:not(.stuck) .preheader { background: transparent; border-block-end-color: rgb(255 255 255 / 0.25); }
 .siteheader.transparent:not(.stuck) :is(.preheader, .preheader a) { color: rgb(255 255 255 / 0.8); }
 .siteheader.transparent:not(.stuck) .preheader img { filter: invert(1); opacity: 0.8; }
@@ -216,7 +216,7 @@ body:not(.mobilemenu) .siteheader.transparent:not(.stuck) .mainnav > ul > li::af
     font-size: 0.9rem;
 }
 
-.masthead .cart { position: relative; display: block; }
+.masthead :is(.cart, .search) { position: relative; display: block; }
 
 /* The cart glyph is a black svg, and black is not a colour this theme paints
    anything in. The theme tinted it to `--textDark` with `.black_2_textDark`,
@@ -230,7 +230,7 @@ body:not(.mobilemenu) .siteheader.transparent:not(.stuck) .mainnav > ul > li::af
    white on a dark or transparent banner is set on `.siteheader.dark` and
    `.siteheader.transparent`, which outrank this on specificity, so the two
    never argue. */
-.masthead .cart img {
+.masthead :is(.cart, .search) img {
     block-size: 1.25rem;
     inline-size: auto;
     filter: contrast(0.7) sepia(1) hue-rotate(160deg);

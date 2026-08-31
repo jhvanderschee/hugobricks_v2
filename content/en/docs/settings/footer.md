@@ -7,7 +7,7 @@ The footer settings live in `data/<lang>/footer.yaml`.
 
 ## Logo image
 
-Here you can specify the path to the logo that should be displayed in the footer. Leave it empty and the site title is used instead.
+Here you can specify the path to the logo image shown beside the footer's text logo (the site title from `general.yaml`). Leave it empty and the global `favicon_image` steps in; leave both empty for the text alone.
 
 ## Menu items
 

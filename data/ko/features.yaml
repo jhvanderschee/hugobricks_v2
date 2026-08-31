@@ -1,0 +1,34 @@
+# ---------------------------------------------------------------------------
+# The feature grid, rendered by the `{{< features >}}` shortcode into the
+# `features` brick. The section's own heading and intro stay in the markdown;
+# the cards live here.
+#
+# `icon` is any square SVG. It is drawn in the accent colour through a CSS
+# mask, so the file's own fill is ignored — a one-colour glyph is what works.
+# ---------------------------------------------------------------------------
+
+- icon: /img/icons/material-symbols/200/rounded/auto_awesome_mosaic.svg
+  title: 모든 컴포넌트 포함
+  description: '다음 브릭을 제공하는 것을 목표로 합니다: 인트로, 제목, 이미지, CTA, 연락처,
+    팀, 후기, 소개, 가격, 제품 목록, 제품, USP, 통계, 갤러리, 인용,
+    FAQ, 브랜드, 비디오, 블로그, 글, 관련 콘텐츠.'
+- icon: /img/icons/material-symbols/200/rounded/performance_max.svg
+  title: 99+ Google Lighthouse 점수
+  description: 매우 빠른 웹사이트. Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis
+    illum nesciunt commodi vel nisi ut alias excepturi ipsum.
+- icon: /img/icons/material-symbols/200/rounded/design_services.svg
+  title: CSS 변수 기반 테마
+  description: 브랜드 스타일에 맞게 손쉽게 조정할 수 있습니다. Lorem ipsum dolor sit amet consectetur
+    adipisicing elit. Corporis illum nesciunt commodi vel nisi ut alias excepturi ipsum.
+- icon: /img/icons/material-symbols/200/rounded/devices.svg
+  title: 모든 화면 크기 지원
+  description: 모든 화면과 기기에서 작동합니다. Lorem ipsum dolor sit amet consectetur adipisicing
+    elit. Corporis illum nesciunt commodi vel nisi ut alias excepturi ipsum.
+- icon: /img/icons/material-symbols/200/rounded/timer.svg
+  title: 초고속 빌드
+  description: 매우 빠릅니다. Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis illum
+    nesciunt commodi vel nisi ut alias excepturi ipsum.
+- icon: /img/icons/material-symbols/200/rounded/auto_fix.svg
+  title: 10개 이상의 미리 만들어진 페이지
+  description: 완성된 결과에서 시작하세요. Lorem ipsum dolor sit amet consectetur adipisicing elit.
+    Corporis illum nesciunt commodi vel nisi ut alias excepturi ipsum.

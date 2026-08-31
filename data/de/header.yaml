@@ -1,0 +1,30 @@
+logo_image:
+logo_subtitle: Das ultimative Hugo-Theme (v2)
+dark_header: false
+mobile_view_width: 1100
+menuitems:
+  - title: Home
+    link: /de/
+    items:
+      - title:
+        link:
+  - title: Lorem
+    link: /de/lorem/
+    items:
+      - title:
+        link: /
+  - title: Ipsum
+    link: /de/ipsum/
+    items:
+      - title:
+        link:
+  - title: Dolor set
+    link: /de/dolor/
+    items:
+      - title:
+        link:
+cta:
+  active: true
+  title: Jetzt loslegen
+  link: /de/
+preheader: geöffnet von 9–17 Uhr, am Wochenende geschlossen

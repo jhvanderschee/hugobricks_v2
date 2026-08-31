@@ -1,0 +1,22 @@
+logo_image:
+menuitems:
+  - title: O nás
+    link:  /cs/
+  - title: Prvky
+    link:  /cs/
+  - title: Zásady ochrany osobních údajů
+    link:  /cs/
+socials:
+  - title: Facebook
+    link: https://facebook.com
+    logo_image: /img/facebook.svg
+  - title: Mastodon
+    link: https://joinmastodon.org
+    logo_image: /img/mastodon.svg
+  - title: Instagram
+    link: https://instagram.com
+    logo_image: /img/instagram.svg
+  - title: Email
+    link: "mailto:?subject:Hugobricks website"
+    logo_image: /img/email.svg
+footer_text: Toto téma je open source. Více informací najdete na [Githubu](https://github.com/jhvanderschee/hugobricks)!

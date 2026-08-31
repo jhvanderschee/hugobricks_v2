@@ -2,16 +2,16 @@
 title: Video
 ---
 
-An HTML5 video is written straight into the markdown. You can see it in action on the [elements page](/elements/):
+A self-hosted HTML5 video plays without loading anything from a streaming service. You can see it in action on the [elements page](/elements/). To show a video, write:
 
 ```
-<figure>
-    <video controls preload="metadata" poster="/uploads/gallery/01.jpg">
-        <source src="/uploads/video/flowers.mp4" type="video/mp4">
-        <p>Your browser does not support HTML5 video.
-           Here is <a href="/uploads/video/flowers.mp4">a link to download the video</a>.</p>
-    </video>
-</figure>
+{{</* video "/uploads/video/flowers.mp4" */>}}
 ```
 
-The same shape works for audio, with `<audio>` and a `type="audio/mpeg"` source. Both are sized by the core stylesheet, so they behave like any other piece of media in the flow.
+A poster image shown before playback and a caption are passed as named parameters:
+
+```
+{{</* video src="/uploads/video/flowers.mp4" poster="/uploads/gallery/01.jpg" caption="Flowers" */>}}
+```
+
+The shortcode renders a `<figure>` holding the video, with a download link as the fallback for browsers without HTML5 video. There are two more optional parameters: `class` lands on the figure, and `preload` is `none`, `metadata` (the default) or `auto`. For a video from a streaming service, use the [Youtube](/docs/shortcodes/youtube/) or [Vimeo](/docs/shortcodes/vimeo/) shortcode instead.

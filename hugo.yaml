@@ -16,6 +16,21 @@ languages:
     languageName: Nederlands
     contentDir: content/nl
     weight: 2
+  de:
+    languageCode: de
+    languageName: Deutsch
+    contentDir: content/de
+    weight: 3
+  cs:
+    languageCode: cs
+    languageName: Čeština
+    contentDir: content/cs
+    weight: 4
+  ko:
+    languageCode: ko
+    languageName: 한국어
+    contentDir: content/ko
+    weight: 5
 
 params:
   sections:
@@ -158,5 +173,6 @@ outputs:
   home:
     - html
     - rss
-    # `json` (the search index) is added back together with a template when
-    # `enable_search` in data/settings.yaml is turned on.
+    # Search ships no index: `enable_search` in data/settings.yaml puts the
+    # banner's search icon up, and the `/search` page it points to scopes a
+    # Google search to this site. A local `json` index would slot in here.

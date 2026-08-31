@@ -2,25 +2,17 @@
 title: Reviews
 ---
 
-Say you want a neat reviews 'component' with some feedback. See the [relevant section](/) on the home page of this sample website.
+Say you want a neat reviews 'component' with some customer feedback. The reviews brick is a centred intro above a row of testimonials. You can see it in action on the [home page](/).
 
 ## Use this brick
 
-The intro is markdown; the testimonials come from `data/<lang>/reviews.yaml` through the `reviews` shortcode:
+To use this brick you only need the [reviews shortcode](/docs/shortcodes/reviews/):
 
 ```
----
-
-## What users say about Hugobricks
-
-Don't just take our word for it — hear from some of our satisfied users!
-
 {{</* reviews */>}}
 ```
 
-The `<ul class="reviews">` that the shortcode emits is also what routes the section: the `reviews` rule in `params.sections` matches `ul.reviews`.
-
-## The data
+Anything else you write in the section — typically a heading and a short line of text — becomes the centred intro above the testimonials. They come from `data/<lang>/reviews.yaml`, one entry per review (`stars` is optional):
 
 ```
 - name: Gitio Hamano
@@ -28,11 +20,10 @@ The `<ul class="reviews">` that the shortcode emits is also what routes the sect
   image: /uploads/photos/avatars/1.jpeg
   description: Rings of Uranus hearts of the stars corpus.
   stars: 5
-- name: Rasmus Phorfp
-  function: All Stacks developer
-  image: /uploads/photos/avatars/2.jpeg
-  description: Finite but unbounded astonishment two ghostly.
-  stars: 4
 ```
 
-`stars` is optional and is announced as "Rated 5 out of 5" rather than as five identical images.
+You can force the use of this block by writing:
+
+```
+---.reviews
+```

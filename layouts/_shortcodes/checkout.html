@@ -1,0 +1,22 @@
+{{- /*
+  Renders the checkout page: the checkout form beside the order summary,
+  with the progress bar under it.
+
+      {{< checkout >}}*Payments are 100% secure…*{{< /checkout >}}
+
+  The inner text lands under the running total — the place for a word about
+  how the payment is handled. The form itself is
+  `_partials/site/checkoutform.html`, shared with the `checkoutform`
+  shortcode, and the page links come from `data/<lang>/webshop.yaml`.
+
+  The `form#checkoutform` the partial renders is also what routes the
+  section: the `checkout` rule in `params.sections` matches it.
+*/ -}}
+{{- $w := (partial "data.html" .Page).webshop -}}
+{{- partial "site/checkoutform.html" (dict "Page" .Page "Inner" (string .Inner)) }}
+
+<ol class="progress">
+    <li class="past"><a href="{{ $w.cart_link }}/">{{ i18n "Cart" }}</a></li>
+    <li class="current"><a href="{{ $w.checkout_link }}/" aria-current="step">{{ i18n "Checkout" }}</a></li>
+    <li><span>{{ i18n "Payment" }}</span></li>
+</ol>
