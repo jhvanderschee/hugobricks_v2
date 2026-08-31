@@ -36,17 +36,32 @@
   matching no rule falls back to `wide`, the plain prose brick — the safest
   thing to do with markdown nobody claimed is to set it at reading measure.
 
+  The markdown can overrule all of it: a divider written as `---.small`
+  (instead of `---`) still splits, and forces the section it opens to the
+  `small` brick, rules unheard. Any brick name works — `---.intro`,
+  `---.image-alt` — and a name without a partial falls back to `wide` with
+  the same warning a rule would get. Opening the page itself with one forces
+  the first section. The typographer writes such a line into the html as
+  `<p>&mdash;.small</p>`, which is what the normalisation below looks for.
+
   Call it through `partialCached` — the page renders it twice.
 
   @context {page} .
-  @returns {slice} one dict per section: Name, Content, Index
+  @returns {slice} one dict per section: Name, Content, Index, Forced
 */ -}}
 
 {{- $page := . -}}
 {{- $rules := site.Params.sections | default slice -}}
 
+{{- /* `---.small` is no thematic break to goldmark: it leaves the page as a
+       paragraph reading `&mdash;.small` (or `---.small` with the typographer
+       off). Fold it into a plain divider carrying its brick name, so the
+       split below treats it as any other `---`. */ -}}
+{{- $content := partial "inline_attributes.html" $page.Content -}}
+{{- $content = replaceRE `<p>(?:&mdash;|—|-{3,})\s*\.([a-zA-Z0-9][a-zA-Z0-9_-]*)</p>` "<hr><!--brick:$1-->" $content -}}
+
 {{- $sections := slice -}}
-{{- range $part := split (partial "inline_attributes.html" $page.Content) "<hr>" -}}
+{{- range $part := split $content "<hr>" -}}
   {{- with trim $part "\n\r\t " -}}
     {{- $sections = $sections | append . -}}
   {{- end -}}
@@ -58,6 +73,16 @@
 
   {{- $name := "wide" -}}
   {{- $matched := false -}}
+  {{- $forced := false -}}
+
+  {{- /* A divider that names its brick has already decided. */ -}}
+  {{- if hasPrefix $html "<!--brick:" -}}
+    {{- $name = replaceRE `(?s)^<!--brick:([a-zA-Z0-9_-]+)-->.*` "$1" $html -}}
+    {{- $html = trim (strings.TrimPrefix (printf "<!--brick:%s-->" $name) $html) "\n\r\t " -}}
+    {{- $matched = true -}}
+    {{- $forced = true -}}
+  {{- end -}}
+
   {{- range $rule := $rules -}}
     {{- if not $matched -}}
       {{- $match := true -}}
@@ -97,7 +122,7 @@
     {{- $name = "wide" -}}
   {{- end -}}
 
-  {{- $out = $out | append (dict "Name" $name "Content" $html "Index" $i) -}}
+  {{- $out = $out | append (dict "Name" $name "Content" $html "Index" $i "Forced" $forced) -}}
 {{- end -}}
 
 {{- /*
@@ -123,6 +148,11 @@
 {{- range $out -}}
   {{- $section := . -}}
   {{- if in $pair $section.Name -}}
+    {{- /* A forced face is kept and re-anchors the phase, so the sections
+           after it keep alternating from the face it chose. */ -}}
+    {{- if $section.Forced -}}
+      {{- $tinted = eq $section.Name "image-alt" -}}
+    {{- end -}}
     {{- $section = merge $section (dict "Name" (cond $tinted "image-alt" "image")) -}}
     {{- $tinted = not $tinted -}}
   {{- end -}}

@@ -25,6 +25,11 @@ params:
       is:
       not_is:
     - title: wide
+      has: 
+      not_has:
+      is: :first-child,:last-child
+      not_is:
+    - title: wide
       has: section.faqgroup
       not_has:
       is:
