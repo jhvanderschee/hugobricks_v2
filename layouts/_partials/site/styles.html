@@ -39,6 +39,14 @@
         {{- $css = $css | append . -}}
     {{- end -}}
 {{- end -}}
+{{- /* `data/settings.yaml` `customcursor`: the dot that trails the mouse.
+       Off, and nothing ships — the file is nothing but the cursor. The same
+       `with` guard as above, for the same reason. */ -}}
+{{- if site.Data.settings.customcursor -}}
+    {{- with resources.Get "css/customcursor.css" -}}
+        {{- $css = $css | append . -}}
+    {{- end -}}
+{{- end -}}
 {{- if $withSectionStyles -}}
     {{- $css = $css | append (resources.Match "css/sections/*.css") -}}
 {{- end -}}

@@ -6,7 +6,7 @@
 
 :is(section.posts, section.webshop) li img {
     inline-size: 100%;
-    aspect-ratio: 1.5;
+    aspect-ratio: 2;
     object-fit: cover;
     border-radius: var(--radius);
     margin: 0 0 1rem;
@@ -82,16 +82,13 @@ section.posts .filter {
     gap: 0.75rem;
     margin-block: -2rem 1.25rem;
 }
-/* `line-height: normal` because the base control rule takes `font: inherit`,
-   and that carries the body's 1.7 into the box — half a line of air the
-   original theme never had, since its select inherits only the family and the
-   size. With that put back it is the theme's own control: no fill, a hairline
-   border, and 0.25em/0.75em of padding. */
+/* The theme's own control: no fill, a hairline border, and 0.25em/0.75em of
+   padding. The base control rule already puts selects at `line-height:
+   normal`. */
 section.posts .filter select {
     background: none;
     padding: 0.25em 0.75em;
     border: 1px solid var(--borderMedium);
-    line-height: normal;
     margin: 0;
 }
 

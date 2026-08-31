@@ -1,0 +1,21 @@
+{{- /*
+  Marks the spot where the Usecue POS payment page takes over, as in
+  hugocodex.
+
+      {{< usecue-payment >}}
+      {{< usecue-payment id="18" lang="nl" >}}
+
+  The account id comes from `webshop.yaml` (`pos_id`) and the language from
+  the page, either overridable here. `webshop.js` finds this element, adds
+  the amount owed and the order number from the cart it keeps, and loads
+  `pay.js` from pos.usecue.com, which turns the page into a payment page for
+  QR code, iDEAL, SEPA or credit card — with a redirect to the POS's own
+  payment page as the fallback when that script cannot run here. The page
+  around it should say "one moment please": that is what a visitor without
+  javascript keeps.
+
+  The `div#usecuepayment` is also what routes the section: a `payment` rule
+  in `params.sections` matches it.
+*/ -}}
+{{- $w := (partial "data.html" .Page).webshop -}}
+<div id="usecuepayment" data-id="{{ .Get "id" | default $w.pos_id }}" data-lang="{{ .Get "lang" | default .Page.Language.Lang }}"></div>

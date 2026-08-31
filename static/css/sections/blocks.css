@@ -7,7 +7,6 @@
 section.blocks li {
     aspect-ratio: 1.5;
     border-radius: var(--radius);
-    overflow: clip;
     text-align: center;
     isolation: isolate;
 }
@@ -17,9 +16,20 @@ section.blocks li > a {
     justify-content: center;
     block-size: 100%;
     padding: 1.5rem;
-    color: #fff;
     text-decoration: none;
 }
+section.blocks li strong {
+    display: block;
+    font-size: 1.25rem;
+    line-height: 1.3;
+    margin-block-end: 0.5rem;
+}
+
+/* A tile with a picture fills with it, dims it behind a scrim, and speaks in
+   white over it. */
+section.blocks li:has(img) { overflow: clip; }
+section.blocks li:has(img) > a,
+section.blocks li:has(img) strong { color: #fff; }
 section.blocks li img {
     position: absolute;
     inset: 0;
@@ -30,7 +40,7 @@ section.blocks li img {
     border-radius: 0;
     margin: 0;
 }
-section.blocks li::after {
+section.blocks li:has(img)::after {
     content: "";
     position: absolute;
     inset: 0;
@@ -38,7 +48,18 @@ section.blocks li::after {
     background: var(--scrim);
     pointer-events: none;
 }
-section.blocks li strong { display: block; color: #fff; font-size: 1.25rem; line-height: 1.3; }
+
+/* A tile without one is a box: the theme's light fill and hairline border,
+   dark text on it. */
+section.blocks li:not(:has(img)) {
+    background: var(--light);
+    border: 1px solid var(--borderLight);
+}
+section.blocks li:not(:has(img)) > a { color: var(--textMedium); }
+section.blocks li:not(:has(img)) strong { color: var(--textDark); }
+
+/* Hover: a picture leans in, a box sharpens its edge. */
 @media (hover: hover) {
     section.blocks li:hover img { transform: scale(1.075); }
+    section.blocks li:not(:has(img)):hover { border-color: var(--borderMedium); }
 }

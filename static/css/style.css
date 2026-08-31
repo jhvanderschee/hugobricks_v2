@@ -300,8 +300,9 @@ p > img { border-radius: var(--radius); margin-block: 2.25rem; }
    different sources still reads as one set — the `reviews` and `team` bricks
    share it. This is the theme's `colorize_image`, which is the same value in
    all four palettes despite living in the palette stylesheet; its leading
-   `contrast(1)` is an identity function and is dropped here. */
-.avatar { filter: sepia(1) hue-rotate(160deg) grayscale(0.8); }
+   `contrast(1)` is an identity function and is dropped here. `.colorize` is
+   the tone alone, for an image that keeps its own shape. */
+.avatar, .colorize { filter: sepia(1) hue-rotate(160deg) grayscale(0.8); }
 
 /* Hovering a linked thumbnail zooms it inside its frame. Only inside a frame:
    every other `<a>` in the theme that holds an image holds an *icon* — the
@@ -371,6 +372,17 @@ input, textarea, select {
     border: 1px solid var(--borderMedium);
     border-radius: 0.25rem;
 }
+/* `font: inherit` carries the body's 1.7 line-height into the controls — a
+   text input honours it, a select does not, and the two come out at
+   different heights beside each other. `normal` puts every one-line control
+   on the select's footing, which is also the theme's own proportion, and the
+   shared block-size settles the last two pixels of chrome a select draws
+   that a text input does not. A textarea keeps the reading line-height: it
+   holds a body of text. */
+input:not([type="checkbox"], [type="radio"]), select {
+    line-height: normal;
+    block-size: 2.75rem;
+}
 label + input, label + textarea, label + select {margin-top: 0.5rem}
 textarea { resize: vertical; block-size: 9rem; }
 :is(input[type="checkbox"], input[type="radio"]) {cursor: pointer; }
@@ -417,9 +429,6 @@ form div:not(.checkbox, .radio) > label:not(.sr-only) {
    already set the measure and the form fills it. */
 main .container > form.form { max-inline-size: var(--measure-small); }
 .box form.form { max-inline-size: 26rem; margin-inline: auto; }
-.colorize {
-  filter: contrast(1) sepia(1) hue-rotate(160deg) grayscale(0.8) !important;
-}
 
 /* -- language switcher --------------------------------------------------- */
 
@@ -596,6 +605,7 @@ main:has(> section.stickstofooter:last-child) + .sitefooter { margin-block-start
 section.collection > .container.small {
     text-align: center;
     margin-block-end: 4rem;
+    padding-top: 1rem;
 }
 section.collection > .container > ul {
     display: grid;

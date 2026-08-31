@@ -4,7 +4,7 @@ sticky_header: true
 dark_header: false
 transparent_header: false
 dark_footer: true
-customcursor: false
+customcursor: true
 intersectionobserver: true
 filter_has_numbers: true
 page_size: 3

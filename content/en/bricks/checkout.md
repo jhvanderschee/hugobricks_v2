@@ -4,4 +4,4 @@ title: Checkout
 
 # Checkout
 
-Payments are 100% secure and will be handled by either Mollie's Paylink service, called Plink, or PayPal.me. In the next screen you will be redirected to a secure checkout process on either useplink.com or paypal.me.
+Payments are 100% secure and will be handled by the Usecue payment page. On the next screen you can pay with a SEPA transaction, iDEAL or credit card.

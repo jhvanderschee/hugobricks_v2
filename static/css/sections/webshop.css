@@ -1,4 +1,14 @@
 /* -- brick: webshop ------------------------------------------------------
-   The product grid is the post grid: both are styled together by the
-   `:is(section.posts, section.webshop)` rules in `posts.css`. Nothing here
-   yet — this file is where a webshop-only rule would go.                 */
+   The product grid is the post grid: the cards are styled together by the
+   `:is(section.posts, section.webshop)` rules in `posts.css`. What is here
+   is the list's own geometry, the same measurements `posts.css` gives
+   `ul.posts` — the `products` shortcode emits `ul.products`, so the shared
+   collection grid's tighter gutter would apply otherwise.                 */
+
+section.webshop > .container > ul.products {
+    grid-template-columns: repeat(auto-fill, minmax(min(20rem, 100%), 1fr));
+    gap: 1.55rem 2rem;
+}
+
+section.webshop li p { margin-block: 0 1rem; }
+section.webshop li p:last-child { margin-block-end: 0; }

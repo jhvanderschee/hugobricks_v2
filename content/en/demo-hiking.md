@@ -19,7 +19,7 @@ Hugobricks is a free website theme for Hugo. It makes building Hugo websites chi
 
 Mauris in nisi ex. Etiam ultricies ipsum id turpis blandit bibendum. Donec posuere elit nec odio vehicula blandit. Aliquam nulla velit, sagittis vitae tellus ut, efficitur faucibus diam. Maecenas id egestas sapien. Nunc sit amet ullamcorper risus. Etiam bibendum mattis ullamcorper. Nulla interdum ornare ipsum, quis efficitur libero tincidunt sed. In ultricies vel enim vel pulvinar. Quisque finibus sem velit, sed consequat mi ullamcorper vitae. Proin finibus tristique sollicitudin. Phasellus sit amet iaculis nisi.
 
-![](/uploads/photos/hike/hike2.jpg)
+![](/uploads/photos/hike/hike2.jpg){:.float}
 
 ---
 
@@ -27,7 +27,7 @@ Mauris in nisi ex. Etiam ultricies ipsum id turpis blandit bibendum. Donec posue
 
 Curabitur sit amet laoreet urna. Donec vel lobortis nunc. Aliquam scelerisque ultrices ipsum vitae gravida. Nam semper, nibh vitae porttitor auctor, quam dui faucibus diam, sit amet vulputate ligula nibh sed dui. Cras viverra nisl vitae dictum auctor. Aliquam rhoncus dolor nibh, sit amet maximus eros blandit vitae. Sed maximus dui sit amet nibh pulvinar volutpat. Nam odio purus, porta quis ultrices vitae, ultricies non justo. Vestibulum elementum elementum vulputate. Proin facilisis ipsum ipsum, vel ornare orci vehicula sed. Duis congue sit amet est ornare convallis. Etiam viverra bibendum elit vitae blandit.
 
-![](/uploads/photos/hike/hike3.jpg)
+![](/uploads/photos/hike/hike3.jpg){:.float}
 
 ---
 
@@ -35,7 +35,7 @@ Curabitur sit amet laoreet urna. Donec vel lobortis nunc. Aliquam scelerisque ul
 
 In ultricies vel enim vel pulvinar. Quisque finibus sem velit, sed consequat mi ullamcorper vitae. Proin finibus tristique sollicitudin. Phasellus sit amet iaculis nisi. Duis sit amet massa cursus, dapibus erat a, eleifend justo. Cras in felis tristique, aliquet est at, ultrices leo. Donec accumsan at quam id volutpat. Sed maximus dui sit amet nibh pulvinar volutpat. Nam odio purus, porta quis ultrices vitae, ultricies non justo. Maecenas id egestas sapien. Nunc sit amet ullamcorper risus. Etiam bibendum mattis ullamcorper.
 
-![](/uploads/photos/hike/hike4.jpg)
+![](/uploads/photos/hike/hike4.jpg){:.float}
 
 ---
 

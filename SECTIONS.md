@@ -10,12 +10,14 @@ each chunk, using the rules in `params.sections`; `sections_logic.html` ranges
 over that result to render the page. The first matching rule wins and a chunk
 that matches no rule falls back to `wide`, the plain prose brick.
 
-Three kinds of page do not go through that splitter at all, because they are
+Four kinds of page do not go through that splitter at all, because they are
 one article rather than a stack of bricks and what makes them one is where
 they live: a blog post (`layouts/posts/page.html`), a service
-(`layouts/services/page.html`) and a documentation page
-(`layouts/docs/all.html`). Each renders its own brick whole and adds the shared
-call to action from `content/<lang>/bricks/cta.md` after it. For the docs that
+(`layouts/services/page.html`), a product (`layouts/products/page.html`) and a
+documentation page (`layouts/docs/all.html`). The first three render their own
+brick whole — the post and the service add the shared call to action from
+`content/<lang>/bricks/cta.md` after it, and the product brick builds the page
+from the front matter rather than the markdown. For the docs that
 is also what keeps their markdown readable: those pages are full of `---` and
 `{:.class}` written out as examples, and the splitter would read a horizontal
 rule in prose as a brick boundary.
@@ -139,6 +141,51 @@ picks its palette. `mobile_view_width` reaches CSS through
 `<body data-mobile-width>` and `site.js`, because a media query cannot read a
 data file.
 
+## The webshop
+
+The webshop is the original theme's, migrated, with the checkout and payment
+of ../hugocodex: the same flow — products, cart, checkout, payment — and the
+same localStorage keys (`cart`, `addons`, `ordernumber`), so a stored cart
+survives. The parts were reworked to this build's conventions:
+
+- **The listing** is `{{< products >}}` on `/webshop/` — `teaser_list.html`
+  over `content/<lang>/products/`, ordered by front-matter `weight`, emitting
+  `ul.products`, which is what the `webshop` rule routes on.
+- **A product page** renders whole through `layouts/products/page.html`, like
+  a post: the `product` brick builds picture, price and add-to-cart form from
+  the front matter (`image`, `variant_type`, `variants` with `name`/`price`/
+  `sku`), with the markdown body as the description.
+- **The cart page** is markdown: the table with its "cart is empty" row, the
+  total, the way on. `webshop.js` redraws the table body from storage.
+- **The checkout form** is `{{< checkoutform >}}` — the address fields in
+  `site/form.html`'s idiom, the shipping options and custom values generated
+  from `webshop.yaml` with their prices as data- attributes, the summary
+  beside it kept true by the javascript, and hidden `order` / `checkout` /
+  `ordernumber` inputs for the mail. The paired shortcode's inner text lands
+  under the running total. It posts to the form handler named in
+  `webshop.yaml` (`form_handler`), hugocodex's flow: the handler checks the
+  `_token` timer the javascript fetched when the page opened, mails the
+  order, and sends the visitor on to `_next` — the payment page.
+- **The payment page** is `{{< usecue-payment >}}`: `webshop.js` hands the
+  Usecue POS (`pos_id` in `webshop.yaml`) the amount owed, the order number
+  and the language, and pay.js turns the page into the payment page — QR
+  code, iDEAL, SEPA, credit card. Every failure path ends on
+  pos.usecue.com's own payment page rather than on "one moment please".
+- **Configuration rides as data- attributes** — currency symbol and links,
+  written by the bricks and shortcodes from `webshop.yaml` — so `webshop.js`
+  carries none of its own. The file loads wherever `show_cart_icon` is on,
+  which is also what shows the banner's cart count.
+- **Without javascript** the shop is a brochure: every page renders, the cart
+  shows its honest empty row, and nothing misleads.
+
+The shop rules in `params.sections` route on what only their page holds:
+`ul.products`, `p.carttotal`, `form#checkoutform`, `ul.methods`,
+`div#usecuepayment`.
+
+Deliberately not carried over: the old payment brick's embedded PayPal
+smart-buttons widget (an SDK load against a hard-coded demo client id). The
+payment brick here is the method picker the markdown writes.
+
 ## Where things live
 
 ```
@@ -151,6 +198,7 @@ layouts/{home,page,section}.html  each just calls sections_logic
 layouts/docs/all.html             docs brick + cta, no splitting
 layouts/posts/page.html           post brick + cta, no splitting
 layouts/services/page.html        post brick + cta, no splitting
+layouts/products/page.html        product brick from front matter, no splitting
 layouts/_partials/
   data.html                       the language bundle, in one place
   section_map.html                splits content on <hr>, routes to a brick
@@ -161,9 +209,11 @@ layouts/_partials/
                                   footer, languages, languageswitch
   sections/                       the 28 bricks
 layouts/_shortcodes/              button, breadcrumbs, faq, socialbuttons,
-                                  openinghours, contactform, ctaform, newsletterform
+                                  openinghours, contactform, ctaform, newsletterform,
+                                  products, checkoutform
 static/css/style.css              the whole stylesheet
 static/js/site.js                 sticky header + mobile menu + language selects
+static/js/webshop.js              the cart, in localStorage — see The webshop
 static/img/                       ui icons, from ../hugobricks/themes/hugobricks/static
 static/fonts/                     Signika 700, Heebo 400/600
 static/uploads/                   the image library, from ../hugobricks/static

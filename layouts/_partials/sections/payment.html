@@ -2,10 +2,16 @@
   Brick: payment
   Payment method picker.
 
+  The markdown carries the page; `webshop.js` writes the amount owed into its
+  `#paymenttotal` span, from the cart and the checkout extras it keeps in
+  localStorage. The currency symbol rides over on the section, from
+  `data/<lang>/webshop.yaml`.
+
   @context {dict} . Content, Name, Index, Page
 */ -}}
 {{- $label := partial "section_label.html" .Content -}}
-<section class="payment"{{ with $label }} aria-labelledby="{{ . }}"{{ end }}>
+{{- $w := (partial "data.html" .Page).webshop -}}
+<section class="payment"{{ with $label }} aria-labelledby="{{ . }}"{{ end }} data-currency="{{ $w.currency_symbol }}">
     <div class="container small">
         {{ .Content }}
     </div>

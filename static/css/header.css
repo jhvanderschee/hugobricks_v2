@@ -241,7 +241,7 @@ body:not(.mobilemenu) .siteheader.transparent:not(.stuck) .mainnav > ul > li::af
     inset-inline-start: 0.65rem;
     min-inline-size: 1rem;
     padding-inline: 0.15rem;
-    background: #d32f2f;
+    background: rgb(235, 0, 0);
     color: #fff;
     font-size: 0.7rem;
     font-weight: 700;

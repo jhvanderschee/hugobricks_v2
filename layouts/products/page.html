@@ -1,0 +1,10 @@
+{{- /*
+  A product page. Like a post, a product is one article rather than a stack
+  of bricks, so it does not go through `section_map.html`: the `product`
+  brick renders the page whole, building the picture, the price and the
+  add-to-cart form from the front matter, with the markdown body as the
+  description.
+*/ -}}
+{{ define "sections" }}
+    {{- partial "sections/product.html" (dict "Content" .Content "Name" "product" "Index" 0 "Page" .) -}}
+{{ end }}

@@ -2,10 +2,18 @@
   Brick: cart
   Shopping cart: line items, total, link on to checkout.
 
+  The markdown carries the whole page — the table with its "cart is empty"
+  row, the total and the way on — and `webshop.js` replaces the table body
+  and the `.carttotal` with the cart it keeps in localStorage. The currency
+  symbol rides over on the section, from `data/<lang>/webshop.yaml`, so the
+  javascript carries no configuration of its own. Without it the page shows
+  an honest empty cart.
+
   @context {dict} . Content, Name, Index, Page
 */ -}}
 {{- $label := partial "section_label.html" .Content -}}
-<section class="cart"{{ with $label }} aria-labelledby="{{ . }}"{{ end }}>
+{{- $w := (partial "data.html" .Page).webshop -}}
+<section class="cart"{{ with $label }} aria-labelledby="{{ . }}"{{ end }} data-currency="{{ $w.currency_symbol }}">
     <div class="container medium">
         {{ .Content }}
     </div>

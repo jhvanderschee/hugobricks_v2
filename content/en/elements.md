@@ -71,7 +71,7 @@ A normal image:
 
 A toned image, the same treatment the review and team portraits get:
 
-![Photo by S. Tsuchiya on Unsplash](/uploads/photos/bricks2.jpg){:.avatar.inline}
+![Photo by S. Tsuchiya on Unsplash](/uploads/photos/bricks2.jpg){:.colorize.inline}
 
 -
 
@@ -89,7 +89,7 @@ A toned image, the same treatment the review and team portraits get:
 
 A map is an image with a marker on top of it, wrapped in a link to the mapping service. Give that image the class `map` and the whole section becomes the full-bleed [map brick](/docs/bricks/map/) instead — which is not what this page wants, so here it is a plain linked image:
 
-[![](/uploads/map.png){:.inline}](https://www.google.com/maps/place/52%C2%B022'20.1%22N+4%C2%B054'00.4%22E/@52.372253,4.8991072,18z/data=!3m1!4b1!4m4!3m3!8m2!3d52.372253!4d4.9001?entry=ttu)
+[![](/uploads/map.png){:.map}](https://www.google.com/maps/place/52%C2%B022'20.1%22N+4%C2%B054'00.4%22E/@52.372253,4.8991072,18z/data=!3m1!4b1!4m4!3m3!8m2!3d52.372253!4d4.9001?entry=ttu)
 
 -
 

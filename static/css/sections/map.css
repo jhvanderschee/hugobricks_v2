@@ -36,3 +36,24 @@ section.map:has(.backdrop)::after {
 @media (max-width: 55rem) {
     section.map > .container { justify-content: center; }
 }
+
+/* -- inline map -----------------------------------------------------------
+   An `img.map` in running text, wrapped in a link to the mapping service —
+   the elements page's plain map. The same pin as the brick's, but drawn on
+   the wrapping link, since a replaced element can carry no `::after`, and in
+   the theme's dark ink rather than `--accent` — the theme tints this one to
+   the text color. */
+a:has(> img.map) { position: relative; display: block; }
+img.map {
+    inline-size: 100%;
+    aspect-ratio: 2.25;
+    object-fit: cover;
+    border-radius: var(--radius);
+}
+a:has(> img.map)::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--textDark);
+    mask: url("/img/marker.svg") center / auto 4rem no-repeat;
+}

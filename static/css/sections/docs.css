@@ -1,7 +1,7 @@
 /* -- brick: docs ---------------------------------------------------------
    Sticky table of contents beside the body.                              */
 
-section.docs { padding-block-start: 0; }
+section.docs { padding-block-start: 0; margin-top: -2rem;}
 section.docs > .container { display: flex; gap: clamp(2rem, 5vw, 5rem); }
 
 section.docs .docsmenu {

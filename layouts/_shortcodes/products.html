@@ -1,0 +1,18 @@
+{{- /*
+  Renders the site's products as a grid of teaser cards.
+
+      {{< products >}}
+
+  The products are the pages of `content/<lang>/products/`, ordered by their
+  front-matter `weight`, so the list is per language like everything else and
+  a new product appears here by existing rather than by being added to a
+  hand-written list. The cards are the blog's `teaser_list.html` with the
+  list classed `products` instead of `posts`.
+
+  The `<ul class="products">` the partial emits is also what routes the
+  section: the `webshop` rule in `params.sections` matches `ul.products`, so
+  writing this shortcode into a section is what picks the brick that wraps it.
+*/ -}}
+{{- with where site.RegularPages "Section" "products" -}}
+    {{- partial "teaser_list.html" (dict "Pages" . "Class" "products") -}}
+{{- end -}}

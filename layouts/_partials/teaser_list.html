@@ -19,13 +19,16 @@
   first: `findRE` is handed `template.HTML` otherwise and quietly matches
   nothing.
 
-  The `<ul class="posts">` is also what routes the section: the `posts` rule in
-  `params.sections` matches `ul.posts`.
+  The class on the `<ul>` is also what routes the section: the `posts` rule in
+  `params.sections` matches `ul.posts`, and the `products` shortcode passes
+  `Class: products` so the `webshop` rule can match `ul.products` — the same
+  card, told apart by the list it sits in.
 
-  @context {dict} . Pages (page slice), Dates (bool), PageSize (int, optional)
+  @context {dict} . Pages (page slice), Dates (bool), PageSize (int, optional),
+                    Class (string, the list's class — default `posts`)
 */ -}}
 {{- $icons := "/img/icons/material-symbols/200/rounded" -}}
-<ul class="posts"{{ with .PageSize }} data-pagesize="{{ . }}"{{ end }}>
+<ul class="{{ .Class | default `posts` }}"{{ with .PageSize }} data-pagesize="{{ . }}"{{ end }}>
     {{- range .Pages -}}
         {{- /* A page opens on its picture, and goldmark wraps a lone image in
                a paragraph of its own, so the first `<p>` is not the first
@@ -41,7 +44,7 @@
         {{- range .Params.tags -}}{{- with . -}}{{- $tags = $tags | append . -}}{{- end -}}{{- end -}}
         <li{{ with $tags }} data-tags="{{ delimit . " " }}"{{ end }}>
             <a href="{{ .RelPermalink }}">
-                {{ with .Params.image }}<img src="{{ . }}" alt="" width="600" height="400">{{ end }}
+                {{ with .Params.image }}<img src="{{ . }}" alt="" width="600" height="300">{{ end }}
                 <strong>{{ .Title | safeHTML }}</strong>
             </a>
             {{ if $.Dates }}{{ with .Date }}<p class="meta"><span class="icon" style="--icon: url('{{ $icons }}/calendar_month-fill.svg')"></span><time datetime="{{ .Format "2006-01-02" }}">{{ . | time.Format ":date_medium" }}</time></p>{{ end }}{{ end }}

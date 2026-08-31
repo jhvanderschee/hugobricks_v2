@@ -1,12 +1,49 @@
 {{- /*
   Brick: product
-  A single product: gallery beside title, price and add-to-cart form.
+  A single product: picture beside title, price and add-to-cart form.
+
+  Unlike most bricks this one renders from front matter rather than from the
+  markdown: a product's picture, its variants and their prices live in the
+  front matter of `content/<lang>/products/<product>.md`, the markdown body
+  is the description, and `layouts/products/page.html` hands the whole page
+  here rather than through `section_map.html`.
+
+  The form is inert markup: `webshop.js` reads the data- attributes off the
+  form and the chosen `<option>`, keeps the cart in localStorage, and moves
+  on to the cart page. Without it the submit posts harmlessly to that same
+  page. The price in the `<h2>` is the first variant's; the `.productprice`
+  span is where the javascript writes the chosen variant's.
 
   @context {dict} . Content, Name, Index, Page
 */ -}}
-{{- $label := partial "section_label.html" .Content -}}
-<section class="product"{{ with $label }} aria-labelledby="{{ . }}"{{ end }}>
+{{- $p := .Page -}}
+{{- $w := (partial "data.html" $p).webshop -}}
+{{- $id := $p.Title | plainify | anchorize -}}
+<section class="product" aria-labelledby="{{ $id }}">
     <article class="container twocols">
-        {{ .Content }}
+        <figure class="media">
+            <a href="{{ $p.Params.image }}"><img src="{{ $p.Params.image }}" alt="{{ $p.Title }}"></a>
+        </figure>
+        <div class="text">
+            <h1 id="{{ $id }}">{{ $p.Title | safeHTML }}</h1>
+            <h2>{{ $w.currency_symbol }} <span class="productprice">{{ lang.FormatNumber 2 (index $p.Params.variants 0).price }}</span></h2>
+            <form method="post" action="{{ $w.cart_link }}/"
+                data-url="{{ $p.RelPermalink }}"
+                data-title="{{ $p.Title }}"
+                data-varianttype="{{ $p.Params.variant_type }}"
+                data-image="{{ $p.Params.image }}"
+                data-cart-link="{{ $w.cart_link }}/">
+                <div>
+                    <label for="variant">{{ $p.Params.variant_type | humanize }}</label>
+                    <select id="variant" name="variant">
+                        {{- range $i, $variant := $p.Params.variants }}
+                        <option value="{{ .sku }}" data-sku="{{ .sku }}" data-variantname="{{ .name }}" data-price="{{ .price }}"{{ if not $i }} selected{{ end }}>{{ .name }} — {{ $w.currency_symbol }} {{ lang.FormatNumber 2 .price }}</option>
+                        {{- end }}
+                    </select>
+                </div>
+                <div class="submit"><button type="submit" class="button">Add to cart</button></div>
+            </form>
+            {{ .Content }}
+        </div>
     </article>
 </section>

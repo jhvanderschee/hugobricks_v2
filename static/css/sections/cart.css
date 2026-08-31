@@ -1,49 +1,104 @@
 /* -- brick: cart ---------------------------------------------------------
-   Line items, total, link on to checkout.                                */
+   Line items, total, link on to checkout. The progress steps and the
+   submit row are shared with the `checkout` brick — the same furniture on
+   the next page of the same flow.                                         */
 
-section.cart table :is(th, td):last-child { text-align: end; }
+section.cart table :is(th, td):last-child { text-align: end; white-space: nowrap; }
+section.cart tbody td[colspan] { text-align: center; }
+section.cart table :is(td) {border-color: var(--borderMedium);}
+
+/* The avatar column stays at the avatar's width — a zero preferred size
+   makes the auto layout give any spare room to the other columns — and the
+   product column claims all of that room, so the amount and total columns
+   sit at their content's width. The stacked product lines read at caption
+   size, and the cell's one link wraps them all. */
+section.cart tbody td:first-child { inline-size: 0; }
+section.cart tbody td:nth-child(2) {
+    inline-size: 100%;
+    font-size: 0.9rem;
+    line-height: 1.3;
+}
+section.cart tbody td:nth-child(2) a {text-decoration: none;}
 section.cart .productavatar {
     inline-size: 4rem;
+    max-inline-size: none; /* its cell has no preferred width to be 100% of */
     block-size: 4rem;
     border-radius: 50%;
     object-fit: cover;
 }
-section.cart input[type="number"] { inline-size: 4rem; text-align: center; }
+/* The amount is typed, not stepped, so the spinner buttons go — each engine
+   asks in its own words. */
+section.cart input[type="number"] {
+    inline-size: 4rem;
+    text-align: center;
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+section.cart input[type="number"]::-webkit-outer-spin-button,
+section.cart input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
 section.cart .carttotal { display: block; text-align: end; font-size: 1.7rem; padding-block-start: 1rem; }
-section.cart .submitbutton { display: flex; justify-content: flex-end; align-items: center; gap: 2rem; margin-block-start: 1rem; }
 
-section.cart ol.progress {
+/* `flex-direction` spelled out: inside the checkout form this row is a
+   `form > div`, and the form's own field rule stacks those in a column. */
+:is(section.cart, section.checkout) .submitbutton {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 2rem;
+    margin-block-start: 1rem;
+}
+
+/* The checkout steps, at the theme's own measurements: a 110px step whose
+   dot sits on the line's start and whose label hangs centered under that
+   dot — which is why every label is wrapped in an element, `translateX`
+   cannot centre a bare text node. The list is centred and then nudged half
+   a step inline, the theme's `margin-left: 55px`, so it is the run of dots
+   that reads as centred rather than the boxes. */
+:is(section.cart, section.checkout) ol.progress {
     display: flex;
     justify-content: center;
-    gap: 0;
     margin-block-start: 3rem;
-    padding: 0;
+    padding: 0 0 0 3.4rem;
     list-style: none;
-    counter-reset: step;
 }
-section.cart ol.progress li {
+:is(section.cart, section.checkout) ol.progress li {
     position: relative;
-    flex: 0 0 8rem;
+    flex: 0 0 6.875rem;
     margin: 0;
-    padding-block-start: 1rem;
+    padding-block-start: 0.5rem;
     border-block-start: 1px solid var(--borderMedium);
-    font-size: 0.9rem;
 }
-section.cart ol.progress li::before {
+:is(section.cart, section.checkout) ol.progress li > * {
+    display: inline-block;
+    white-space: nowrap;
+    transform: translateX(-50%);
+}
+:is(section.cart, section.checkout) ol.progress li a { text-decoration: none; }
+/* The dot: the theme's ring — a fill inside a page-coloured border, the
+   hairline drawn by the shadow, sitting on the line. */
+:is(section.cart, section.checkout) ol.progress li::before {
     content: "";
     position: absolute;
-    inset-block-start: -0.35rem;
-    inset-inline-start: 0;
-    inline-size: 0.7rem;
-    block-size: 0.7rem;
+    inset-block-start: -0.5rem;
+    inset-inline-start: -0.5rem;
+    inline-size: 0.95rem;
+    block-size: 0.95rem;
+    border: 2px solid var(--page);
     border-radius: 50%;
     background: var(--page);
-    box-shadow: 0 0 0 1px var(--borderMedium);
+    box-shadow: 0 0 0.1px 1px var(--borderMedium);
 }
-section.cart ol.progress li:is(.current, .past) { border-block-start-color: var(--accent); }
-section.cart ol.progress li:is(.current, .past)::before { background: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
-section.cart ol.progress li:is(.current, .past) a { color: var(--accentDarker); }
-
-@media (max-width: 800px) {
-    section.cart table :is(th, td):nth-child(3) { display: none; }
+:is(section.cart, section.checkout) ol.progress li:is(.current, .past) { border-block-start-color: var(--accent); }
+:is(section.cart, section.checkout) ol.progress li:is(.current, .past)::before { background: var(--accent); box-shadow: 0 0 0.1px 1px var(--accent); }
+:is(section.cart, section.checkout) ol.progress li:is(.current, .past) a { color: var(--accentDarker); }
+/* The line runs dot to dot, so the last step carries a dot but no line
+   onward — the border stays, transparent, so its dot sits at the same
+   height as the others'. */
+:is(section.cart, section.checkout) ol.progress li:last-child {
+    flex-basis: auto;
+    border-block-start-color: transparent;
 }

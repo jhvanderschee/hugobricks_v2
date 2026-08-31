@@ -1,5 +1,6 @@
 {{- /*
-  Renders the site's services as a grid of teaser cards.
+  Renders the site's services as a grid of teaser cards under a filter that
+  narrows them by tag.
 
       {{< services >}}
 
@@ -10,7 +11,30 @@
   the section to the same `posts` brick — a service listing and a post listing
   are the same thing with different pages in them, which is how the original
   theme builds `/our-services/` too. No date: a service is not news.
+
+  The filter is the blog's, worked by the same `site.js`, but its tags are the
+  site's rather than this listing's — the original theme offers every tag on
+  the site wherever the filter appears, and this page keeps that. A tag no
+  service carries is offered and disabled rather than hidden, which is `site.js`
+  doing what it does everywhere: an option that would leave nothing is closed
+  off, not lied about.
 */ -}}
 {{- with sort (where site.RegularPages "Section" "services") "Title" -}}
-    {{- partial "teaser_list.html" (dict "Pages" . "Dates" false) -}}
+
+{{- $tags := slice -}}
+{{- range site.RegularPages -}}
+    {{- range .Params.tags -}}{{- with . -}}{{- $tags = $tags | append . -}}{{- end -}}{{- end -}}
+{{- end -}}
+{{- with sort (uniq $tags) -}}
+<form class="filter">
+    <label class="sr-only" for="tagfilter">Filter services by tag</label>
+    <select id="tagfilter" data-numbers="{{ site.Data.settings.filter_has_numbers }}">
+        <option value="">Filter tags</option>
+        {{- range $name := . -}}<option value="{{ $name }}">{{ $name }}</option>{{- end -}}
+    </select>
+    <ul class="tags" aria-live="polite"></ul>
+</form>
+{{- end -}}
+
+{{- partial "teaser_list.html" (dict "Pages" . "Dates" false) -}}
 {{- end -}}

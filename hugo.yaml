@@ -34,6 +34,31 @@ params:
       not_has:
       is:
       not_is:
+    - title: webshop
+      has: ul.products
+      not_has:
+      is:
+      not_is:
+    - title: cart
+      has: p.carttotal
+      not_has:
+      is:
+      not_is:
+    - title: checkout
+      has: form#checkoutform
+      not_has:
+      is:
+      not_is:
+    - title: payment
+      has: ul.methods
+      not_has:
+      is:
+      not_is:
+    - title: payment
+      has: div#usecuepayment
+      not_has:
+      is:
+      not_is:
     - title: contact
       has: form#contactform
       not_has:

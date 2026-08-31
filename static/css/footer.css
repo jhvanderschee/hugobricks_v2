@@ -13,6 +13,10 @@
     color: var(--textMedium);
 }
 .sitefooter a { color: inherit; text-decoration: none; }
+/* `.sitefooter a`'s inherit outweighs `.logo`'s own color, which would mute
+   the mark to the footer's `--textMedium`; the logo keeps its dark ink, name
+   and subtitle both, as in the theme. The dark footer whitens it below. */
+.sitefooter .logo, .sitefooter .logo small { color: var(--textDark); }
 
 /* data/settings.yaml `dark_footer` */
 .sitefooter.dark { background: var(--textDark); border-block-start: 0; color: rgb(255 255 255 / 0.55); }

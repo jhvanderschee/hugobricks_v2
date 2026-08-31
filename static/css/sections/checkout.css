@@ -1,8 +1,13 @@
 /* -- brick: checkout -----------------------------------------------------
    Delivery details beside the order summary.                             */
 
-section.checkout > .container { display: grid; grid-template-columns: 2fr 1.1fr; gap: 3rem; }
-section.checkout > .container > h1 { grid-column: 1 / -1; }
+section.checkout > .container { display: grid; grid-template-columns: 2fr 1.1fr; gap: 1rem 3rem; }
+section.checkout > .container > :is(h1, ol.progress) { grid-column: 1 / -1; }
+
+section.checkout fieldset + fieldset {margin-top: 1rem;}
+section.checkout .summary {padding-top: 0.35rem;}
+section.checkout .summary em { font-size: 0.9rem; display: block; line-height: 1.6;}
+
 section.checkout .calculation {
     background: var(--light);
     border-radius: 0.25rem;
@@ -10,7 +15,17 @@ section.checkout .calculation {
     text-align: end;
 }
 section.checkout .calculation span { float: inline-start; }
-section.checkout .calculation .sum { border-block-start: 0.1rem solid var(--borderMedium); margin-block-start: 0.35rem; padding-block-start: 0.1rem; }
+/* The sum: a block of its own — the label span inside it still floats, the
+   amount rides right on the text-align — so the rule above it runs the full
+   width of the summary. `clear` drops it below the floated labels. */
+section.checkout .calculation .sum {
+    display: block;
+    float: none;
+    clear: both;
+    border-block-start: 0.1rem solid var(--borderMedium);
+    margin-block-start: 0.35rem;
+    padding-block-start: 0.1rem;
+}
 
 @media (max-width: 800px) {
     section.checkout > .container { grid-template-columns: 1fr; max-inline-size: var(--measure-small); }
