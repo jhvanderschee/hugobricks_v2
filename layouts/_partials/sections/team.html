@@ -1,0 +1,16 @@
+{{- /*
+  Brick: team
+  Intro copy plus a grid of colleagues.
+
+  The people come from the markdown, which writes `{{< team >}}` to render
+  `data/<lang>/people.yaml`. This brick only supplies the section and its
+  container — the same shape as `features`, `reviews`, `blocks` and `prices`.
+
+  @context {dict} . Content, Name, Index, Page
+*/ -}}
+{{- $label := partial "section_label.html" .Content -}}
+{{- $parts := partial "split_list.html" .Content -}}
+<section class="team collection"{{ with $label }} aria-labelledby="{{ . }}"{{ end }}>
+    {{ with $parts.Intro }}<div class="container small">{{ . | safeHTML }}</div>{{ end }}
+    {{ with $parts.List }}<div class="container">{{ . | safeHTML }}</div>{{ end }}
+</section>

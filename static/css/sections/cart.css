@@ -1,0 +1,49 @@
+/* -- brick: cart ---------------------------------------------------------
+   Line items, total, link on to checkout.                                */
+
+section.cart table :is(th, td):last-child { text-align: end; }
+section.cart .productavatar {
+    inline-size: 4rem;
+    block-size: 4rem;
+    border-radius: 50%;
+    object-fit: cover;
+}
+section.cart input[type="number"] { inline-size: 4rem; text-align: center; }
+section.cart .carttotal { display: block; text-align: end; font-size: 1.7rem; padding-block-start: 1rem; }
+section.cart .submitbutton { display: flex; justify-content: flex-end; align-items: center; gap: 2rem; margin-block-start: 1rem; }
+
+section.cart ol.progress {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    margin-block-start: 3rem;
+    padding: 0;
+    list-style: none;
+    counter-reset: step;
+}
+section.cart ol.progress li {
+    position: relative;
+    flex: 0 0 8rem;
+    margin: 0;
+    padding-block-start: 1rem;
+    border-block-start: 1px solid var(--borderMedium);
+    font-size: 0.9rem;
+}
+section.cart ol.progress li::before {
+    content: "";
+    position: absolute;
+    inset-block-start: -0.35rem;
+    inset-inline-start: 0;
+    inline-size: 0.7rem;
+    block-size: 0.7rem;
+    border-radius: 50%;
+    background: var(--page);
+    box-shadow: 0 0 0 1px var(--borderMedium);
+}
+section.cart ol.progress li:is(.current, .past) { border-block-start-color: var(--accent); }
+section.cart ol.progress li:is(.current, .past)::before { background: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+section.cart ol.progress li:is(.current, .past) a { color: var(--accentDarker); }
+
+@media (max-width: 800px) {
+    section.cart table :is(th, td):nth-child(3) { display: none; }
+}

@@ -1,0 +1,52 @@
+{{- /*
+  A section's html from its nth top-level child onward.
+
+  `section_has.html` needs this for `:nth-child(n)`: drop the first n-1
+  children and the nth one is whatever is now at the front, which is the same
+  question `:first-child` already knows how to answer.
+
+  Goldmark hands us a flat run of block elements, so a child is dropped by
+  cutting to its closing tag — lazily, to the *first* one, which is its own
+  unless it holds another of its kind. A nested list does hold one, and cutting
+  short there leaves the outer `</li></ul>` behind; those are skipped without
+  counting, which lands the tally back where it belongs. Void elements have no
+  closing tag and end at their own `>`.
+
+  A standalone picture is skipped and not counted, for the reason
+  `section_has.html` gives: the bricks lift it out of the column, so it is the
+  section's media rather than a line of it, and counting it would make the
+  tally depend on where the author happened to put it.
+
+  @context {dict} . Html (string), N (int, 1-based)
+  @returns {string} the html from the nth child on, "" if there is no nth child
+*/ -}}
+{{- $rest := trim (string .Html) " \n\r\t" -}}
+{{- $n := int .N -}}
+{{- $void := `(?is)^<(?:img|hr|br|input|source|col|area|embed|track|wbr)\b[^>]*>\s*` -}}
+{{- $media := `(?is)^(?:<p>\s*(?:<a\b[^>]*>\s*)?<img\b[^>]*>\s*(?:</a>\s*)?</p>|<figure\b.*?</figure>)\s*` -}}
+{{- $skip := `(?s)^(?:</[^>]*>\s*)+` -}}
+
+{{- if gt $n 1 -}}
+  {{- range seq (sub $n 1) -}}
+    {{- $rest = replaceRE $media "" (replaceRE $skip "" $rest) -}}
+    {{- if hasPrefix $rest "<" -}}
+      {{- if findRE $void $rest 1 -}}
+        {{- $rest = replaceRE $void "" $rest -}}
+      {{- else if findRE `(?is)^<[a-zA-Z][\w-]*[\s/>]` $rest 1 -}}
+        {{- $name := replaceRE `(?is)^<([a-zA-Z][\w-]*)[\s/>].*$` "$1" $rest -}}
+        {{- $rest = replaceRE (printf `(?is)^.*?</%s\s*>\s*` $name) "" $rest -}}
+      {{- else -}}
+        {{- $rest = "" -}}
+      {{- end -}}
+    {{- else -}}
+      {{- /* loose text at the top level counts as one child too */ -}}
+      {{- $rest = replaceRE `(?s)^[^<]*` "" $rest -}}
+    {{- end -}}
+    {{- $rest = trim $rest " \n\r\t" -}}
+  {{- end -}}
+{{- end -}}
+{{- /* Once more at the end, so the nth child is what the caller sees at the
+       front however the section happened to be written — and so that N=1,
+       which skips the loop entirely, gets the same treatment as the rest. */ -}}
+{{- $rest = trim (replaceRE $media "" (replaceRE $skip "" $rest)) " \n\r\t" -}}
+{{- return $rest -}}

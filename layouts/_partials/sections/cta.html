@@ -1,0 +1,17 @@
+{{- /*
+  Brick: cta
+  A boxed closing call to action: heading, one paragraph, one button, and an
+  illustration that drops away on narrow screens.
+
+  @context {dict} . Content, Name, Index, Page
+*/ -}}
+{{- $label := partial "section_label.html" .Content -}}
+{{- $parts := partial "split_media.html" .Content -}}
+<section class="cta hasbackgroundcolor"{{ with $label }} aria-labelledby="{{ . }}"{{ end }}>
+    <div class="container">
+        <div class="box twocols">
+            <div class="text">{{ $parts.Text | safeHTML }}</div>
+            {{ with $parts.Media }}<figure class="media" aria-hidden="true">{{ . | safeHTML }}</figure>{{ end }}
+        </div>
+    </div>
+</section>

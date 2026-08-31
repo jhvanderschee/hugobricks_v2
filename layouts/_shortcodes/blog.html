@@ -1,0 +1,51 @@
+{{- /*
+  Renders the site's posts as a grid of teaser cards, newest first, under a
+  filter that narrows them by tag.
+
+      {{< blog >}}
+
+  The posts are the pages of `content/<lang>/posts/`, so the list is per
+  language like everything else, and a new post appears here by existing
+  rather than by being added to a hand-written list. The tags are the ones the
+  posts carry in their front matter; `filter_has_numbers` in
+  `data/settings.yaml` decides whether each is offered with a count.
+
+  The cards themselves are `teaser_list.html`, which the services listing uses
+  too — the two are the same grid with different pages in them. Only the blog
+  asks for dates, and only the blog is filtered and paged.
+
+  The filter and the paging are `site.js`'s work, ported from the original
+  theme's `filter.js`. The markup here is what it needs and nothing more: the
+  tags on a `<select>`, the tags of each post on its card, the page size on the
+  list, and an empty `<ul class="tags">` for the chips it builds. Without that
+  file the select does nothing, the button stays hidden and every card is
+  visible — the whole list, unfiltered and unpaged, which is the honest
+  fallback for a page whose content is all here already.
+
+  The `<ul class="posts">` the partial emits is also what routes the section:
+  the `posts` rule in `params.sections` matches `ul.posts`, so writing this
+  shortcode into a section is what picks the brick that wraps it.
+*/ -}}
+{{- $posts := sort (where site.RegularPages "Section" "posts") "Date" "desc" -}}
+{{- with $posts -}}
+
+{{- /* `with` skips the blanks: a post whose front matter leaves a `tags:`
+       entry empty otherwise offers an unnamed tag that matches nothing. */ -}}
+{{- $tags := slice -}}
+{{- range . -}}
+    {{- range .Params.tags -}}{{- with . -}}{{- $tags = $tags | append . -}}{{- end -}}{{- end -}}
+{{- end -}}
+{{- with sort (uniq $tags) -}}
+<form class="filter">
+    <label class="sr-only" for="tagfilter">Filter posts by tag</label>
+    <select id="tagfilter" data-numbers="{{ site.Data.settings.filter_has_numbers }}">
+        <option value="">Filter tags</option>
+        {{- range $name := . -}}<option value="{{ $name }}">{{ $name }}</option>{{- end -}}
+    </select>
+    <ul class="tags" aria-live="polite"></ul>
+</form>
+{{- end -}}
+
+{{- partial "teaser_list.html" (dict "Pages" . "Dates" true "PageSize" site.Data.settings.page_size) -}}
+<p class="loadmore"><button type="button" class="button secondary ghost smaller" hidden>Load more posts…</button></p>
+{{- end -}}

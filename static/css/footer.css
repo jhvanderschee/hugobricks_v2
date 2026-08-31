@@ -1,0 +1,72 @@
+/* ==========================================================================
+   Chrome: the footer
+
+   `footer.sitefooter` — logo, navigation, socials and colophon.
+   ========================================================================== */
+
+/* -- footer -------------------------------------------------------------- */
+
+.sitefooter {
+    margin-block-start: 4rem;
+    background: var(--light);
+    border-block-start: 0.1rem solid var(--borderLight);
+    color: var(--textMedium);
+}
+.sitefooter a { color: inherit; text-decoration: none; }
+
+/* data/settings.yaml `dark_footer` */
+.sitefooter.dark { background: var(--textDark); border-block-start: 0; color: rgb(255 255 255 / 0.55); }
+.sitefooter.dark .logo, .sitefooter.dark .logo small { color: #fff; }
+.sitefooter.dark .logo img { filter: invert(1); }
+.sitefooter.dark .colophon { border-block-start-color: rgb(255 255 255 / 0.1); }
+.sitefooter.dark ul.social .button.icon { background: var(--accent); }
+
+.sitefooter > .container {
+    display: flex;
+    align-items: center;
+    gap: 1rem 2rem;
+    padding-block: 3rem;
+}
+.sitefooter > .container > * { flex: 1; }
+.sitefooter > .container nav { flex: 3; }
+.sitefooter nav ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0 2rem;
+    padding: 0;
+    list-style: none;
+}
+.sitefooter nav li { margin: 0; }
+.sitefooter nav a { display: block;}
+@media (hover: hover) {
+    .sitefooter nav a:hover { color: var(--textDark); }
+    .sitefooter.dark nav a:hover { color: #fff; }
+}
+.sitefooter ul.social { justify-content: flex-end; }
+
+.sitefooter .colophon { border-block-start: 1px solid var(--borderLight); font-size: 0.9rem; }
+.sitefooter .colophon .container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0 2rem;
+    padding-block: 1.7rem;
+}
+.sitefooter .colophon > .container > div > :last-child { margin: 0; }
+.sitefooter .colophon a { text-decoration: underline; }
+.sitefooter .colophon li a { text-decoration: none; }
+.sitefooter .colophon ul { display: flex; gap: 1rem; padding: 0; list-style: none; }
+/* The language switcher is `.languageswitch` in the core; the footer only
+   says what colour it is. Hover is read on the wrapper so the caret comes
+   along with the text. */
+@media (hover: hover) {
+    .sitefooter .colophon .languageswitch:hover { color: var(--textDark); }
+    .sitefooter.dark .colophon .languageswitch:hover { color: #fff; }
+}
+
+@media (max-width: 1000px) {
+    .sitefooter > .container { flex-direction: column; text-align: center; }
+    .sitefooter ul.social { justify-content: center; }
+}

@@ -1,0 +1,19 @@
+{{- /*
+  Brick: map
+  Full-bleed map with a floating address card. Put it last on the page and it
+  butts up against the footer.
+
+  Revised from the original theme: the contact details are an `<address>`, the
+  map is an `<img>` instead of an inline `background-image`, and the whole map
+  is a link rather than a `<div>` with an `onclick` and a `cursor: pointer`.
+
+  @context {dict} . Content, Name, Index, Page
+*/ -}}
+{{- $label := partial "section_label.html" .Content -}}
+{{- $parts := partial "split_media.html" .Content -}}
+<section class="map hasbackgroundcolor stickstofooter"{{ with $label }} aria-labelledby="{{ . }}"{{ end }}>
+    {{ with $parts.Media }}<div class="backdrop" aria-hidden="true">{{ . | safeHTML }}</div>{{ end }}
+    <div class="container">
+        <address>{{ $parts.Text | safeHTML }}</address>
+    </div>
+</section>

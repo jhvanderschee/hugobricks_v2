@@ -1,0 +1,12 @@
+{{- /*
+  Brick: about
+  Personal introduction: round portrait, h1, text, social links.
+
+  @context {dict} . Content, Name, Index, Page
+*/ -}}
+{{- $label := partial "section_label.html" .Content -}}
+<section class="about"{{ with $label }} aria-labelledby="{{ . }}"{{ end }}>
+    <div class="container small">
+        {{ .Content }}
+    </div>
+</section>

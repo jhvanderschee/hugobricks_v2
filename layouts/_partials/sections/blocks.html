@@ -1,0 +1,12 @@
+{{- /*
+  Brick: blocks
+  Intro plus a list of links that renders as a grid of image tiles.
+
+  @context {dict} . Content, Name, Index, Page
+*/ -}}
+{{- $label := partial "section_label.html" .Content -}}
+{{- $parts := partial "split_list.html" .Content -}}
+<section class="blocks collection"{{ with $label }} aria-labelledby="{{ . }}"{{ end }}>
+    {{ with $parts.Intro }}<div class="container small">{{ . | safeHTML }}</div>{{ end }}
+    {{ with $parts.List }}<div class="container">{{ . | safeHTML }}</div>{{ end }}
+</section>

@@ -1,0 +1,304 @@
+/* ==========================================================================
+   Chrome: the banner
+
+   `header.siteheader` — the skip link that precedes it, the preheader, the
+   logo, the main navigation, the header actions and the mobile menu panel.
+   ========================================================================== */
+
+/* -- skip link ----------------------------------------------------------- */
+
+.skiplink {
+    position: absolute;
+    inset-block-start: 0.5rem;
+    inset-inline-start: 0.5rem;
+    z-index: 100;
+    background: var(--textDark);
+    color: #fff;
+    padding: 0.6rem 1rem;
+    border-radius: var(--radius-s);
+    text-decoration: none;
+    transform: translateY(-150%);
+    transition: transform 0.15s ease-in-out;
+}
+.skiplink:focus-visible { transform: none; }
+
+/* -- banner -------------------------------------------------------------- */
+
+.siteheader { position: relative; z-index: 9; inline-size: 100%; background: var(--page); }
+.siteheader a { text-decoration: none; }
+
+/* data/settings.yaml `sticky_header`. The banner scrolls away with the page
+   and slides back in once you are past it — `.sticky` says the setting is on,
+   `.stuck` says it is currently pinned. While it is pinned it is out of flow,
+   so site.js reserves its resting height on <body> rather than the theme's
+   `header + section { padding-top: 11rem !important }`. */
+@keyframes slidedown {
+    from { transform: translateY(-100%); }
+    to   { transform: translateY(0); }
+}
+.siteheader.sticky.stuck {
+    position: fixed;
+    inset-block-start: 0;
+    box-shadow: 0 0 0.5rem rgb(0 0 0 / 0.1);
+}
+body:not(.mobilemenu) .siteheader.sticky.stuck { animation: slidedown 0.45s ease-in-out; }
+.siteheader.sticky.stuck .preheader { display: none; }
+
+/* header.dark — data/settings.yaml `dark_header`, data/<lang>/header.yaml */
+.siteheader.dark { background: var(--textDarker); }
+.siteheader.dark :is(.logo, .logo small, .mainnav > ul > li > a, .languageswitch) { color: #fff; }
+.siteheader.dark .mainnav > ul > li::after { background: #fff; }
+.siteheader.dark :is(.logo img, .cart img, #togglemenu) { filter: invert(1); }
+.siteheader.dark .preheader { background: rgb(255 255 255 / 0.06);}
+.siteheader.dark :is(.preheader, .preheader a) { color: rgb(255 255 255 / 0.55); }
+.siteheader.dark .preheader img { filter: invert(1); opacity: 0.55; }
+
+/* header.transparent — a page's own `transparent_header: true` front matter.
+   The banner lifts out of flow and paints nothing, so the `header` brick's
+   backdrop runs up behind the logo and the menu; both turn white to sit on
+   the scrim. Once the sticky banner is pinned it is an ordinary opaque bar
+   again, so the white reverses out on `.stuck`.
+
+   `.siteheader.sticky.stuck` outranks the position here on specificity, not
+   on order — a pinned banner stays `fixed`.
+
+   Only the top row of the menu reverses out. The dropdown is an opaque panel
+   of its own, painted in `--page`, so its links keep the dark type they are
+   given below — a blanket `.mainnav a` here would outrank that and hand the
+   panel white text on a white ground. The mobile menu is likewise its own
+   dark panel, so it is excluded too, and the hover rule keeps its active
+   colour. */
+.siteheader.transparent { position: absolute; inset-block-start: 0; background: transparent; }
+.siteheader.transparent.stuck { background: var(--page); }
+.siteheader.transparent:not(.stuck) :is(.logo, .logo small, .languageswitch) { color: #fff; }
+body:not(.mobilemenu) .siteheader.transparent:not(.stuck) .mainnav > ul > li > a { color: #fff; }
+body:not(.mobilemenu) .siteheader.transparent:not(.stuck) .mainnav > ul > li::after { background: #fff; }
+.siteheader.transparent:not(.stuck) :is(.logo img, .cart img, #togglemenu) { filter: invert(1); }
+.siteheader.transparent:not(.stuck) .preheader { background: transparent; border-block-end-color: rgb(255 255 255 / 0.25); }
+.siteheader.transparent:not(.stuck) :is(.preheader, .preheader a) { color: rgb(255 255 255 / 0.8); }
+.siteheader.transparent:not(.stuck) .preheader img { filter: invert(1); opacity: 0.8; }
+
+/* The hero reserves the height the banner would have taken. site.js measures
+   the banner at rest and publishes it as `--banner-height`; without that file
+   the fallback is close enough that nothing is ever covered. */
+.siteheader.transparent + main > section.bgimage:first-child > .container {
+    padding-block-start: calc(5.5rem + var(--banner-height, 8rem));
+}
+
+.preheader {
+    background: var(--textDark);
+    color: rgb(255 255 255 / 0.55);
+    border-block-end: 0.1rem solid var(--borderLight);
+    font-size: 0.9rem;
+}
+.preheader a { color: inherit; }
+.preheader img { filter: invert(1); }
+/* data/settings.yaml `preheader.is_light`. The icons are solid black SVGs, so
+   dropping the invert leaves them at full black next to type that is only 70%
+   — they read as the loudest thing in the bar. Fading them to half strength
+   lands them on the same weight as the text, as on the v1 site. */
+.preheader.light { background: var(--light); color: var(--textMedium); }
+.preheader.light img { filter: none; opacity: 0.5; }
+.preheader .container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0 2rem;
+    padding-block: 0.4rem;
+}
+.preheader p { margin: 0; }
+.preheader ul.contact { gap: 0 2rem; }
+.preheader a { display: flex; align-items: center; gap: 0.35rem; }
+.preheader img { block-size: 0.8em; inline-size: auto; }
+
+@media (max-width: 600px) {
+    .preheader .container { justify-content: center; }
+    .preheader ul.contact { display: none; }
+}
+
+.masthead .container {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    padding-block: 1.25rem;
+    transition: padding 0.15s ease-in-out;
+}
+.siteheader.sticky.stuck .masthead .container { padding-block: 0.7rem; }
+
+/* -- logo ---------------------------------------------------------------- */
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    font-family: var(--fontTitles);
+    font-size: 1.8rem;
+    line-height: 1.15;
+    color: var(--textDark);
+}
+/* Tinted to `--textDark` the same way the cart glyph is, and for the same
+   reason — see the note there. This rule is not scoped to the banner because
+   `.logo` is one partial: the footer's logo is the same mark and takes the
+   same tint, as it did in the theme. Both dark variants and the transparent
+   banner invert it to white from more specific selectors. */
+.logo img {
+    block-size: 2rem;
+    inline-size: auto;
+    filter: contrast(0.7) sepia(1) hue-rotate(160deg);
+}
+.logo strong, .logo small { display: block; font-weight: 700; color: inherit; }
+.logo small { font-family: var(--fontBody); font-size: 0.75rem; font-weight: 400; color: var(--textMedium); }
+
+/* -- main navigation ----------------------------------------------------- */
+
+.mainnav { margin-inline: auto; }
+.mainnav ul { display: flex; gap: 2rem; padding: 0; list-style: none; }
+.mainnav li { position: relative; margin: 0; }
+.mainnav a { display: block; padding-block: 0.8rem 0.65rem; white-space: nowrap; color: var(--textDarker); }
+
+.mainnav > ul > li::after {
+    content: "";
+    position: absolute;
+    inset-inline-start: 0;
+    inset-block-end: 0.6rem;
+    inline-size: 100%;
+    block-size: 0.05rem;
+    background: currentcolor;
+    transform: scaleX(0);
+    transition: transform 0.15s ease-in-out;
+}
+.mainnav > ul > li:is(:hover, :focus-within, .active)::after { transform: scaleX(1); }
+
+.mainnav li:has(> ul) > a::after {
+    content: "";
+    display: inline-block;
+    inline-size: 0.3rem;
+    block-size: 0.3rem;
+    margin-inline-start: 0.4rem;
+    border: 0.1rem solid currentcolor;
+    border-inline-start: 0;
+    border-block-start: 0;
+    transform: translateY(-0.15rem) rotate(45deg);
+}
+
+.mainnav ul ul {
+    position: absolute;
+    z-index: 99;
+    display: block;
+    min-inline-size: 100%;
+    margin-inline-start: -1rem;
+    padding-block: 0.75rem 0.85rem;
+    background: var(--page);
+    border-radius: var(--radius-s);
+    box-shadow: 0 0 1.5rem rgb(0 0 0 / 0.15);
+    font-size: 0.95rem;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(0.25rem);
+    transition: opacity 0.1s ease-in-out, transform 0.1s ease-in-out;
+}
+.mainnav li:is(:hover, :focus-within) > ul { opacity: 1; transform: none; pointer-events: auto; }
+.mainnav ul ul a { padding: 0.3rem 2rem 0.3rem 1rem; color: var(--textMedium); font-weight: 400; }
+.mainnav ul ul li.active > a { color: var(--textDark); font-weight: 700; }
+
+/* -- header actions and mobile menu -------------------------------------- */
+
+.masthead .actions { display: flex; align-items: center; gap: 1rem; }
+
+/* The language switcher is `.languageswitch` in the core, the same control
+   the footer carries. The banner only sizes it: the current language's code,
+   on the main navigation's weight, so it sits beside the menu rather than
+   under it. A `<select>` rather than the theme's hover panel, so a phone
+   opens it with the picker it already has. */
+.masthead .languageswitch {
+    color: var(--textDarker);
+    font-size: 0.9rem;
+}
+
+.masthead .cart { position: relative; display: block; }
+
+/* The cart glyph is a black svg, and black is not a colour this theme paints
+   anything in. The theme tinted it to `--textDark` with `.black_2_textDark`,
+   the same `contrast(0.7) sepia(1) hue-rotate(160deg)` in all four palettes,
+   and that is what this is — the leading `contrast(0.7)` lifts the black to a
+   grey, the rest turns that grey the blue of the body text.
+
+   A filter rather than the mask the accent glyphs use: those are drawn on an
+   empty `<span>`, and a mask over an `<img>` cuts the picture out rather than
+   colouring it. No `!important` either — the `invert(1)` that turns the glyph
+   white on a dark or transparent banner is set on `.siteheader.dark` and
+   `.siteheader.transparent`, which outrank this on specificity, so the two
+   never argue. */
+.masthead .cart img {
+    block-size: 1.25rem;
+    inline-size: auto;
+    filter: contrast(0.7) sepia(1) hue-rotate(160deg);
+}
+.masthead .cart .itemcount {
+    position: absolute;
+    inset-block-start: -0.5rem;
+    inset-inline-start: 0.65rem;
+    min-inline-size: 1rem;
+    padding-inline: 0.15rem;
+    background: #d32f2f;
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 700;
+    line-height: 1rem;
+    text-align: center;
+    border-radius: 1rem;
+}
+
+/* The third of the theme's `.black_2_textDark` icons, after the logo and the
+   cart — see the note on the cart. The glyph is this button's background
+   image, so the filter goes on the button; the only other thing in it is the
+   label, and that is clipped out of sight. */
+#togglemenu {
+    display: none;
+    inline-size: 3rem;
+    aspect-ratio: 1;
+    padding: 0;
+    border: 0;
+    background: url("/img/menu.svg") center / 2rem no-repeat;
+    filter: contrast(0.7) sepia(1) hue-rotate(160deg);
+    cursor: pointer;
+}
+#togglemenu span { position: absolute; clip-path: inset(50%); }
+
+body.mobilemenu #togglemenu { display: block; }
+body.mobilemenu .masthead .container { flex-wrap: wrap; }
+body.mobilemenu .mainnav {
+    position: fixed;
+    inset-block: 0;
+    inset-inline-end: 0;
+    z-index: 2;
+    inline-size: min(20rem, 100%);
+    margin: 0;
+    padding-block: 4rem;
+    overflow-y: auto;
+    background: var(--textDark);
+    transform: translateX(100%);
+    transition: transform 0.2s ease-in-out;
+}
+body.mobilemenu.menushown .mainnav { transform: none; box-shadow: 0 0 0.5rem rgb(0 0 0 / 0.3); }
+body.mobilemenu .mainnav ul { flex-direction: column; gap: 0; }
+body.mobilemenu .mainnav a { color: #fff; padding: 0.45rem 2.5rem 0.45rem 3rem; font-size: 1.15rem; }
+body.mobilemenu .mainnav > ul > li::after { content: none; }
+body.mobilemenu .mainnav ul ul {
+    position: static;
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+    margin: 0;
+    padding: 0;
+    background: none;
+    box-shadow: none;
+    border-radius: 0;
+}
+body.mobilemenu .mainnav ul ul a { padding-inline-start: 5rem; color: rgb(255 255 255 / 0.7); }
+body.mobilemenu .mainnav li.active > a { color: var(--accent); font-weight: 700; }
+
+@media (max-width: 450px) {
+    .masthead .actions .button { display: none; }
+}

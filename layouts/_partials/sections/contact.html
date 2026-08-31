@@ -1,0 +1,19 @@
+{{- /*
+  Brick: contact
+  A contact form beside an address.
+
+  @context {dict} . Content, Name, Index, Page
+*/ -}}
+{{- $label := partial "section_label.html" .Content -}}
+{{- $html := string .Content -}}
+{{- $form := "" -}}
+{{- with findRE `(?is)<form\b.*?</form>` $html 1 -}}
+    {{- $form = index . 0 -}}
+    {{- $html = replace $html $form "" 1 -}}
+{{- end -}}
+<section class="contact"{{ with $label }} aria-labelledby="{{ . }}"{{ end }}>
+    <div class="container twocols">
+        {{ with $form }}<div class="box">{{ . | safeHTML }}</div>{{ end }}
+        <address>{{ trim $html "\n\r\t " | safeHTML }}</address>
+    </div>
+</section>

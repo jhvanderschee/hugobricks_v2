@@ -1,0 +1,7 @@
+/* -- brick: contact ------------------------------------------------------
+   {{< contact-form >}}
+   Address, email, phone, social links.                                   */
+
+section.intro + section.contact {padding-top: 0!important;}
+section.contact .box { padding: clamp(2rem, 4vw, 3rem); }
+section.contact address { margin: 0; }

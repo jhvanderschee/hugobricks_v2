@@ -1,0 +1,57 @@
+{{- /*
+  Brick: post
+  A single article: breadcrumbs, title, byline, featured image, body.
+
+  Everything above the body is built from the page's own front matter —
+  `title`, `date`, `tags`, `image` — rather than written out again at the top
+  of every post. The markdown is the article and nothing else.
+
+  Each tag links to the blog page filtered on it, which is the query parameter
+  `site.js` reads there, so a reader can follow a tag from a post to the rest
+  of the posts carrying it.
+
+  Revised from the original theme: the body is an `<article>` rather than a
+  third `<div class="container">`, the byline is a `<p>` of real `<time>` and
+  links rather than nested divs and lists, and the icons are masks rather than
+  images run through a per-palette `filter`.
+
+  @context {dict} . Content, Name, Index, Page
+*/ -}}
+{{- $page := .Page -}}
+{{- $icons := "/img/icons/material-symbols/200/rounded" -}}
+{{- $tags := slice -}}
+{{- range $page.Params.tags -}}{{- with . -}}{{- $tags = $tags | append . -}}{{- end -}}{{- end -}}
+<section class="post">
+    <div class="container title">
+        {{ partial "site/breadcrumbs.html" $page }}
+        <h1>{{ $page.Title | safeHTML }}</h1>
+        {{ if or $page.Date $tags }}
+            <p class="meta">
+                {{ with $page.Date }}
+                    <span class="entry">
+                        <span class="icon" style="--icon: url('{{ $icons }}/calendar_month-fill.svg')"></span>
+                        <time datetime="{{ .Format "2006-01-02" }}">{{ . | time.Format ":date_medium" }}</time>
+                    </span>
+                {{ end }}
+                {{ with $tags }}
+                    <span class="entry">
+                        <span class="icon" style="--icon: url('{{ $icons }}/label-fill.svg')"></span>
+                        <span class="tags">
+                            {{- range $i, $tag := . -}}
+                                {{ if $i }}, {{ end }}<a href="{{ "blog/" | relLangURL }}?tag={{ $tag | urlize }}">{{ $tag }}</a>
+                            {{- end -}}
+                        </span>
+                    </span>
+                {{ end }}
+            </p>
+        {{ end }}
+    </div>
+    {{ with $page.Params.image }}
+        <div class="container wide">
+            <img class="featuredimage" src="{{ . }}" alt="" width="1600" height="800">
+        </div>
+    {{ end }}
+    <article class="container">
+        {{ .Content }}
+    </article>
+</section>

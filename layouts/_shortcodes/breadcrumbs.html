@@ -1,0 +1,9 @@
+{{- /*
+  Breadcrumb trail for the current page.
+
+      {{< breadcrumbs >}}
+
+  The trail itself is `site/breadcrumbs.html`, so the `post` brick can lay one
+  out without going through a shortcode.
+*/ -}}
+{{- partial "site/breadcrumbs.html" .Page -}}

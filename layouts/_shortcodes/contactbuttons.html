@@ -1,0 +1,20 @@
+{{- /*
+  Phone and email as icon buttons, from `data/<lang>/general.yaml`.
+
+      {{< contactbuttons >}}
+
+  Revised from the original theme: each button carries a real accessible name
+  instead of relying on the `alt` of its icon, and the phone number is
+  stripped to digits for the `tel:` href rather than only having its spaces
+  removed.
+*/ -}}
+{{- $d := partial "data.html" .Page -}}
+{{- $c := $d.general.contact -}}
+<ul class="buttons">
+    {{- with $c.phone -}}
+        <li><a class="button icon" href="tel:{{ replaceRE `[^+0-9]` "" . }}"><img src="/img/phone.svg" alt="" width="20" height="20"><span class="sr-only">Call {{ . }}</span></a></li>
+    {{- end -}}
+    {{- with $c.email -}}
+        <li><a class="button icon" href="mailto:{{ . }}"><img src="/img/email.svg" alt="" width="20" height="20"><span class="sr-only">Email {{ . }}</span></a></li>
+    {{- end -}}
+</ul>

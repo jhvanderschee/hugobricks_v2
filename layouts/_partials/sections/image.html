@@ -1,0 +1,19 @@
+{{- /*
+  Brick: image
+  Prose in one column, a picture in the other.
+
+  Revised from the original theme: the picture is a `<figure>` rather than a
+  `<div class="image">` wrapping a `<p>`, and the two columns are two elements
+  instead of a `direction: rtl` flip, so the reading order in the markup
+  matches the reading order on screen in both variants.
+
+  @context {dict} . Content, Name, Index, Page
+*/ -}}
+{{- $label := partial "section_label.html" .Content -}}
+{{- $parts := partial "split_media.html" .Content -}}
+<section class="image"{{ with $label }} aria-labelledby="{{ . }}"{{ end }}>
+    <div class="container twocols">
+        <div class="text">{{ $parts.Text | safeHTML }}</div>
+        {{ with $parts.Media }}<figure class="media">{{ . | safeHTML }}</figure>{{ end }}
+    </div>
+</section>

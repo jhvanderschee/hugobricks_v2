@@ -1,0 +1,112 @@
+{{- /*
+  The site banner. One `<header>` landmark per page, holding the utility bar,
+  the logo and the navigation landmarks.
+
+  Everything here comes from data: `data/<lang>/header.yaml` for the menu, the
+  call to action and the preheader line, `data/<lang>/general.yaml` for the
+  contact details, `data/<lang>/webshop.yaml` for the cart, and
+  `data/settings.yaml` for the sticky / dark / preheader switches.
+
+  The banner has three appearances, and a page picks one from its front
+  matter. `transparent_header` lifts it out of flow so a hero runs up behind
+  it; `dark_header` keeps it in flow but paints the bar dark; with neither it
+  is the plain white bar the hero starts below. `preheader_is_light` is the
+  same choice for the utility line above it.
+
+  Each of the three reads a site-wide default from `data/settings.yaml` — the
+  dark one may also be set per language in `data/<lang>/header.yaml` — and each
+  is overridden by a front-matter key of the same name on the page. That is
+  what makes two pages built from the same bricks look different, and it is
+  why `isset` rather than `with` decides: a page saying `dark_header: false`
+  against a dark site has to be able to turn the switch *off*.
+
+  `transparent_header` carries one extra condition beyond its switch: it only
+  takes effect when the page actually opens with a brick that paints a
+  full-bleed backdrop, because the logo and the menu turn white to sit on the
+  scrim and over an ordinary page they would be white on white.
+  `section_map.html` reports how the first section routed.
+
+  Revised from the original theme:
+  - the preheader moved *inside* `<header>`, so the page has one banner
+    landmark instead of a stray `<div>` above it;
+  - the menu toggle is a real `<button>` with `aria-expanded`/`aria-controls`
+    instead of an `onclick` on a `<div>`;
+  - every `<nav>` carries an `aria-label`, because a page may hold more than
+    one navigation landmark;
+  - the cart count is announced with `aria-live` rather than being a bare span.
+
+  @context {page} .
+*/ -}}
+{{- $d := partial "data.html" . -}}
+{{- $s := site.Data.settings -}}
+
+{{- /* Bricks that paint a full-bleed backdrop, and so can carry the banner. */ -}}
+{{- $backdropBricks := slice "header" -}}
+
+{{- /* Site default, then the language, then the page. */ -}}
+{{- $dark := or $s.dark_header $d.header.dark_header -}}
+{{- if isset .Params "dark_header" -}}
+    {{- $dark = .Params.dark_header -}}
+{{- end -}}
+
+{{- $lightPreheader := $s.preheader.is_light | default false -}}
+{{- if isset .Params "preheader_is_light" -}}
+    {{- $lightPreheader = .Params.preheader_is_light -}}
+{{- end -}}
+
+{{- $transparent := $s.transparent_header | default false -}}
+{{- if isset .Params "transparent_header" -}}
+    {{- $transparent = .Params.transparent_header -}}
+{{- end -}}
+{{- if $transparent -}}
+    {{- $first := "" -}}
+    {{- with partialCached "section_map.html" . .RelPermalink -}}
+        {{- $first = (index . 0).Name -}}
+    {{- end -}}
+    {{- $transparent = in $backdropBricks $first -}}
+{{- end -}}
+
+<header class="siteheader{{ if $s.sticky_header }} sticky{{ end }}{{ if $dark }} dark{{ end }}{{ if $transparent }} transparent{{ end }}">
+
+    {{ if $s.preheader.active }}
+        <div class="preheader{{ if $lightPreheader }} light{{ end }}">
+            <div class="container">
+                <ul class="contact">
+                    {{ with $d.general.contact.phone }}<li><a href="tel:{{ replaceRE `[^+0-9]` "" . }}"><img src="/img/phone.svg" alt="" width="16" height="16"> {{ . }}</a></li>{{ end }}
+                    {{ with $d.general.contact.email }}<li><a href="mailto:{{ . }}"><img src="/img/email.svg" alt="" width="16" height="16"> {{ . }}</a></li>{{ end }}
+                </ul>
+                {{ with $d.header.preheader }}<p>{{ . }}</p>{{ end }}
+            </div>
+        </div>
+    {{ end }}
+
+    <div class="masthead">
+        <div class="container">
+
+            {{ partial "site/logo.html" (dict "Page" . "Logo" (or $d.header.logo_image $s.favicon_image)) }}
+
+            <nav id="mainnav" class="mainnav" aria-label="Main">
+                {{ partial "site/menu.html" (dict "Page" . "Items" $d.header.menuitems) }}
+            </nav>
+
+            <div class="actions">
+                {{ if $d.webshop.show_cart_icon }}
+                    <a class="cart" href="{{ $d.webshop.cart_link }}">
+                        <img src="/img/shopping-cart.svg" alt="" width="20" height="20">
+                        <span class="sr-only">Shopping cart</span>
+                        <output class="itemcount" aria-live="polite" hidden>0</output>
+                    </a>
+                {{ end }}
+                {{ partial "site/languageswitch.html" (dict "Page" . "Label" (.Language.Lang | upper)) }}
+                {{ if $d.header.cta.active }}
+                    <a class="button smaller" href="{{ $d.header.cta.link }}">{{ $d.header.cta.title }}</a>
+                {{ end }}
+                <button type="button" id="togglemenu" aria-controls="mainnav" aria-expanded="false">
+                    <span>Menu</span>
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+</header>

@@ -1,0 +1,7 @@
+{{- /*
+  Renders `data/<lang>/ctaform.yaml` as a form.
+
+      {{< ctaform >}}
+*/ -}}
+{{- $d := partial "data.html" .Page -}}
+{{- partial "site/form.html" (dict "Form" $d.ctaform "Id" "ctaform") -}}

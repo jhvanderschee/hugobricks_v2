@@ -1,0 +1,54 @@
+{{- /*
+  Breadcrumb trail for a page.
+
+  Lives in a partial rather than in the shortcode alone because the `post`
+  brick needs it too, and a shortcode cannot be called from a template.
+  `_shortcodes/breadcrumbs.html` is a one-line wrapper around this.
+
+  A trail longer than two crumbs drops its last one, the page you are already
+  on: by then the trail is doing its real job — saying where this page sits —
+  and the title below it says the rest. A two-crumb trail keeps it, because
+  "Home" alone says nothing about where you are.
+
+  The walk collects the page and then its ancestors, so the result is reversed
+  rather than sorted: sorting on `RelPermalink` only puts ancestors first while
+  they are path prefixes of their children, and a post's parent is `/blog/`
+  while the post itself is under `/posts/`.
+
+  Revised from the original theme: an ordered list inside a labelled `<nav>`,
+  with the current page marked `aria-current="page"` when it is shown, instead
+  of an unlabelled `<ul>` of links.
+
+  @context {page} .
+*/ -}}
+{{- $walk := slice -}}
+{{- $p := . -}}
+{{- range seq 6 -}}
+    {{- if and $p (not $p.IsHome) -}}
+        {{- $walk = $walk | append $p -}}
+        {{- $p = $p.Parent -}}
+    {{- end -}}
+{{- end -}}
+
+{{- $trail := slice -}}
+{{- range seq (len $walk) -}}
+    {{- $trail = $trail | append (index $walk (sub (len $walk) .)) -}}
+{{- end -}}
+{{- if gt (len $trail) 1 -}}
+    {{- $trail = first (sub (len $trail) 1) $trail -}}
+{{- end -}}
+
+<nav aria-label="Breadcrumb">
+    <ol>
+        <li><a href="{{ "/" | relLangURL }}">Home</a></li>
+        {{- range $trail -}}
+            <li>
+                {{- if eq . $ -}}
+                    <a href="{{ .RelPermalink }}" aria-current="page">{{ .LinkTitle }}</a>
+                {{- else -}}
+                    <a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>
+                {{- end -}}
+            </li>
+        {{- end -}}
+    </ol>
+</nav>

@@ -1,0 +1,21 @@
+{{- /*
+  Brick: form
+  A short form on its own, at the small measure — what the theme renders as a
+  `small` brick when the thing inside it is a form.
+
+      ## Shut up and take my money!
+
+      {{< ctaform >}}
+
+  The form itself comes from `site/form.html` by way of one of the form
+  shortcodes, so the fields are defined in `data/<lang>/*form.yaml` rather
+  than in the section.
+
+  @context {dict} . Content, Name, Index, Page
+*/ -}}
+{{- $label := partial "section_label.html" .Content -}}
+<section class="form"{{ with $label }} aria-labelledby="{{ . }}"{{ end }}>
+    <div class="container small">
+        {{ .Content }}
+    </div>
+</section>

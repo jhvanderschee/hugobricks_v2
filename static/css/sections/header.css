@@ -1,0 +1,13 @@
+/* -- brick: header -------------------------------------------------------
+   Hero. The image becomes the backdrop, everything else sits on top.
+
+   ![](/photo.jpg){:.background}
+   # Heading
+   Lead copy.
+   {{< button "Get started" "/get-started/" >}}
+
+   The stacking, the scrim, the white copy and the hero's padding are all in
+   the core, on `:has(> .backdrop)` and `.bgimage` — shared with `quote` and
+   `map`. Only the centring is the hero's own.                            */
+
+section.header > .container { text-align: center; }

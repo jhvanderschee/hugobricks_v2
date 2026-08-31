@@ -1,0 +1,136 @@
+/* ==========================================================================
+   Motion: bricks fading in as they arrive
+
+   `data/settings.yaml` `intersectionobserver`. The key keeps the v1 name so a
+   site's settings file still reads, but there is no observer here any more.
+   The theme added `.opaque` to every section but the first, watched them all
+   with an IntersectionObserver, and stripped the class on the first
+   intersection; this file is what is left when that script goes away.
+
+   It is written twice, because the browsers split on which half they have.
+
+   1. A view-progress timeline, which scrubs: the fade tracks the scroll
+      position, so scrolling back up fades a brick out again. Chrome 115,
+      Safari 26, Firefox 144.
+   2. An animation trigger, which fires: the brick coming into view starts an
+      ordinary timed animation, and `play-once` is the whole of what the
+      observer did — it runs forwards, once, and no scrolling undoes it.
+      Chrome 145. This is the theme's behaviour, exactly, and where it is
+      available it overrides the block above.
+
+   Both are the same two keyframes, and both are off under
+   `prefers-reduced-motion` and in a browser that has neither.
+
+   The brick's content, not the brick: `.backdrop` is a sibling of
+   `.container` inside the bricks that paint a full-bleed image, and fading
+   the backdrop in would fade in the whole band rather than the words on it.
+   The theme drew its backdrops as a background-image on the `<section>`
+   itself, so `section > *` reached the same set.
+
+   The rise is the `translate` property and not a `transform`, because two
+   rules in the bricks put a static `transform` on a box that also fades —
+   the lifted price plan's `scale(1.08)` is the one that shows. An animation
+   holding its last frame outranks any normal declaration, so a `transform`
+   here would flatten that card for good; `translate` composes with it
+   instead, and the card keeps its lift.
+   ========================================================================== */
+
+@media (prefers-reduced-motion: no-preference) {
+
+    /* -- scrubbed ------------------------------------------------------- */
+
+    @supports (animation-timeline: view()) {
+
+        /* The first brick is the one on screen when the page opens, and the
+           theme never faded it. Everything else is below the fold, or close
+           enough that a third of it showing is already a brick at full
+           strength.
+
+           Nothing here can strand a brick at `opacity: 0`: a page too short
+           to scroll has an inactive timeline, and an animation on an inactive
+           timeline is not applied at all. */
+        main > section:not(:first-child) > .container,
+        .sitefooter > * {
+            animation: fadeup linear both;
+            /* Declared after the shorthand, which resets it to `auto`. */
+            animation-timeline: view(block);
+            animation-range: entry 0% entry 33%;
+        }
+
+        /* No rise for the footer or for the map that butts up against it, as
+           in the theme. Both sit at the end of the document, where a downward
+           translate lengthens the scrollable area — and the timeline is
+           measured against that same area, so the two would chase each other
+           over the last few pixels of the page. */
+        main > section.stickstofooter > .container,
+        .sitefooter > * { animation-name: fadein; }
+
+        /* A collection's cards arrive one at a time rather than as one block,
+           so the container holding the grid fades nothing and hands the job
+           to its items. The intro above the grid is a container of its own
+           and keeps its fade. `animation: none` resets the timeline with it.
+
+           Each card is timed by its own position here, which on a grid means
+           a row at a time: two cards side by side cross the same line at the
+           same moment. The cascade *within* a row is in the trigger version
+           below — it needs `sibling-index()`, and the browsers that have
+           this timeline but not the trigger do not all have that either. */
+        main > section.collection > .container:has(> ul) { animation: none; }
+        main > section:not(:first-child).collection > .container > ul > li {
+            animation: fadeup linear both;
+            animation-timeline: view(block);
+            animation-range: entry 0% entry 33%;
+        }
+    }
+
+    /* -- fired once ----------------------------------------------------- */
+
+    @supports (animation-trigger: --brick play-once) {
+
+        /* The range is where the trigger is *live*, not a point it crosses:
+           from a quarter of the brick showing until it has left the top of
+           the screen. It has to stay live that long because a brick already
+           on screen when the page opens must find itself inside the range —
+           past a one-off point, with `both` holding the first keyframe, it
+           would sit at `opacity: 0` and never be told to move. */
+        main > section:not(:first-child) > .container,
+        .sitefooter > * {
+            timeline-trigger: --brick view() entry 25% exit 100%;
+            /* The shorthand resets `animation-timeline` to `auto`, which is
+               what unpicks the scrubbed version above — and it resets
+               `animation-trigger` too, so that follows it. */
+            animation: fadeup 0.7s ease-out both;
+            animation-trigger: --brick play-once;
+        }
+
+        main > section.stickstofooter > .container,
+        .sitefooter > * { animation-name: fadein; }
+
+        /* The stagger. One trigger for the whole grid, published to the cards
+           with `trigger-scope` — a trigger, like a timeline, is only visible
+           to the subtree it is scoped to — so the cards run as one cascade
+           off a single event instead of each waiting for its own line. That
+           is what makes the second card in a row follow the first, which a
+           timeline of its own can never do: they cross every line together.
+
+           `sibling-index()` is the card's position in the list, so the delay
+           is written once and holds for a row of three or a grid of nine. */
+        main > section.collection > .container:has(> ul) { animation: none; }
+        main > section.collection > .container > ul {
+            timeline-trigger: --cards view() entry 25% exit 100%;
+            trigger-scope: --cards;
+        }
+        main > section:not(:first-child).collection > .container > ul > li {
+            animation: fadeup 0.7s ease-out both;
+            animation-trigger: --cards play-once;
+            animation-delay: calc((sibling-index() - 1) * 80ms);
+        }
+    }
+
+    @keyframes fadeup {
+        from { opacity: 0; translate: 0 4rem; }
+    }
+    @keyframes fadein {
+        from { opacity: 0; }
+    }
+}

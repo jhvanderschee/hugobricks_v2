@@ -1,0 +1,660 @@
+/* ==========================================================================
+   Hugobricks — the shared core
+
+   Written against the revised, landmark-based markup:
+
+     header.siteheader   banner      preheader + logo + nav
+     main#main           main        a stack of <section> bricks
+     footer.sitefooter   contentinfo logo + nav + colophon
+
+   Every brick is one `<section class="<brickname>">` holding one `.container`
+   (`.small` 40rem, `.medium` 60rem, default 84rem). Bricks style the plain
+   html that markdown produces — headings, paragraphs, lists, images — so a
+   content section needs no wrapper classes of its own. Where a brick needs
+   two columns, its partial has already split the media out into a `<figure>`.
+
+   This file holds what every brick leans on. The rest of the stylesheet is
+   split by what it styles, and concatenated in `site/styles.html`:
+
+     variables.css         the design tokens
+     fonts.css             the @font-face rules
+     header.css            the banner
+     footer.css            the footer
+     sections/<brick>.css  one file per brick, named after its partial
+
+   Media queries live beside the rules they modify, in whichever file that is.
+
+   Contents
+     1  Reset and base
+     2  Typography
+     3  Components: buttons, box, forms, lists, media, details, breadcrumbs,
+           language switcher
+     4  Section rhythm
+     5  Shared brick scaffolding: the collection grid and the backdrop
+   ========================================================================== */
+
+
+/* ==========================================================================
+   1  Reset and base
+   ========================================================================== */
+
+*, *::before, *::after { box-sizing: border-box; }
+* { margin: 0; padding: 0; }
+
+html {
+    font-size: clamp(14px, 2vw, 16px);
+    line-height: 1.7;
+    scroll-behavior: smooth;
+    scroll-padding-block-start: 8rem;
+    -webkit-text-size-adjust: 100%;
+}
+
+/* The page is at least as tall as the viewport, and `main` takes whatever the
+   banner and the footer leave over. Without the stretch a short page — the
+   `/headers/` placeholder, `/404/`, a single-brick page — ends halfway down
+   the screen with the footer floating above the fold.
+
+   The skip link is absolutely positioned, and so is the banner whenever it is
+   transparent or pinned, so each drops out of this flow by itself and the
+   column stays banner / main / footer. `flex-basis: auto` keeps every section
+   at its own height: main grows into the space that is left over rather than
+   sharing it out, so the extra room shows as page background above the
+   footer instead of stretching the last brick. */
+body {
+    background: var(--page);
+    color: var(--textMedium);
+    font-family: var(--fontBody);
+    font-size: 1rem;
+    display: flex;
+    flex-direction: column;
+    min-height: 100svh;
+}
+
+main { flex: 1 0 auto; }
+
+/* Except when the last brick sticks to the footer. The slack would open up
+   between the map and the footer, which is the one gap that brick exists to
+   close, and there is no way to hand it to the top of the section instead
+   without flexing `main` — which would flatten the margin the brick rhythm
+   puts above it. A page that ends in a map is long enough not to need the
+   stretch anyway. */
+main:has(> section.stickstofooter:last-child) { flex-grow: 0; }
+
+img, svg, video, audio, iframe { display: block; max-width: 100%; }
+img, video { height: auto; }
+video, audio, iframe { width: 100%; }
+
+/* `hidden` has to outrank every component below, or it stops meaning hidden.
+   The ua sheet's own `[hidden]` loses to any author rule that sets `display`,
+   and one class is all it takes to tie with an attribute and win on order —
+   `.button` sets `inline-block`, and a hidden button stayed on the page. This
+   is the case `!important` is for: `hidden` is a state the markup asserts, not
+   a style a component gets a say in. */
+[hidden] { display: none !important; }
+
+a { color: var(--textMedium); }
+a:focus-visible,
+button:focus-visible,
+:is(input, select, textarea, summary, [tabindex]):focus-visible {
+    outline: 0.15rem solid var(--accentDarker);
+    outline-offset: 2px;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px; height: 1px;
+    margin: -1px; padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* The measure. Three widths, one rule. */
+.container {
+    inline-size: 100%;
+    max-inline-size: var(--measure-wide);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+}
+.container.small  { max-inline-size: var(--measure-small); }
+.container.medium { max-inline-size: var(--measure-medium); }
+
+
+/* ==========================================================================
+   2  Typography
+   ========================================================================== */
+
+h1, h2, h3, h4, h5, h6 { text-wrap: balance; }
+h1, h2 { font-family: var(--fontTitles); color: var(--textDark); line-height: 1.1; }
+
+h1 { font-size: clamp(2.25rem, 5vw, 3.25rem); margin-block-end: 1.75rem; }
+h2 { font-size: clamp(2rem, 4vw, 2.6rem); margin-block: 3.5rem 1.25rem; }
+h3 { font-size: 1.25rem; line-height: 1.3; font-weight: 700; color: var(--textDark); margin-block: 3rem 0.4rem; }
+h4 { font-size: 1.1rem; line-height: 1.4; color: var(--textMedium); margin-block: 1rem 0.2rem; }
+
+:is(h1, h2, h3, h4):first-child { margin-block-start: 0; }
+h1 + p { font-size: 1.05rem; }
+h2 + h3, h3 + h4 { margin-block-start: 0; }
+
+/* Flow spacing is a property of content, not of chrome: the banner and the
+   footer lay their lists out with flex gaps and must not inherit it.
+   `:where()` keeps the specificity at `main` alone, so every override further
+   down the file still wins. */
+main :where(p, ul, ol, dl, blockquote, pre, figure, table, details, address, form) {
+    margin-block-end: var(--flow);
+}
+:where(section) :last-child { margin-block-end: 0; }
+
+ul, ol { padding-inline-start: 1.25rem; }
+li + li { margin-block-start: 0.15rem; }
+
+strong, b { color: var(--textDark); font-weight: 600; }
+address { font-style: normal; }
+
+/* A rule across the column. `<hr>` is the obvious way to write one and the
+   one way an author cannot: `section_map.html` splits a page into sections on
+   its horizontal rules, so `---` in the markdown starts a new brick instead of
+   drawing a line inside the one being written. A list of a single empty item
+   is the way to ask for the line — `-` alone on its own line, which goldmark
+   renders as `<ul><li></li></ul>`.
+
+   `:only-child` is what keeps it from firing on a real list that happens to
+   have a blank item in it; that one stays a list, blank item and all. The two
+   selectors share the declarations so the drawn line and the written one
+   cannot drift apart, and the list needs two resets on top: its indent, and
+   the marker an empty `<li>` would otherwise still show. */
+hr,
+ul:has(> li:only-child:empty) { block-size: 1px; border: 0; background: var(--borderMedium); margin-block: 3.5rem; }
+ul:has(> li:only-child:empty) { padding: 0; list-style: none; }
+
+blockquote {
+    font-style: italic;
+    border-inline-start: 0.25rem solid var(--borderMedium);
+    padding-inline-start: 1.25rem;
+}
+
+pre {
+    overflow: auto;
+    background: var(--light);
+    padding: 0.75rem 1rem;
+    border: 0.1rem solid var(--borderLight);
+    border-radius: 0.25rem;
+    font-size: 0.95rem;
+    white-space: pre-wrap;
+}
+:not(pre) > code {
+    background: var(--light);
+    padding: 0.15rem 0.3rem;
+    border: 0.1rem solid var(--borderLight);
+    border-radius: 0.25rem;
+}
+
+table { width: 100%; border-collapse: collapse; }
+caption { text-align: start; color: var(--textDark); padding-block-end: 0.5rem; }
+th { text-align: start; color: var(--textDark); }
+:is(th, td) { padding: 0.8rem 0.5rem; border-block-end: 0.0625rem solid var(--borderLight); }
+thead th { border-block-end-width: 0.125rem; border-block-end-color: var(--borderMedium); }
+
+
+/* ==========================================================================
+   3  Components
+   ========================================================================== */
+
+/* -- buttons ------------------------------------------------------------- */
+
+/* The menu toggle draws its own bars and is excluded, but the exclusion is
+   wrapped in `:where()` so it costs nothing: an id inside a bare `:not()`
+   counts as an id, which would put this base rule above every `.ghost` and
+   `.secondary` below it and leave a `<button>` unable to wear them. */
+.button, button:not(:where(#togglemenu)), input[type="submit"] {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    font: inherit;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-decoration: none;
+    white-space: nowrap;
+    padding: 0.7em 1.25em;
+    border: 0;
+    border-radius: var(--radius-s);
+    cursor: pointer;
+    transition: transform 0.075s ease-in-out;
+}
+@media (hover: hover) and (min-width: 600px) {
+    :is(.button, button, input[type="submit"]):hover { transform: scale(1.035); }
+}
+.button.ghost           { background: none; color: var(--accentDarker); box-shadow: inset 0 0 0 0.1rem var(--accent); }
+.button.secondary       { background: var(--textDark); }
+.button.secondary.ghost { background: none; color: var(--textDark); box-shadow: inset 0 0 0 0.1rem var(--textDark); }
+.button.smaller         { padding: 0.4rem 1rem; }
+
+.button.icon {
+    display: grid;
+    place-items: center;
+    aspect-ratio: 1;
+    inline-size: 2.25rem;
+    padding: 0;
+    background: var(--textDark);
+}
+.button.icon img { inline-size: 45%; filter: invert(1); }
+
+p > .button { margin-block: 0.5rem; }
+
+/* -- box ----------------------------------------------------------------- */
+
+.box {
+    /* What a notched field label paints over its top half, see `-- forms --`. */
+    --field-notch: var(--light);
+    position: relative;
+    background: var(--light);
+    border: 0.1rem solid var(--borderLight);
+    border-radius: var(--radius);
+    padding: 3.5rem clamp(2rem, 5vw, 5rem);
+}
+.box:not(:last-child) { margin-block-end: var(--flow); }
+
+/* Two columns that fall to one when there is no room for both. `.twocols` is
+   named in the markup by `image`, `image-alt`, `contact`, `product` and
+   `cta`, so the grid that makes it work belongs here; a brick sets only what
+   differs, which is the cross-axis alignment — copy beside a picture centres,
+   a form beside an address hangs from the top. */
+.twocols {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(20rem, 100%), 1fr));
+    gap: 2.5rem clamp(2rem, 5vw, 5rem);
+    align-items: start;
+}
+
+/* -- inline link lists (social, contact, buttons) ------------------------ */
+
+ul.social, ul.buttons, ul.contact {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 0;
+    list-style: none;
+}
+ul.social li, ul.buttons li, ul.contact li { margin: 0; }
+
+/* -- media --------------------------------------------------------------- */
+
+figure { border-radius: var(--radius); overflow: clip; }
+figure img { inline-size: 100%; }
+figure > a { display: block; }
+figcaption { font-size: 0.9rem; padding-block-start: 0.5rem; }
+
+p > img { border-radius: var(--radius); margin-block: 2.25rem; }
+.box p > img { border-radius: 0; }
+
+/* Portraits are toned rather than shown raw, so that a grid of avatars from
+   different sources still reads as one set — the `reviews` and `team` bricks
+   share it. This is the theme's `colorize_image`, which is the same value in
+   all four palettes despite living in the palette stylesheet; its leading
+   `contrast(1)` is an identity function and is dropped here. */
+.avatar { filter: sepia(1) hue-rotate(160deg) grayscale(0.8); }
+
+/* Hovering a linked thumbnail zooms it inside its frame. Only inside a frame:
+   every other `<a>` in the theme that holds an image holds an *icon* — the
+   preheader phone and mail, the logo, the cart, the social and team buttons —
+   and those have nothing to clip the growth against, so they just swell and
+   blur. The `.button.icon` ones already scale as a whole button besides. */
+.thumb { border-radius: var(--radius); overflow: clip; }
+.thumb img { transition: transform 0.35s ease-in-out; }
+@media (hover: hover) {
+    a:hover .thumb img { transform: scale(1.075); }
+}
+
+.avatar, img[src*="avatar"] { border-radius: 50%; aspect-ratio: 1; object-fit: cover; }
+
+/* -- forms --------------------------------------------------------------- */
+
+/* Every form lays its rows out on the same two-column grid, whether the rows
+   are written in markdown as direct children of the `<form>` or generated by
+   `site/form.html`, which groups them in a `<fieldset>` with a `<legend>`.
+   The fieldset is a grouping element, not a frame: its border, padding and
+   `min-inline-size: min-content` are reset away and it carries the same grid,
+   so both cases behave alike. A row spans both columns unless it is `.half`,
+   which is what puts two fields side by side. */
+form, form fieldset {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 1rem;
+}
+form fieldset { min-inline-size: 0; margin: 0; padding: 0; border: 0; }
+form > :not(.half), form fieldset > :not(.half) { grid-column: 1 / -1; }
+@media (max-width: 600px) {
+    form .half { grid-column: 1 / -1; }
+}
+
+/* `:not([hidden])` keeps the spam trap hidden: `display` would override it.
+   The row is the positioning context its label is notched into, below. */
+form > div:not([hidden]), form fieldset > div:not([hidden]) {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    min-inline-size: 0;
+    margin-block-end: 1rem;
+}
+/* A grid item stretches by default; a button keeps its own width. */
+form .submit { align-items: flex-start; }
+form > :is(button, .button, input[type="submit"]) { justify-self: start; }
+
+/* A `<legend>` is not a heading, so the base `h3`'s metrics are spelled out
+   for it here. The face is the body one: the title face is for `h1` and `h2`,
+   and a heading inside a form reads at plain heading size like any other. */
+form legend, form h3 {
+    font-size: 1.25rem;
+    line-height: 1.3;
+    font-weight: 700;
+    color: var(--textDark);
+    padding: 0;
+    margin-block: 0 1rem;
+}
+
+label { color: var(--textMedium); font-size: 0.9rem; }
+input, textarea, select {
+    font: inherit;
+    color: var(--textDark);
+    background: var(--page);
+    padding: 0.5em;
+    border: 1px solid var(--borderMedium);
+    border-radius: 0.25rem;
+}
+label + input, label + textarea, label + select {margin-top: 0.5rem}
+textarea { resize: vertical; block-size: 9rem; }
+:is(input[type="checkbox"], input[type="radio"]) {cursor: pointer; }
+:is(.checkbox, .radio) label { display: flex; align-items: center; gap: 0.5rem; font-size: 1rem; color: var(--textMedium); }
+
+/* A field's label rides in a notch cut out of the top of its own border,
+   rather than standing on a line above it. It is lifted out of the row's flow
+   and centred on that border, so the control keeps the row to itself and the
+   set of fields reads as one stack of boxes instead of alternating label,
+   box, label, box.
+
+   Straddling the border means the label's two halves sit on two different
+   surfaces: above the line is whatever the form stands on, below it is the
+   control's own fill. So the chip paints `--page` — the fill — and lays the
+   surface over its top half only. Out on the page those are the same colour
+   and the seam does not show; inside a `.box` the tint is real, and painting
+   `--light` over `--page` composites to exactly what the box itself is
+   painted with, so the halves line up with what they cover.
+
+   Checkboxes and radios are left out: their label is a caption *beside* the
+   control and wraps it, so it belongs in the flow. So is a label already
+   hidden by `placeholders: true` — that one has given its text to the
+   control's placeholder and must stay clipped. */
+form div:not(.checkbox, .radio) > label:not(.sr-only) {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-start: 0.6rem;
+    z-index: 1;
+    transform: translateY(calc( 0.5rem - 50%));
+    padding-inline: 0.25rem;
+    font-size: 0.8rem;
+    line-height: 1;
+    background-color: var(--page);
+    background-image: linear-gradient(var(--field-notch, transparent) 50%, transparent 50%);
+}
+
+/* A generated form carries no frame of its own. A brick that wants one says
+   so — `contact` is the one that does, wrapping the form in a `.box` — so a
+   form dropped into a plain section reads as that section's own content
+   rather than as a card sitting inside it. */
+
+/* A brick caps its direct children at the brick measure; a form reads better
+   narrower than that, so it names its own. Inside a `.box` the box has
+   already set the measure and the form fills it. */
+main .container > form.form { max-inline-size: var(--measure-small); }
+.box form.form { max-inline-size: 26rem; margin-inline: auto; }
+.colorize {
+  filter: contrast(1) sepia(1) hue-rotate(160deg) grayscale(0.8) !important;
+}
+
+/* -- language switcher --------------------------------------------------- */
+
+/* A `<select>` that navigates on change, in the banner and in the footer
+   both — `site/languageswitch.html`, wired up in `site.js`. It is a control
+   rather than a hover panel so that a phone opens it with the picker it
+   already has, and it is undressed back to a line of text so that it reads as
+   chrome rather than as a field someone is filling in: no box, and the native
+   arrow traded for the theme's own caret. Each place it appears says only what
+   colour and size it is.
+
+   `appearance: none` reaches the closed control only. The options are drawn
+   by the browser, and a transparent ground with an inherited colour lands
+   white on white in some of them, so the popup is painted explicitly. The
+   focus ring is the one every control gets, and stays.
+
+   `field-sizing: content` is what makes it read as text: a `<select>` is
+   otherwise as wide as its widest option, so "EN" in the banner would carry
+   the width of "Nederlands" beside it and the caret would float away from the
+   label. Where it is not supported the control falls back to that widest-option
+   width, which is what it had before — wider than it needs to be, never
+   broken.
+
+   The caret hangs off the wrapper because a `<select>` is a replaced element
+   and grows no pseudo-element of its own. `pointer-events: none` lays it over
+   the space the control reserves for it, so the whole width stays one click
+   target. */
+.languageswitch { position: relative; display: inline-block; }
+.languageswitch select {
+    appearance: none;
+    field-sizing: content;
+    font: inherit;
+    color: inherit;
+    background: none;
+    border: 0;
+    border-radius: 0;
+    padding: 0 0.8rem 0 0;
+    cursor: pointer;
+}
+.languageswitch option { color: var(--textDark); background: var(--page); }
+.languageswitch::after {
+    content: "";
+    position: absolute;
+    inset-inline-end: 0.1rem;
+    inset-block-start: 50%;
+    inline-size: 0.3rem;
+    block-size: 0.3rem;
+    border: 0.1rem solid currentcolor;
+    border-inline-start: 0;
+    border-block-start: 0;
+    transform: translateY(-65%) rotate(45deg);
+    pointer-events: none;
+}
+
+/* -- breadcrumbs --------------------------------------------------------- */
+
+nav[aria-label="Breadcrumb"] ol,
+ul.breadcrumbs {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0 0.5rem;
+    padding: 0;
+    margin-block: -1rem .5rem;
+    font-size: 0.9rem;
+    list-style: none;
+}
+:is(nav[aria-label="Breadcrumb"] ol, ul.breadcrumbs) li { margin: 0; }
+:is(nav[aria-label="Breadcrumb"] ol, ul.breadcrumbs) li + li::before { content: "/"; padding-inline-end: 0.5rem; color: var(--accent)!important;}
+:is(nav[aria-label="Breadcrumb"] ol, ul.breadcrumbs) :is(a, li::before) { color: var(--accent)!important; text-decoration: none; }
+
+/* -- details / faq ------------------------------------------------------- */
+
+details { border-block: 0.1rem solid var(--borderMedium); }
+details + details { border-block-start: 0; margin-block-start: calc(var(--flow) * -1); }
+details summary {
+    position: relative;
+    display: block;
+    cursor: pointer;
+    padding: 0.35rem 2rem 0.25rem 0;
+    color: var(--textMedium);
+}
+details summary::marker, details summary::-webkit-details-marker { content: ""; display: none; }
+details summary::after {
+    content: "";
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-end: 0.5rem;
+    inline-size: 0.5rem;
+    block-size: 0.5rem;
+    border: 0.1rem solid var(--textMedium);
+    border-inline-start: 0;
+    border-block-end: 0;
+    transform: translateY(-50%) rotate(45deg);
+    transition: transform 0.15s ease-in-out;
+}
+details[open] summary { font-weight: 600; color: var(--textDark); }
+details[open] summary::after { transform: translateY(-25%) rotate(-45deg); }
+details > :not(summary):last-child { padding-block: 0.75rem 1.75rem; }
+details > div > :last-child { margin-block-end: 0; }
+.faqgroup + .faqgroup { margin-block-start: 2.5rem; }
+.faqgroup h3 { margin-block-end: 0.75rem; }
+
+/* -- opening hours ------------------------------------------------------- */
+
+dl.openinghours { display: grid; grid-template-columns: auto 1fr; gap: 0.15rem 1.5rem; }
+dl.openinghours dt { color: var(--textDark); }
+dl.openinghours dd { margin: 0; }
+
+
+/* ==========================================================================
+   4  Section rhythm
+
+   Most bricks sit on the page background and space themselves with their own
+   padding. A brick that paints its own surface — a tinted band, a full-bleed
+   backdrop, a boxed call to action — is flagged `hasbackgroundcolor` in the
+   markup, the theme's own name for it. Such a brick contributes no padding of
+   its own (the thing it paints carries that) and only takes 2rem of air above
+   itself, so two painted surfaces never collide and a painted surface never
+   drifts away from the copy it belongs to.
+
+   The flag is set by the brick partial, not by the author: `image-alt`,
+   `header`, `map` and `cta` always carry it, `quote` only when the markdown
+   gave it a backdrop.
+   ========================================================================== */
+
+main > section { padding-block: var(--brick-space); }
+main > section:first-child { padding-block-start: calc(var(--brick-space) * 0.8); }
+
+main > section.hasbackgroundcolor { padding-block: 0; margin-block-start: 2rem; }
+
+/* Opening the page, there is nothing above it to be separated from — and a
+   gap here would show as a white strip between the banner and a hero that is
+   meant to run up behind it. */
+main > section.hasbackgroundcolor:first-child { margin-block-start: 0; }
+
+/* Two painted surfaces in a row need a gap that neither of them provides. */
+main > section.hasbackgroundcolor + section.hasbackgroundcolor { padding-block-start: 3.5rem; }
+
+/* Two plain bricks in a row need less air between them than a plain brick
+   needs against a painted one, whose own edge does the separating. */
+main > section:not(.hasbackgroundcolor) + section:not(.hasbackgroundcolor) {
+    padding-block-start: var(--brick-space-tight);
+}
+
+/* Coming off a full-bleed backdrop, the next plain brick starts a little
+   sooner — the backdrop has already given the eye its break. */
+main > section.bgimage + section:not(.hasbackgroundcolor) { margin-block-start: 1.5rem; }
+
+/* A painted surface running into the footer needs the gap the footer's own
+   background would otherwise swallow — unless the brick is meant to butt up
+   against it. */
+main:has(> section.hasbackgroundcolor:last-child) + .sitefooter { margin-block-start: 7.5rem; }
+main:has(> section.stickstofooter:last-child) + .sitefooter { margin-block-start: 0; }
+
+
+
+/* ==========================================================================
+   5  Shared brick scaffolding
+
+   The two things more than one brick is built out of. Everything else lives
+   in `sections/<brick>.css`.
+   ========================================================================== */
+
+/* A grid of cards, shared by the collection bricks — the ones flagged
+   `collection` in the markup: `features`, `team`, `blocks`, `reviews`,
+   `prices`, `posts`, `webshop`. Each is a centred intro above a grid, and the
+   two are separate containers because they want different measures:
+   `split_list.html` puts the prose in `.container.small` and the list in the
+   full-width `.container`.
+
+   The flag is what keeps this rule out of the business of knowing which
+   bricks exist — the same move `hasbackgroundcolor` makes for the bands. */
+section.collection > .container.small {
+    text-align: center;
+    margin-block-end: 4rem;
+}
+section.collection > .container > ul {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(20rem, 100%), 1fr));
+    gap: 1.55rem 1.5rem;
+    padding: 0;
+    list-style: none;
+}
+section.collection > .container > ul > li {
+    position: relative;
+    margin: 0;
+}
+
+
+/* Full-bleed backdrops, shared by the `header`, `quote` and `map` bricks. The
+   image stays a real <img> so it is sized, fetched and cached normally — but
+   it is taken out of flow, so it contributes no height. Like the theme's
+   `background-image`, the brick is sized by its container's padding alone;
+   left in flow the row would grow to the image's intrinsic height. */
+.backdrop {
+    position: absolute;
+    inset: 0;
+    /* Below the scrim, which is -1. Both were -1 once, which left the order
+       to the tree — and a `::before` scrim generates ahead of the element it
+       is meant to cover, so the image painted over it and the scrim did
+       nothing. Naming the two layers is what keeps that from recurring. */
+    z-index: -2;
+    overflow: clip;
+}
+.backdrop > * { margin: 0; block-size: 100%; }
+.backdrop :is(img, figure) {
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+    border-radius: 0;
+    margin: 0;
+}
+
+/* The stack that makes a backdrop work, and the whole of it: a section that
+   holds one becomes the containing block the absolute image needs, and lays
+   its children on a single grid cell so the content sits over the image
+   rather than after it. It lives here rather than in the bricks because it is
+   mechanism, not decoration — any brick that emits a `.backdrop` gets a
+   working full-bleed image with no stylesheet of its own. */
+section:has(> .backdrop) { position: relative; isolation: isolate; display: grid; }
+section:has(> .backdrop) > * { grid-area: 1 / 1; }
+section:has(> .backdrop) > :not(.backdrop) { z-index: 1; align-self: center; }
+
+/* `bgimage` says the backdrop is a photograph to be read over, so it takes a
+   scrim and turns its copy white. A `map` carries a backdrop without the
+   flag: the theme leaves the map undarkened, and its floating card supplies
+   its own contrast. */
+section.bgimage { color: rgb(255 255 255 / 1); }
+section.bgimage::before {
+    content: "";
+    grid-area: 1 / 1;
+    z-index: -1;
+    background: var(--scrim);
+}
+section.bgimage > .container { padding-block: 5.5rem 6rem; }
+section.bgimage :is(h1, h2, h3, strong, blockquote, figcaption) { color: #fff; }
+section.bgimage a:not(.button) { color: #fff; }

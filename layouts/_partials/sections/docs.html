@@ -1,0 +1,33 @@
+{{- /*
+  Brick: docs
+  Documentation layout: a sticky table of contents beside the body.
+
+  The heading and the breadcrumb trail are built from where the page sits
+  rather than written out at the top of every docs file, the same way the
+  `post` brick builds them — the markdown is the documentation and nothing
+  else. `docs/all.html` is what routes a page here.
+
+  Revised from the original theme: the table of contents is an `<aside>`
+  holding a labelled `<nav>`, so it is reachable as a landmark and announced
+  as navigation rather than as a heading followed by a bare list.
+
+  @context {dict} . Content, Name, Index, Page
+*/ -}}
+{{- $page := .Page -}}
+<section class="docs">
+    <div class="container">
+
+        <aside class="docsmenu">
+            <nav aria-label="Documentation">
+                {{ partial "site/nestedmenu.html" (dict "Page" $page "Root" (site.GetPage "/docs")) }}
+            </nav>
+        </aside>
+
+        <div class="docsbody">
+            {{ partial "site/breadcrumbs.html" $page }}
+            <h1>{{ $page.Title | safeHTML }}</h1>
+            {{ .Content }}
+        </div>
+
+    </div>
+</section>

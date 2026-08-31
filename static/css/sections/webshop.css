@@ -1,0 +1,4 @@
+/* -- brick: webshop ------------------------------------------------------
+   The product grid is the post grid: both are styled together by the
+   `:is(section.posts, section.webshop)` rules in `posts.css`. Nothing here
+   yet — this file is where a webshop-only rule would go.                 */

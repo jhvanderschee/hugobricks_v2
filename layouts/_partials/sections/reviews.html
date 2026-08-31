@@ -1,0 +1,16 @@
+{{- /*
+  Brick: reviews
+  Intro copy plus a grid of testimonials.
+
+  The testimonials come from the markdown, which writes `{{< reviews >}}` to
+  render `data/<lang>/reviews.yaml`. This brick only supplies the section and
+  its container — the same shape as `blocks`, `prices` and `posts`.
+
+  @context {dict} . Content, Name, Index, Page
+*/ -}}
+{{- $label := partial "section_label.html" .Content -}}
+{{- $parts := partial "split_list.html" .Content -}}
+<section class="reviews collection"{{ with $label }} aria-labelledby="{{ . }}"{{ end }}>
+    {{ with $parts.Intro }}<div class="container small">{{ . | safeHTML }}</div>{{ end }}
+    {{ with $parts.List }}<div class="container">{{ . | safeHTML }}</div>{{ end }}
+</section>

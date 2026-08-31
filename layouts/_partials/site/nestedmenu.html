@@ -1,0 +1,19 @@
+{{- /*
+  Recursive page tree, used by the `docs` brick for its table of contents.
+
+  @context {dict} . Page (the page being rendered), Root (the branch to list)
+*/ -}}
+{{- $page := .Page -}}
+{{- with .Root -}}
+    {{- $pages := .Pages.ByWeight -}}
+    {{- with $pages -}}
+        <ul>
+            {{- range . -}}
+                <li{{ if eq $page.RelPermalink .RelPermalink }} class="current"{{ else if $page.IsDescendant . }} class="active"{{ end }}>
+                    <a href="{{ .RelPermalink }}"{{ if eq $page.RelPermalink .RelPermalink }} aria-current="page"{{ end }}>{{ .LinkTitle }}</a>
+                    {{ partial "site/nestedmenu.html" (dict "Page" $page "Root" .) }}
+                </li>
+            {{- end -}}
+        </ul>
+    {{- end -}}
+{{- end -}}

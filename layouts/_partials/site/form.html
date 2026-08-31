@@ -1,0 +1,66 @@
+{{- /*
+  Builds a form from one of the form definitions in `data/<lang>/` —
+  `contactform.yaml`, `ctaform.yaml` or `newsletterform.yaml`. Each definition
+  has an `action`, a `placeholders` flag and a list of `fields`
+  (`name`, `input_type`, `label`, `required`).
+
+  Revised from the original theme:
+  - the fields sit in a `<fieldset>` with a `<legend>`, so the form has a
+    programmatic name;
+  - `required` is honoured per field instead of being hard-coded on every
+    control, and it is mirrored in the visible label;
+  - with `placeholders: true` the label is still rendered, visually hidden,
+    rather than being replaced by a placeholder that vanishes on typing;
+  - the spam trap is `hidden` and `aria-hidden`, not an off-screen image;
+  - ids are namespaced, so two forms on one page cannot collide.
+
+  `Id` names the form: it lands on the `<form>` itself, so the form can be
+  linked to as `#contactform` or referenced by a control's `form=` attribute,
+  and it prefixes every field id so two forms on one page cannot collide.
+  Give the second one its own id — `{{< contactform id="signup" >}}`.
+
+  @context {dict} . Form (the data), Id (the form's id, and its field prefix)
+*/ -}}
+{{- $f := .Form -}}
+{{- $id := .Id | default "form" -}}
+{{- $ph := eq $f.placeholders true -}}
+{{- $legend := "" -}}
+{{- range $f.fields -}}
+    {{- if and (eq .input_type "html") (not $legend) -}}{{ $legend = trim (plainify .label) " \t\r\n" }}{{- end -}}
+{{- end -}}
+<form id="{{ $id }}" class="form" method="post" action="{{ $f.action }}">
+    <fieldset>
+        {{ with $legend }}<legend>{{ . }}</legend>{{ end }}
+
+        {{- range $f.fields -}}
+            {{- $fid := printf "%s-%s" $id .name -}}
+            {{- if eq .input_type "html" -}}
+            {{- else if eq .input_type "submit" -}}
+                <div class="submit"><button type="submit">{{ .label }}</button></div>
+            {{- else if eq .input_type "checkbox" -}}
+                <div class="checkbox">
+                    <label for="{{ $fid }}"><input type="checkbox" id="{{ $fid }}" name="{{ .name }}" value="{{ .label }}"{{ if .required }} required{{ end }}> {{ .label | safeHTML }}</label>
+                </div>
+            {{- else if eq .input_type "radio" -}}
+                <div class="radio">
+                    <label for="{{ $fid }}"><input type="radio" id="{{ $fid }}" name="{{ .name }}" value="{{ .label }}"{{ if .required }} required{{ end }}> {{ .label | safeHTML }}</label>
+                </div>
+            {{- else if eq .input_type "textarea" -}}
+                <div>
+                    <label for="{{ $fid }}"{{ if $ph }} class="sr-only"{{ end }}>{{ .label }}{{ if .required }} <span aria-hidden="true">*</span>{{ end }}</label>
+                    <textarea id="{{ $fid }}" name="{{ .name }}" rows="8"{{ if $ph }} placeholder="{{ .label }}"{{ end }}{{ if .required }} required{{ end }}></textarea>
+                </div>
+            {{- else -}}
+                <div>
+                    <label for="{{ $fid }}"{{ if $ph }} class="sr-only"{{ end }}>{{ .label }}{{ if .required }} <span aria-hidden="true">*</span>{{ end }}</label>
+                    <input type="{{ .input_type }}" id="{{ $fid }}" name="{{ .name }}"{{ with .name }}{{ if eq . "email" }} autocomplete="email"{{ else if eq . "name" }} autocomplete="name"{{ end }}{{ end }}{{ if $ph }} placeholder="{{ .label }}"{{ end }}{{ if .required }} required{{ end }}>
+                </div>
+            {{- end -}}
+        {{- end -}}
+
+        <div hidden aria-hidden="true">
+            <label for="{{ $id }}-website">Leave this field empty</label>
+            <input type="text" id="{{ $id }}-website" name="website" tabindex="-1" autocomplete="off">
+        </div>
+    </fieldset>
+</form>

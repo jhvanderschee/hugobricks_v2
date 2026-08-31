@@ -1,0 +1,41 @@
+/* -- brick: features -----------------------------------------------------
+   Intro from the markdown, cards from data/<lang>/features.yaml.        */
+
+section.features > .container > ul { gap: 3rem; margin-bottom: 2rem;}
+section.features li { text-align: center; }
+
+/* The icon. `--accent` masked through the glyph, the same trick the review
+   stars and the map marker use, rather than the theme's `filter: contrast()
+   sepia() hue-rotate()` hack respelled once per palette.
+
+   The ring and the glyph cannot share an element: a mask applies to the whole
+   box, borders included, so a ring drawn here would be masked away with
+   everything outside the glyph. The ring stays on the box, the glyph goes on
+   a pseudo-element.
+
+   The circle is not a fixed size — it is the glyph plus its padding and ring,
+   so changing one number changes the icon and nothing else. `inline-grid`
+   rather than `grid` both centres it in the card's `text-align: center` and
+   sets it on a text baseline, and that line box is what puts the last few
+   pixels between the icon and the heading. */
+section.features .icon {
+    display: inline-grid;
+    place-items: center;
+    padding: 1.5rem;
+    margin-block-end: 1.45rem;
+    border: 0.1rem solid var(--accent);
+    border-radius: 50%;
+}
+section.features .icon::before {
+    content: "";
+    inline-size: 3rem;
+    block-size: 3rem;
+    background: var(--accent);
+    mask: var(--icon) center / contain no-repeat;
+}
+
+/* The base `h3` is already the card title — 1.25rem, 1.3, 700, `--textDark`,
+   in the body face. Only the top margin goes: the icon above it supplies that
+   space. The title face is for `h1` and `h2`; a heading inside a card stays in
+   the body face, the same as `section.reviews figcaption strong`. */
+section.features li h3 { margin-block-start: 0; }

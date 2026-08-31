@@ -1,0 +1,42 @@
+{{- /*
+  Renders the plans in `data/<lang>/pricing.yaml` as a pricing table, for the
+  `prices` brick. The section keeps its own heading and intro in the markdown:
+
+      ## Our friendly pricing
+
+      One line about the pricing.
+
+      {{< pricing >}}
+
+  Revised from the theme, which drove this brick from a nested markdown list:
+  each plan is an `<article>` titled by its own `<h3>`, the badge is a `<p>`
+  rather than a `<strong>` doing duty as a label, and the amount is wrapped so
+  `$25/month` is one phrase instead of a heading split across two elements.
+  The lifted plan is marked `.featured` from the data, so it no longer has to
+  be the second one.
+*/ -}}
+{{- $d := partial "data.html" .Page -}}
+{{- with $d.pricing -}}
+    {{- $currency := .currency -}}
+    {{- $period := .period -}}
+    <ul class="prices">
+        {{- range .plans -}}
+            <li{{ if .featured }} class="featured"{{ end }}>
+                <article>
+                    {{ with .badge }}<p class="badge">{{ . }}</p>{{ end }}
+                    <h3>{{ .title }}</h3>
+                    {{ with .description }}<p>{{ . | markdownify }}</p>{{ end }}
+                    <p class="amount"><span class="currency">{{ $currency }}</span><span class="price">{{ .price }}</span>{{ $period }}</p>
+                    {{ with .features }}
+                        <ul>
+                            {{ range . }}<li>{{ . | markdownify }}</li>{{ end }}
+                        </ul>
+                    {{ end }}
+                    {{ with .cta }}
+                        <p><a class="button{{ with .style }} {{ . }}{{ end }}" href="{{ .link }}">{{ .title }}</a></p>
+                    {{ end }}
+                </article>
+            </li>
+        {{- end -}}
+    </ul>
+{{- end -}}

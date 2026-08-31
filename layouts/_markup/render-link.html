@@ -1,0 +1,18 @@
+{{- /*
+  Link render hook.
+
+  Plain, predictable anchors, and deliberately no `class` or `id` — those
+  arrive from a kramdown-style attribute list written after the link:
+
+      [Get started now](/get-started/){:.button}
+
+  A render hook only ever sees its own node, so it cannot read the text that
+  follows it. `inline_attributes.html` moves that `{: … }` onto the anchor
+  once the paragraph is html; this file's job is to guarantee the shape that
+  pass expects to find.
+
+  @context {link} .
+  @returns {string} one <a>
+*/ -}}
+<a href="{{ .Destination | safeURL }}"{{ with .Title }} title="{{ . }}"{{ end }}>{{ .Text }}</a>
+{{- /* no trailing newline: a render hook writes inline content */ -}}

@@ -1,0 +1,6 @@
+/* -- brick: title --------------------------------------------------------
+   # Page title
+   One paragraph of standfirst.                                           */
+
+section.title { text-align: center; padding-block-end: 3.25rem; }
+section.title > .container > :is(p, ul) { margin-inline: auto; }

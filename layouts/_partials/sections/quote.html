@@ -1,0 +1,21 @@
+{{- /*
+  Brick: quote
+  A pulled quotation, optionally over a backdrop image.
+
+  Revised from the original theme: the quotation is a `<figure>` holding a
+  `<blockquote>` and a `<figcaption>`, so the attribution is tied to the quote
+  instead of being a loose paragraph under a heading.
+
+  ![](/photo.jpg)
+  > The pulled quotation.
+  — Attribution
+
+  @context {dict} . Content, Name, Index, Page
+*/ -}}
+{{- $parts := partial "split_media.html" .Content -}}
+<section class="quote{{ with $parts.Media }} bgimage hasbackgroundcolor{{ end }}">
+    {{ with $parts.Media }}<div class="backdrop" aria-hidden="true">{{ . | safeHTML }}</div>{{ end }}
+    <figure class="container small">
+        {{ $parts.Text | safeHTML }}
+    </figure>
+</section>

@@ -1,0 +1,11 @@
+{{- /*
+  Renders `data/<lang>/contactform.yaml` as a form.
+
+      {{< contactform >}}
+      {{< contactform id="signup" >}}
+
+  `id` lands on the `<form>` and prefixes its field ids. It defaults to
+  `contactform`; give a second copy on the same page an id of its own.
+*/ -}}
+{{- $d := partial "data.html" .Page -}}
+{{- partial "site/form.html" (dict "Form" $d.contactform "Id" (.Get "id" | default "contactform")) -}}

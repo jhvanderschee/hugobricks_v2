@@ -1,0 +1,12 @@
+{{- /*
+  Brick: cart
+  Shopping cart: line items, total, link on to checkout.
+
+  @context {dict} . Content, Name, Index, Page
+*/ -}}
+{{- $label := partial "section_label.html" .Content -}}
+<section class="cart"{{ with $label }} aria-labelledby="{{ . }}"{{ end }}>
+    <div class="container medium">
+        {{ .Content }}
+    </div>
+</section>

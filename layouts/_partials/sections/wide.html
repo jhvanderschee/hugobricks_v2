@@ -1,0 +1,12 @@
+{{- /*
+  Brick: wide
+  Wide prose column, used for documentation-style and long-form pages.
+
+  @context {dict} . Content, Name, Index, Page
+*/ -}}
+{{- $label := partial "section_label.html" .Content -}}
+<section class="wide"{{ with $label }} aria-labelledby="{{ . }}"{{ end }}>
+    <div class="container medium">
+        {{ .Content }}
+    </div>
+</section>

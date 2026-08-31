@@ -1,0 +1,173 @@
+{{- /*
+  Does a rendered section contain the elements a selector list names?
+
+  A selector is a tag, a `.class` or an `#id`, in any combination of a tag
+  with one of the two, optionally suffixed with `:first-child`, `:last-child`
+  or `:nth-child(n)` — the small part of css that is worth matching against
+  html held in a string. Several are separated by commas:
+
+      img                    a section holding any image
+      img.background         an image carrying `background`, from `![](){:.background}`
+      .button                any element with the class, whatever its tag
+      form#ctaform           the form that `{{< ctaform >}}` renders, and no other
+      h1, img                both an h1 *and* an image
+      blockquote:first-child a section that *opens* with a blockquote
+      a.button:last-child    a section that *ends* on a button
+      :nth-child(4)          a section with a fourth child — four lines or more
+      h2:nth-child(2)        a section whose second child is an h2
+
+  A class is one name out of the element's list, an id is the whole value —
+  which is what makes `#id` the way to name one particular piece of furniture
+  rather than a kind of it: the page has several `form.form`s and exactly one
+  `form#ctaform`.
+
+  The pseudo-classes anchor the match to one place in the section rather than
+  looking anywhere in it, which is how a rule tells "this section is a quote"
+  from "this section happens to quote someone", or "this section closes on a
+  call to action" from "this section mentions a button somewhere". A section is
+  a run of markdown between two horizontal rules, so its children are its
+  block-level elements: `> …` at the top makes `blockquote:first-child` match
+  while the same quote under a heading does not, and a button with a heading
+  after it is not `a.button:last-child`.
+
+  `:nth-child(n)` counts those children, 1-based, and `section_nth.html` does
+  the counting. Written on its own it names no element, so it asks only
+  whether the section *has* an nth child — which is how a rule reaches a
+  section's length: `not_has: :nth-child(4)` is "three children or fewer",
+  the short body of text the `small` brick is for. `:nth-child(1)` is
+  `:first-child` by another name.
+
+  These are the only pseudo-classes `has` takes — position *among* the
+  sections is `is` / `not_is`, in `section_position.html`, where
+  `:nth-child(n)` counts sections rather than the children of one.
+
+  A standalone image does not count as a child anywhere. It is the
+  section's media rather than a line of it: the bricks lift it out of the flow
+  into a `.backdrop` or a `.media` column, `split_media.html` being what does
+  the lifting. So whether an author writes the picture above or below the
+  words is a matter of taste, and both orders have to route the same way —
+  `demo-paragliding` puts its backdrop after the quote and `demo-hiking`
+  before it, `_index` closes its call to action on the button and `demo-pos`
+  on the illustration. The anchored match is therefore tried twice, once
+  against the section as it stands and once with the media at that end taken
+  off; the first pass is what lets a rule still name the picture itself with
+  `img.background:first-child`.
+
+  Every selector has to be present, so that `not_has` is the exact negation
+  of `has`: `not_has: h1, img.background` reads "not (an h1 *and* a background
+  image)", the mirror of the `has` that routes the `header` brick.
+
+  A selector that is not one of those shapes is counted as asked for and never
+  found, so it fails the whole `has` rather than dropping quietly out of it.
+  An ignored selector would leave the surviving ones to match on their own and
+  make the rule *wider* than it reads, which is a much worse way to learn
+  about a typo than the warning.
+
+  @context {dict} . Html (string), Selectors (string)
+  @returns {bool}
+*/ -}}
+{{- $html := string .Html -}}
+{{- $seen := 0 -}}
+{{- $asked := 0 -}}
+
+{{- /* A standalone picture as goldmark leaves it: a `<figure>`, or an image
+       alone on its line and so wrapped in a paragraph of its own, possibly
+       inside a link. The shapes `split_media.html` lifts out. */ -}}
+{{- $media := `(?:<p>\s*(?:<a\b[^>]*>\s*)?<img\b[^>]*>\s*(?:</a>\s*)?</p>|<figure\b.*?</figure>)` -}}
+
+{{- /* What a `:last-child` match may not be followed by. Closing tags are not
+       in it: `</p>` cannot match `<p[\s/>]`. */ -}}
+{{- $blocks := `(?is)<(?:p|div|section|article|aside|h[1-6]|ul|ol|dl|table|blockquote|figure|pre|form|nav)[\s/>]` -}}
+
+{{- range $selector := split .Selectors "," -}}
+  {{- with trim $selector " " -}}
+    {{- $asked = add $asked 1 -}}
+    {{- if not (findRE `^[\w-]*(\.[\w-]+|#[\w-]+)?(:(first|last)-child|:nth-child\(\s*\d+\s*\))?$` . 1) -}}
+      {{- warnf "section_map: unsupported selector %q — use a tag, a `.class` or an `#id`, or a tag with one of the two, each optionally suffixed with `:first-child`, `:last-child` or `:nth-child(n)`" . -}}
+    {{- else -}}
+      {{- $first := in . ":first-child" -}}
+      {{- $last := in . ":last-child" -}}
+      {{- $nth := 0 -}}
+      {{- if in . ":nth-child(" -}}
+        {{- $nth = int (index (findRE `\d+` . 1) 0) -}}
+      {{- end -}}
+
+      {{- /* Split the selector into its tag and its one qualifier. A bare
+             qualifier leaves no tag, which stands for any of them. */ -}}
+      {{- $bare := replaceRE `:(first|last)-child$|:nth-child\(\s*\d+\s*\)$` "" . -}}
+      {{- $tag := $bare -}}
+      {{- $class := "" -}}
+      {{- $id := "" -}}
+      {{- with findRE `[.#][\w-]+$` $bare 1 -}}
+        {{- $qualifier := index . 0 -}}
+        {{- $tag = replaceRE `[.#][\w-]+$` "" $bare -}}
+        {{- if hasPrefix $qualifier "#" -}}
+          {{- $id = substr $qualifier 1 -}}
+        {{- else -}}
+          {{- $class = substr $qualifier 1 -}}
+        {{- end -}}
+      {{- end -}}
+      {{- $tag = or $tag `[a-zA-Z][\w-]*` -}}
+
+      {{- /* A class is one name out of a list, an id is the whole attribute.
+             The tag is captured so that `:last-child` can name it below even
+             when the selector did not. */ -}}
+      {{- $body := printf `<(%s)[\s/>]` $tag -}}
+      {{- if $class -}}
+        {{- $body = printf `<(%s)\b[^>]*\sclass="(?:[^"]*\s)?%s(?:\s[^"]*)?"` $tag $class -}}
+      {{- else if $id -}}
+        {{- $body = printf `<(%s)\b[^>]*\sid="%s"` $tag $id -}}
+      {{- end -}}
+
+      {{- /* The sections are trimmed before they get here, so the first child
+             is whatever tag the string opens with; `^` is start of text, not
+             of line, because `(?m)` is never set. The `<p>` is optional
+             because goldmark wraps a lone image in a paragraph, and an image
+             on the first line is the section's first block whatever the
+             parser wrapped it in. */ -}}
+      {{- $anchored := or $first (gt $nth 0) -}}
+      {{- $subject := $html -}}
+      {{- if gt $nth 0 -}}
+        {{- $subject = partial "section_nth.html" (dict "Html" $html "N" $nth) -}}
+      {{- end -}}
+      {{- $re := printf `(?is)%s%s` (cond $anchored `^\s*(?:<p>\s*)?` "") $body -}}
+      {{- /* Only `:first-child` retries against the unstripped section: that
+             retry is what lets a rule name the media itself, and asking it for
+             `:nth-child(n)` would put the picture back into the count that
+             `section_nth.html` just took it out of. */ -}}
+      {{- $hit := findRE $re $subject 1 -}}
+      {{- if and (not $hit) $first -}}
+        {{- $hit = findRE $re (replaceRE (printf `(?is)^\s*%s\s*` $media) "" $subject) 1 -}}
+      {{- end -}}
+
+      {{- /* `:last-child` cannot be anchored the way `:first-child` is — the
+             element runs on past its opening tag, and how far depends on what
+             it holds. So it is asked the other way round: cut the section down
+             to what follows the *last* opening tag of that kind (`.*` is
+             greedy, so it reaches the last one) and hold if nothing
+             block-level starts after it.
+
+             What the element holds is its own business, though, and a `form`
+             or a `blockquote` is full of block-level children. So the cut runs
+             on to that element's own closing tag first — lazily, to the
+             *first* one, which is its own as long as html forbids it to nest
+             inside itself. An element with no closing tag, `img` and friends,
+             finds nothing to cut and is measured from its opening tag, which
+             is the whole of it anyway. */ -}}
+      {{- if and $hit $last -}}
+        {{- $name := replaceRE (printf `(?is)^.*%s.*$` $body) "$1" $html -}}
+        {{- $rest := replaceRE (printf `(?is)^.*%s` $body) "" $html -}}
+        {{- $rest = replaceRE (printf `(?is)^.*?</%s\s*>` $name) "" $rest -}}
+        {{- $hit = not (findRE $blocks (replaceRE (printf `(?is)\s*%s\s*$` $media) "" $rest) 1) -}}
+      {{- end -}}
+
+      {{- if $hit -}}{{- $seen = add $seen 1 -}}{{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- $found := false -}}
+{{- if gt $asked 0 -}}
+  {{- $found = eq $seen $asked -}}
+{{- end -}}
+{{- return $found -}}

@@ -1,0 +1,12 @@
+{{- /*
+  Brick: error404
+  Not-found brick: illustration, apology, link back home.
+
+  @context {dict} . Content, Name, Index, Page
+*/ -}}
+{{- $label := partial "section_label.html" .Content -}}
+<section class="error404"{{ with $label }} aria-labelledby="{{ . }}"{{ end }}>
+    <div class="container small">
+        {{ .Content }}
+    </div>
+</section>

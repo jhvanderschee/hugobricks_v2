@@ -1,0 +1,12 @@
+{{- /*
+  Returns the `id` of the first heading inside a section, so the `<section>`
+  can point at it with `aria-labelledby` and become a named region landmark.
+  Returns an empty string when the section has no heading; a `<section>`
+  without an accessible name is not exposed as a landmark, which is the
+  correct outcome for a purely decorative brick.
+
+  @context {string} . The rendered html of one section.
+  @returns {string}
+*/ -}}
+{{- $m := findRESubmatch `(?is)<h[1-6][^>]*\bid="([^"]+)"` (string .) 1 -}}
+{{- with $m -}}{{ index (index . 0) 1 }}{{- end -}}

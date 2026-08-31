@@ -1,0 +1,19 @@
+{{- /*
+  Brick: header
+  Full-bleed hero. The image in the markdown becomes the backdrop.
+
+  Revised from the original theme: the backdrop is a real `<img>` with an
+  empty `alt` rather than an inline `background-image`, so it is sized,
+  fetched with high priority and cached like any other image; the scrim is a
+  pseudo-element rather than an empty `<div class="overlay">`.
+
+  @context {dict} . Content, Name, Index, Page
+*/ -}}
+{{- $label := partial "section_label.html" .Content -}}
+{{- $parts := partial "split_media.html" .Content -}}
+<section class="header bgimage hasbackgroundcolor"{{ with $label }} aria-labelledby="{{ . }}"{{ end }}>
+    {{ with $parts.Media }}<div class="backdrop" aria-hidden="true">{{ . | safeHTML }}</div>{{ end }}
+    <div class="container small">
+        {{ $parts.Text | safeHTML }}
+    </div>
+</section>

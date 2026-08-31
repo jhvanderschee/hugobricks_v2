@@ -1,0 +1,36 @@
+{{- /*
+  Renders the question groups in `data/<lang>/faqs.yaml`.
+
+      {{< faq >}}     all groups, each under its own heading
+      {{< faq 2 >}}   just the questions of the second group
+
+  Revised from the original theme: the answer is a direct child of
+  `<details>` rather than being buried in two nameless `<div>`s (the height
+  animation is done with `grid-template-rows` on `details::details-content`),
+  and each group is a `<section>` named by its own heading.
+*/ -}}
+{{- $d := partial "data.html" .Page -}}
+{{- if .Get 0 -}}
+    {{- with index $d.faqs (sub (int (.Get 0)) 1) -}}
+        {{- range .faqs -}}
+            <details>
+                <summary>{{ .question }}</summary>
+                <div>{{ .answer | markdownify }}</div>
+            </details>
+        {{- end -}}
+    {{- end -}}
+{{- else -}}
+    {{- range $i, $group := $d.faqs -}}
+        {{- with $group.title -}}
+            <section class="faqgroup" aria-labelledby="faqgroup-{{ $i }}">
+                <h3 id="faqgroup-{{ $i }}">{{ . }}</h3>
+                {{- range $group.faqs -}}
+                    <details>
+                        <summary>{{ .question }}</summary>
+                        <div>{{ .answer | markdownify }}</div>
+                    </details>
+                {{- end -}}
+            </section>
+        {{- end -}}
+    {{- end -}}
+{{- end -}}

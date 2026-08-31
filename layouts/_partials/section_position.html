@@ -1,0 +1,40 @@
+{{- /*
+  Where does a section sit among the sections of its page?
+
+  Accepts `:first-child`, `:last-child`, `:only-child`, `:nth-child(n)`
+  (1-based) and any of those wrapped in `:not(…)`.
+
+  An unsupported selector warns and returns true, so one typo in hugo.yaml
+  loosens a rule rather than silently killing it.
+
+  @context {dict} . Selector (string), Index (int), Count (int)
+  @returns {bool}
+*/ -}}
+{{- $selector := trim .Selector " " -}}
+{{- $i := .Index -}}
+{{- $n := .Count -}}
+{{- $negate := false -}}
+
+{{- if hasPrefix $selector ":not(" -}}
+  {{- $negate = true -}}
+  {{- $selector = trim (strings.TrimSuffix ")" (strings.TrimPrefix ":not(" $selector)) " " -}}
+{{- end -}}
+
+{{- $at := false -}}
+{{- $known := true -}}
+{{- if eq $selector ":first-child" -}}
+  {{- $at = eq $i 0 -}}
+{{- else if eq $selector ":last-child" -}}
+  {{- $at = eq $i (sub $n 1) -}}
+{{- else if eq $selector ":only-child" -}}
+  {{- $at = eq $n 1 -}}
+{{- else if findRE `^:nth-child\(\s*\d+\s*\)$` $selector 1 -}}
+  {{- $at = eq $i (sub (int (index (findRE `\d+` $selector 1) 0)) 1) -}}
+{{- else -}}
+  {{- $known = false -}}
+  {{- warnf "section_map: unsupported position %q in params.sections" .Selector -}}
+{{- end -}}
+
+{{- $result := true -}}
+{{- if $known -}}{{- $result = ne $at $negate -}}{{- end -}}
+{{- return $result -}}

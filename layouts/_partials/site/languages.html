@@ -1,0 +1,38 @@
+{{- /*
+  The language switcher's links, resolved once for both the banner and the
+  footer.
+
+  A language points at this page's translation when there is one, and at that
+  language's home when there is not. The theme always went to the home; the
+  footer's rebuild went the other way and only rendered at all when the page
+  *was* translated, which on this site means it vanished from every page but a
+  handful. Falling back is what lets the switcher sit on every page and still
+  land on the right page whenever there is one.
+
+  Ordered by the languages' weight in `hugo.yaml`, so the switcher reads the
+  same everywhere.
+
+  @context {page} .
+  @returns {slice} one dict per language: Lang, Name, Url, Current (bool)
+*/ -}}
+{{- $page := . -}}
+{{- $out := slice -}}
+{{- range site.Sites -}}
+    {{- $lang := .Language.Lang -}}
+    {{- $url := .Home.RelPermalink -}}
+    {{- range $page.AllTranslations -}}
+        {{- /* Hugo pairs `content/en/404.md` with the 404 page it generates
+               for every other language, and that one has no template here, so
+               its permalink goes nowhere. Anything that is not an ordinary
+               page is not a translation worth linking to. */ -}}
+        {{- if and (eq .Language.Lang $lang) (ne .Kind "404") -}}
+            {{- $url = .RelPermalink -}}
+        {{- end -}}
+    {{- end -}}
+    {{- $out = $out | append (dict
+        "Lang" $lang
+        "Name" .Language.LanguageName
+        "Url" $url
+        "Current" (eq $lang $page.Language.Lang)) -}}
+{{- end -}}
+{{- return $out -}}

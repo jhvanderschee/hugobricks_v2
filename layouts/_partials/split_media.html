@@ -1,0 +1,23 @@
+{{- /*
+  Splits one rendered section into its media and the rest of its text.
+
+  Two-column bricks (`image`, `cta`, `contact`, `header`, `map`) need to know
+  which part of the markdown is the picture and which part is the prose. This
+  lifts out the first standalone image — a `<figure>`, or a paragraph holding
+  nothing but an `<img>` — and returns both halves. Everything else about a
+  section stays plain markdown.
+
+  @context {string} . The rendered html of one section.
+  @returns {dict} Media (string, may be empty), Text (string)
+*/ -}}
+{{- $html := string . -}}
+{{- $media := "" -}}
+{{- range $re := slice `(?is)<figure\b.*?</figure>` `(?is)<p>\s*<img\b[^>]*>\s*</p>` `(?is)<p>\s*<a\b[^>]*>\s*<img\b[^>]*>\s*</a>\s*</p>` -}}
+    {{- if not $media -}}
+        {{- with findRE $re $html 1 -}}
+            {{- $media = index . 0 -}}
+            {{- $html = replace $html $media "" 1 -}}
+        {{- end -}}
+    {{- end -}}
+{{- end -}}
+{{- return dict "Media" $media "Text" (trim $html "\n\r\t ") -}}

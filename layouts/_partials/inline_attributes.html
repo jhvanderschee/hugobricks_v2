@@ -1,0 +1,77 @@
+{{- /*
+  Kramdown-style inline attribute lists.
+
+  Markdown labels a link or an image by writing an attribute list straight
+  after it:
+
+      [Get started now](/get-started/){:.button}
+      ![](/photo.jpg){:.background}
+      ![](/map.png){: .map #overview}
+
+  The list has to sit directly against the link or the image it labels, with
+  no space between — one that stands loose in the copy is left as it is.
+
+  `.name` becomes a class — several are allowed, spaced or chained — and
+  `#name` becomes an id. Goldmark has no notion of any of this, so the list
+  survives markdown as literal text sitting right after the `</a>` or the
+  `<img>`. This moves it into the tag and drops it from the copy.
+
+  It runs on the whole page before `section_map.html` splits it, so the rules
+  in `params.sections` match against the classes it writes: `has:
+  img.background` is reading what `{:.background}` put there.
+
+  A tag that already carries a class is left alone with a warning — that only
+  happens for raw html in the markdown, and silently merging into it would be
+  the more surprising answer.
+
+  @context {string} . The rendered html of a page.
+  @returns {string}
+*/ -}}
+{{- $html := string . -}}
+
+{{- /* The anchor body is tempered rather than lazy: Go's regexp has no
+       lookahead, and `.*?</a>` happily backtracks past one `</a>` to reach a
+       later `{:`, which lands the class on the wrong link. Spelling out "any
+       character, or a `<` that does not begin `</a>`" keeps each match inside
+       one element. The list has to touch what it labels, as in kramdown. */ -}}
+{{- $anchor := `<a\b[^>]*>(?:[^<]|<[^/]|</[^a]|</a[^>])*</a>` -}}
+{{- range $match := findRE (printf `(?:%s|<img\b[^>]*>)\{:[^}]*\}` $anchor) $html -}}
+
+  {{- $ial := index (findRE `\{:[^}]*\}$` $match 1) 0 -}}
+  {{- $el := strings.TrimRight " \n\r\t" (strings.TrimSuffix $ial $match) -}}
+  {{- $open := index (findRE `^<[a-zA-Z]+\b[^>]*>` $el 1) 0 -}}
+
+  {{- $classes := slice -}}
+  {{- $id := "" -}}
+  {{- range $token := split (trim (strings.TrimSuffix "}" (strings.TrimPrefix "{:" $ial)) " \n\r\t") " " -}}
+    {{- with trim $token " \n\r\t" -}}
+      {{- if hasPrefix . "." -}}
+        {{- range $name := split . "." -}}
+          {{- with $name -}}{{- $classes = $classes | append . -}}{{- end -}}
+        {{- end -}}
+      {{- else if hasPrefix . "#" -}}
+        {{- $id = strings.TrimPrefix "#" . -}}
+      {{- else -}}
+        {{- warnf "inline_attributes: ignoring %q — an attribute list takes `.class` and `#id`" . -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+
+  {{- $attrs := "" -}}
+  {{- with $id -}}{{- $attrs = printf `%s id="%s"` $attrs . -}}{{- end -}}
+  {{- with $classes -}}{{- $attrs = printf `%s class="%s"` $attrs (delimit . " ") -}}{{- end -}}
+
+  {{- if and $attrs (findRE `\sclass="` $open 1) -}}
+    {{- warnf "inline_attributes: %s already carries a class, so %q was dropped" $open $ial -}}
+    {{- $attrs = "" -}}
+  {{- end -}}
+
+  {{- $replacement := $el -}}
+  {{- with $attrs -}}
+    {{- $replacement = replace $el $open (printf "%s%s>" (strings.TrimSuffix ">" $open) .) 1 -}}
+  {{- end -}}
+  {{- $html = replace $html $match $replacement 1 -}}
+
+{{- end -}}
+
+{{- return $html -}}

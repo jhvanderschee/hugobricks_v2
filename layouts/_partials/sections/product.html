@@ -1,0 +1,12 @@
+{{- /*
+  Brick: product
+  A single product: gallery beside title, price and add-to-cart form.
+
+  @context {dict} . Content, Name, Index, Page
+*/ -}}
+{{- $label := partial "section_label.html" .Content -}}
+<section class="product"{{ with $label }} aria-labelledby="{{ . }}"{{ end }}>
+    <article class="container twocols">
+        {{ .Content }}
+    </article>
+</section>

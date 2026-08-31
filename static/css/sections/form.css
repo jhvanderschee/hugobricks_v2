@@ -1,0 +1,9 @@
+/* -- brick: form ---------------------------------------------------------
+   ## Shut up and take my money!
+   {{< ctaform >}}
+
+   A short form at the small measure. The controls, and the card around them,
+   are styled once in the core — this only sets the rhythm around the form
+   and centres the heading when the section leads with one.               */
+
+section.form h1 { text-align: center; }

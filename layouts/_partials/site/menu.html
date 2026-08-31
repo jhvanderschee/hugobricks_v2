@@ -1,0 +1,58 @@
+{{- /*
+  Renders `header.menuitems` (or `footer.menuitems`) as a nested list, marking
+  the current page with `aria-current="page"` and its ancestors with `.active`.
+
+  Two things the data makes it deal with, both the way the theme did:
+
+  - A menu item always carries an `items:` key, and where there is no submenu
+    that key still holds one entry with an empty `title` and `link`. The theme
+    read `(index .items 0).title` to tell a real submenu from that placeholder;
+    this drops every child that has no title, so a half-filled list behaves as
+    well as an empty one. Without it the placeholder renders as a submenu of
+    one blank link — and, since its empty link resolves to the language home,
+    lights every item on the home page up as active.
+
+  - An item is active when the current page sits under it, not only when it
+    *is* it, so `/docs/shortcodes/button/` lights up `Docs`. The exception is
+    an item pointing at the home page, which is a prefix of every url on the
+    site: that one is active only when you are actually there. The theme
+    spelled that exception as a literal `/`, which leaves the Dutch menu's
+    `/nl/` item permanently active; comparing against the language's own home
+    is the same rule without the hole.
+
+  @context {dict} . Page, Items
+*/ -}}
+{{- $page := .Page -}}
+{{- $here := $page.RelPermalink -}}
+{{- $home := $page.Site.Home.RelPermalink -}}
+<ul>
+    {{- range .Items -}}
+        {{- $link := .link | relLangURL -}}
+
+        {{- $children := slice -}}
+        {{- range $child := .items -}}
+            {{- with $child.title -}}{{- $children = $children | append $child -}}{{- end -}}
+        {{- end -}}
+
+        {{- $current := eq $here $link -}}
+        {{- $active := $current -}}
+        {{- if and (not $active) $link (ne $link $home) -}}
+            {{- $active = hasPrefix $here $link -}}
+        {{- end -}}
+        {{- range $children -}}
+            {{- if eq $here (.link | relLangURL) -}}{{- $active = true -}}{{- end -}}
+        {{- end -}}
+
+        <li{{ if $active }} class="active"{{ end }}>
+            <a href="{{ $link }}"{{ if $current }} aria-current="page"{{ end }}>{{ .title }}</a>
+            {{- with $children -}}
+                <ul>
+                    {{- range . -}}
+                        {{- $sub := eq $here (.link | relLangURL) -}}
+                        <li{{ if $sub }} class="active"{{ end }}><a href="{{ .link | relLangURL }}"{{ if $sub }} aria-current="page"{{ end }}>{{ .title }}</a></li>
+                    {{- end -}}
+                </ul>
+            {{- end -}}
+        </li>
+    {{- end -}}
+</ul>

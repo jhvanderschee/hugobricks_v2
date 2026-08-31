@@ -1,0 +1,38 @@
+{{- /*
+  Renders `data/<lang>/people.yaml` as a list of colleagues
+  (name, function, image, description, email, phone, linkedin, website).
+
+      {{< team >}}
+
+  Each person is an `<article>` and the role is a `<p>` tied to the name,
+  rather than the theme's nameless `<div class="function">`. Every contact
+  icon carries the person's name in its accessible name, so a screen reader
+  hears "Email Gitio Hamano" instead of six identical "joost@vdschee.nl"
+  links down the page.
+
+  The `<ul class="team">` is also what routes the section: the `team` rule in
+  `params.sections` matches `ul.team`, so writing this shortcode into a
+  section is what picks the brick that wraps it.
+*/ -}}
+{{- $d := partial "data.html" .Page -}}
+{{- with $d.people -}}
+<ul class="team">
+    {{- range . -}}
+        {{- $person := .name -}}
+        <li>
+            <article>
+                {{ with .image }}<img src="{{ . }}" alt="" width="128" height="128" class="avatar">{{ end }}
+                <h3>{{ $person }}</h3>
+                {{ with .function }}<p class="function">{{ . | safeHTML }}</p>{{ end }}
+                {{ with .description }}<p>{{ . | safeHTML }}</p>{{ end }}
+                <ul class="buttons">
+                    {{ with .phone }}<li><a class="button icon" href="tel:{{ replaceRE `[^+0-9]` "" . }}"><img src="/img/phone.svg" alt="" width="20" height="20"><span class="sr-only">Call {{ $person }}</span></a></li>{{ end }}
+                    {{ with .email }}<li><a class="button icon" href="mailto:{{ . }}"><img src="/img/email.svg" alt="" width="20" height="20"><span class="sr-only">Email {{ $person }}</span></a></li>{{ end }}
+                    {{ with .linkedin }}<li><a class="button icon" href="{{ . }}" rel="noopener"><img src="/img/linkedin.svg" alt="" width="20" height="20"><span class="sr-only">{{ $person }} on LinkedIn</span></a></li>{{ end }}
+                    {{ with .website }}<li><a class="button icon" href="{{ . }}" rel="noopener"><img src="/img/world.svg" alt="" width="20" height="20"><span class="sr-only">Website of {{ $person }}</span></a></li>{{ end }}
+                </ul>
+            </article>
+        </li>
+    {{- end -}}
+</ul>
+{{- end -}}

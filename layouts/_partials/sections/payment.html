@@ -1,0 +1,12 @@
+{{- /*
+  Brick: payment
+  Payment method picker.
+
+  @context {dict} . Content, Name, Index, Page
+*/ -}}
+{{- $label := partial "section_label.html" .Content -}}
+<section class="payment"{{ with $label }} aria-labelledby="{{ . }}"{{ end }}>
+    <div class="container small">
+        {{ .Content }}
+    </div>
+</section>

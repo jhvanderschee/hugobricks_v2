@@ -1,0 +1,138 @@
+/* -- brick: posts / webshop ----------------------------------------------
+   ## Heading
+   Intro copy.
+
+   - [![](/photo.jpg) **Post title**](/blog/post/) Summary.               */
+
+:is(section.posts, section.webshop) li img {
+    inline-size: 100%;
+    aspect-ratio: 1.5;
+    object-fit: cover;
+    border-radius: var(--radius);
+    margin: 0 0 1rem;
+}
+/* The card title is a `<strong>` rather than a heading — a teaser is not a
+   section of the page — so the base `h3`'s metrics are spelled out here. The
+   face is the body one, as it is for every heading inside a card. */
+:is(section.posts, section.webshop) li strong {
+    display: block;
+    font-size: 1.25rem;
+    line-height: 1.3;
+    color: var(--textDark);
+    margin-block-end: 0.4rem;
+}
+:is(section.posts, section.webshop) li > a { text-decoration: none; }
+
+/* The card's own furniture, at the original theme's measurements —
+   `bricks.css` `section.posts` and `base.css` `.meta`. `--flow` is the
+   paragraph rhythm of a body of prose and far too much inside a card, so the
+   card sets its own. */
+section.posts li p { margin-block: 0 1rem; }
+section.posts li p:last-child { margin-block-end: 0; }
+
+/* The date. `--textDarker` rather than the muted `--textMedium`: it is a fact
+   about the post, not a caption. `.meta` in the theme carries several of these
+   groups 1rem apart and each one's icon 0.4rem from its text; there is only
+   the date here, so the inner gap is the one that shows. */
+section.posts li .meta {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-block: 0.5rem 1rem;
+    font-size: 0.9rem;
+    color: var(--textDarker);
+}
+/* `--accent` masked through the glyph, the same trick the feature icons and
+   the review stars use, in place of the theme's per-palette `filter` hack. The
+   0.1rem lift is the theme's, to sit the glyph on the text's baseline. */
+section.posts li .meta .icon {
+    inline-size: 1rem;
+    block-size: 1rem;
+    position: relative;
+    inset-block-end: 0.1rem;
+    background: var(--textDarker);
+    mask: var(--icon) center / contain no-repeat;
+}
+
+/* A wider column gutter than the shared collection grid's 1.5rem — the cards
+   carry more text than a feature or a review and need the air.
+
+   `auto-fill` rather than the shared grid's `auto-fit`, because this is the
+   one grid whose items come and go: `auto-fit` collapses the tracks it has no
+   item for, so filtering down to a single post would stretch that post across
+   the full width. `auto-fill` keeps the empty tracks and the card keeps its
+   column. It is what the original theme's two trailing `li.placeholder`
+   elements were holding open, without the two empty list items. */
+section.posts > .container > ul.posts {
+    grid-template-columns: repeat(auto-fill, minmax(min(20rem, 100%), 1fr));
+    gap: 1.55rem 2rem;
+}
+
+/* The tag filter sits over the grid, at the grid's right edge — `split_list`
+   puts it in the wide container for exactly that. The negative top margin
+   pulls it back into the 4rem the intro leaves below itself, so the filter
+   rides in that space rather than pushing the grid down. It is the one control
+   on the page that does nothing without `site.js`, and the page is complete
+   without it: every card is visible until something hides one. */
+section.posts .filter {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-block: -2rem 1.25rem;
+}
+/* `line-height: normal` because the base control rule takes `font: inherit`,
+   and that carries the body's 1.7 into the box — half a line of air the
+   original theme never had, since its select inherits only the family and the
+   size. With that put back it is the theme's own control: no fill, a hairline
+   border, and 0.25em/0.75em of padding. */
+section.posts .filter select {
+    background: none;
+    padding: 0.25em 0.75em;
+    border: 1px solid var(--borderMedium);
+    line-height: normal;
+    margin: 0;
+}
+
+/* The chosen tags, as chips that drop themselves. `site.js` builds them, so
+   the list is empty and takes no room until one is picked. */
+section.posts .filter ul.tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    order: -1;
+}
+section.posts .filter ul.tags li { margin: 0; }
+section.posts .filter ul.tags button {
+    display: flex;
+    align-items: center;
+    block-size: 2rem;
+    padding: 0 0.6rem 0 1rem;
+    font: inherit;
+    font-size: 0.9rem;
+    line-height: 1;
+    white-space: nowrap;
+    cursor: pointer;
+    color: #fff;
+    background: var(--textDark);
+    border: 0;
+    border-radius: 1.15rem;
+}
+/* The cross is a rotated plus, as in the theme. It is decoration: the button's
+   `aria-label` names the tag it drops, and an accessible name replaces the
+   content rather than adding to it, so nothing reads out a stray "+". */
+section.posts .filter ul.tags button::after {
+    content: "+";
+    display: inline-block;
+    margin-inline-start: 1rem;
+    font-size: 1.5rem;
+    transform: rotate(45deg);
+}
+
+/* The way on. `site.js` unhides it while cards are still held back. */
+section.posts .loadmore { margin-block: 0; position: relative; inset-block-end: 1rem; }
+

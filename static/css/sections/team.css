@@ -1,0 +1,19 @@
+/* -- brick: team ---------------------------------------------------------
+   Intro from the markdown, people from data/<lang>/people.yaml.         */
+
+section.team li > article {
+    display: flex;
+    flex-direction: column;
+    block-size: 100%;
+    padding: 2.25rem clamp(1.5rem, 4vw, 3rem);
+    text-align: center;
+    background: var(--light);
+    border: 0.1rem solid var(--borderLight);
+    border-radius: var(--radius);
+}
+/* Shape and crop come from `.avatar` in the core. */
+section.team article img.avatar { inline-size: 8rem; block-size: 8rem; margin: 0.5rem auto 0.75rem; }
+section.team article h3 { margin: 0; font-size: 1.25rem; }
+section.team article .function { color: var(--textDark); margin-block: 0 1rem; }
+section.team article > p:last-of-type { flex: 1; }
+section.team article ul.buttons { justify-content: center; padding: 0; margin: 0; }

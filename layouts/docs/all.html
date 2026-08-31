@@ -1,0 +1,29 @@
+{{- /*
+  Every page under `/docs/` — the section index, the sub-section indexes and
+  the leaves alike. Documentation does not go through `section_map.html` the
+  way an ordinary page does: a docs page is one article beside a table of
+  contents rather than a stack of bricks, and what makes it one is where it
+  lives, not what is written in it. So the `docs` brick renders the page
+  whole, and the call to action every page closes on is added after it.
+
+  The markdown here is full of `---` and `{:.class}` written out as examples.
+  Keeping it out of `section_map.html` is what lets it stay that way: the
+  splitter would read a horizontal rule in prose as a brick boundary.
+
+  That call to action is written once, in `content/<lang>/bricks/cta.md`, and
+  shared by every docs page — the same arrangement `posts/page.html` uses, and
+  its content has to go through `inline_attributes.html` here for the same
+  reason: the page being rendered is not the one the markdown came from, so
+  nothing has hoisted its attribute lists.
+*/ -}}
+{{ define "sections" }}
+    {{- partial "sections/docs.html" (dict "Content" .Content "Name" "docs" "Index" 0 "Page" .) -}}
+    {{- with site.GetPage "/bricks/cta" -}}
+        {{- partial "sections/cta.html" (dict
+            "Content" (partial "inline_attributes.html" .Content)
+            "Name" "cta"
+            "Index" 1
+            "Page" $)
+        -}}
+    {{- end -}}
+{{ end }}

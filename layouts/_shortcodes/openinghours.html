@@ -1,0 +1,19 @@
+{{- /*
+  Renders `data/<lang>/openinghours.yaml` as a description list. Days with no
+  start time are shown as closed.
+
+      {{< openinghours >}}
+
+  Revised from the original theme, which had no consumer for this file at all:
+  a `<dl>` pairs each day with its hours, and the times are `<time>` elements.
+*/ -}}
+{{- $d := partial "data.html" .Page -}}
+{{- $days := dict "mon" "Monday" "tue" "Tuesday" "wed" "Wednesday" "thu" "Thursday" "fri" "Friday" "sat" "Saturday" "sun" "Sunday" -}}
+<dl class="openinghours">
+    {{- range $key := slice "mon" "tue" "wed" "thu" "fri" "sat" "sun" -}}
+        {{- with index $d.openinghours $key -}}
+            <dt>{{ index $days $key }}</dt>
+            <dd>{{ if .start }}{{ .start }} – {{ .end }}{{ else }}Closed{{ end }}</dd>
+        {{- end -}}
+    {{- end -}}
+</dl>

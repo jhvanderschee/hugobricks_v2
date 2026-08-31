@@ -1,0 +1,26 @@
+/* -- brick: image-alt ----------------------------------------------------
+   The `image` brick with its columns swapped onto a tinted band. Everything
+   else it needs is in `image.css`.                                       */
+
+/* The two variants are four custom properties: a tint, its hairlines, and
+   which column comes first. The `image-alt` brick already writes its picture
+   before its prose, so `--media-order: 1` only confirms the markup order. */
+section.image.alt {
+    --band: var(--light);
+    --band-border: 0.1rem;
+    --text-order: 2;
+    --media-order: 1;
+}
+
+/* Two rhythm rules that only the image pair knows about, so they live here
+   rather than in the core's section rhythm. Brick stylesheets load after the
+   core, so both still override it.
+
+   A tinted band is `hasbackgroundcolor`, which zeroes the section padding on
+   the grounds that whatever the brick paints carries its own. That does not
+   hold for a full-bleed band: the space its content needs has to come from
+   the section after all. And inside a run of image bricks the band is part of
+   the zig-zag rather than a break in it, so there it butts straight up
+   against its neighbour instead of taking the usual 2rem. */
+main > section.image.alt { padding-block: var(--brick-space); }
+main > section.image + section.image.alt { margin-block-start: 0; }

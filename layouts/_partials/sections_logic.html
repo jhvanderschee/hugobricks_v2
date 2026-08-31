@@ -1,0 +1,15 @@
+{{- /*
+  Renders a page as a stack of bricks. `section_map.html` does the splitting
+  and the routing; this walks the result and hands each section to its brick.
+
+  @context {page} .
+*/ -}}
+{{- $page := . -}}
+{{- range partialCached "section_map.html" $page $page.RelPermalink -}}
+  {{- partial (printf "sections/%s" .Name) (dict
+    "Content" (.Content | safeHTML)
+    "Name" .Name
+    "Index" .Index
+    "Page" $page)
+  -}}
+{{- end -}}

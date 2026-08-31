@@ -1,0 +1,4 @@
+/* -- brick: default ------------------------------------------------------
+   Fallback. Whatever the markdown is, at the full measure.               */
+
+section.default > .container > * { max-inline-size: var(--measure-medium); }

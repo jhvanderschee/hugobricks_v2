@@ -1,0 +1,34 @@
+# ---------------------------------------------------------------------------
+# The feature grid, rendered by the `{{< features >}}` shortcode into the
+# `features` brick. The section's own heading and intro stay in the markdown;
+# the cards live here.
+#
+# `icon` is any square SVG. It is drawn in the accent colour through a CSS
+# mask, so the file's own fill is ignored — a one-colour glyph is what works.
+# ---------------------------------------------------------------------------
+
+- icon: /img/icons/material-symbols/200/rounded/auto_awesome_mosaic.svg
+  title: Omvat alle componenten
+  description: 'We streven ernaar de volgende bricks te leveren: intro, titel, afbeelding, cta, contact,
+    team, getuigenissen, over, prijzen, producten, product, usps, statistieken, galerij, citaat,
+    veelgestelde vragen, merken, video, blogs, post, gerelateerd.'
+- icon: /img/icons/material-symbols/200/rounded/performance_max.svg
+  title: 99+ Google Lighthouse-score
+  description: Razendsnelle website. Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis
+    illum nesciunt commodi vel nisi ut alias excepturi ipsum.
+- icon: /img/icons/material-symbols/200/rounded/design_services.svg
+  title: Thema met CSS-variabelen
+  description: Gemakkelijk aan te passen aan jouw huisstijl. Lorem ipsum dolor sit amet consectetur
+    adipisicing elit. Corporis illum nesciunt commodi vel nisi ut alias excepturi ipsum.
+- icon: /img/icons/material-symbols/200/rounded/devices.svg
+  title: Werkt op ieder formaat
+  description: Werkt op elk scherm en ieder device. Lorem ipsum dolor sit amet consectetur adipisicing
+    elit. Corporis illum nesciunt commodi vel nisi ut alias excepturi ipsum.
+- icon: /img/icons/material-symbols/200/rounded/timer.svg
+  title: Supersnel bouwen
+  description: Extreem snel. Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis illum
+    nesciunt commodi vel nisi ut alias excepturi ipsum.
+- icon: /img/icons/material-symbols/200/rounded/auto_fix.svg
+  title: 10+ kant-en-klare pagina's
+  description: Begin met het eindresultaat. Lorem ipsum dolor sit amet consectetur adipisicing elit.
+    Corporis illum nesciunt commodi vel nisi ut alias excepturi ipsum.

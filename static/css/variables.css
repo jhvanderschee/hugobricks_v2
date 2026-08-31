@@ -1,0 +1,45 @@
+/* ==========================================================================
+   Design tokens
+
+   Every colour, face, measure and rhythm the rest of the stylesheet builds
+   on. Loaded first, so nothing below has to define a fallback.
+   ========================================================================== */
+
+:root {
+    /* colour */
+    --textDarker:   #1e282d;
+    --textDark:     rgb(38 50 56);
+    --textMedium:   rgb(38 50 56 / 0.7);
+    --borderMedium: rgb(38 50 56 / 0.2);
+    --borderLight:  rgb(38 50 56 / 0.075);
+    --light:        rgb(38 50 56 / 0.035);
+    --page:         #fff;
+    --accent:       #f4b500;
+    --accentDarker: #e6ac00;
+    --scrim:        rgb(0 0 0 / 0.32);
+
+    /* type */
+    --fontTitles: "Signika", ui-sans-serif, system-ui, sans-serif;
+    --fontBody:   "Heebo", ui-sans-serif, system-ui, sans-serif;
+
+    /* measure */
+    --measure-small:  40rem;
+    --measure-medium: 60rem;
+    --measure-wide:   84rem;
+    --gutter:  clamp(1rem, 4vw, 3rem);
+    --radius:  1rem;
+    --radius-s: 0.4rem;
+
+    /* rhythm */
+    --brick-space:       clamp(3.5rem, 7vw, 5rem);
+    --brick-space-tight: clamp(1.5rem, 3vw, 2rem);
+    --flow:        1.7em;
+}
+
+/* Colour themes. `color_name` in data/settings.yaml sets it site-wide, a
+   page's own `color_name` front matter overrides it. The palettes differ only
+   in the accent, so this is two tokens rather than four stylesheets. */
+:root[data-color="red"]    { --accent: #ec0f0f; --accentDarker: #e00606; }
+:root[data-color="blue"]   { --accent: #00adef; --accentDarker: #009ad5; }
+:root[data-color="green"]  { --accent: #5fb22d; --accentDarker: #4f9625; }
+:root[data-color="yellow"] { --accent: #f4b500; --accentDarker: #e6ac00; }

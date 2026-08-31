@@ -1,0 +1,4 @@
+/* -- brick: small --------------------------------------------------------
+   Plain measure brick for short forms.                                   */
+
+section.small, section.small h1 { text-align: center; }

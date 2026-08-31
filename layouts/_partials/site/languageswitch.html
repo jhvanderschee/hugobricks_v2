@@ -1,0 +1,28 @@
+{{- /*
+  The language switcher: a `<select>` that navigates on change, as the theme's
+  footer one did. The banner and the footer both use it, so both get the
+  platform's own picker — a wheel on a phone, a menu on a desktop — instead of
+  a hover panel that a touch screen has no way to open.
+
+  The first option is the label the closed control wears and nothing more:
+  `selected` is what puts it there — without it the browser falls through to
+  the first option it is allowed to pick, which is the language you are *not*
+  reading — while `disabled` and `hidden` keep it out of the list that drops
+  down. A browser that ignores `hidden` on an option shows it greyed out.
+
+  `site.js` does the navigating, so this is the one piece of chrome that needs
+  that file.
+
+  @context {dict} . Page, Label (string — what the closed control shows)
+*/ -}}
+{{- $langs := partial "site/languages.html" .Page -}}
+{{- if gt (len $langs) 1 -}}
+    <span class="languageswitch">
+        <select aria-label="Change language" data-languageswitch>
+            <option value="" disabled selected hidden>{{ .Label }}</option>
+            {{- range $langs -}}
+                <option value="{{ .Url }}" lang="{{ .Lang }}"{{ if .Current }} disabled{{ end }}>{{ .Name }}</option>
+            {{- end -}}
+        </select>
+    </span>
+{{- end -}}

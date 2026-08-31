@@ -1,0 +1,126 @@
+/* -- brick: prices -------------------------------------------------------
+   ## Heading
+   Intro copy.
+
+   {{< pricing >}}
+
+   The plans come from data/<lang>/pricing.yaml; the shortcode emits one
+   <article> per plan and marks the lifted one `.featured`.
+
+   Every selector here is anchored on `> .container > ul > li`, the plan
+   itself. A plan holds a second list — its features — and the card styling
+   must not reach that far down.                                          */
+
+section.prices > .container > ul { 
+    max-inline-size: 70rem; 
+    margin-inline: auto; 
+    gap: 1.55rem 1.5rem;
+}
+
+section.prices > .container > ul > li {
+    background: var(--light);
+    border: 0.1rem solid var(--borderLight);
+    border-radius: var(--radius);
+}
+section.prices > .container > ul > li > article {
+    display: flex;
+    flex-direction: column;
+    block-size: 100%;
+    padding: 3rem 2rem;
+    text-align: center;
+}
+
+section.prices .badge {
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.15rem;
+    margin-block-end: 2rem;
+    position: relative;
+    bottom: 1rem;
+}
+/* The theme sets the plan title at plain heading size in the body face —
+   1.25rem/700 — rather than enlarging it. Left at 1.6rem it crowds the card
+   and competes with the price for the eye. */
+section.prices article h3 { margin-block-start: 0; }
+
+/* `$25/month` is three sizes on one baseline: a small raised currency sign,
+   the numeral at 3rem, and the period back at title size. */
+section.prices .amount {
+    margin-block: 1.25rem 0;
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--textDark);
+}
+section.prices .currency { vertical-align: top; }
+section.prices .price {
+    /* 900 resolves to the 600 face, the heaviest Heebo we ship — which is
+       what the theme renders too, shipping the same two weights. */
+    font-weight: 900;
+    font-size: 3rem;
+    line-height: 0.9;
+    letter-spacing: -0.1rem;
+    vertical-align: bottom;
+    padding-inline: 0.25rem;
+}
+
+/* The feature list reads flush left, but sits centred in the card rather than
+   spanning it. `align-self` does both jobs: it takes the item off the flex
+   container's default `stretch`, so the list shrinks to its longest line, and
+   it centres what is left. The theme gets there with `display: inline-block`,
+   which cannot work here — the card is a flex container, and a flex item is
+   blockified, so `inline-block` would compute to `block` and stretch anyway.
+
+   `flex: 1` is on the main (vertical) axis and is unaffected: the list still
+   takes the slack, which is what lines the buttons up across plans of
+   different lengths. */
+section.prices article > ul {
+    flex: 1;
+    align-self: center;
+    text-align: start;
+    margin-block: 1.5rem 2.5rem;
+    padding: 0;
+    list-style: none;
+}
+section.prices article > ul > li { margin: 0; }
+section.prices article > ul > li::before {
+    content: "✓";
+    padding-inline-end: 0.4rem;
+    color: var(--accentDarker);
+}
+section.prices article > p:last-child { margin: 0; }
+
+@media (min-width: 65rem) {
+    section.prices > .container > ul { grid-template-columns: repeat(3, 1fr); gap: 0; margin-bottom: 2rem;}
+    section.prices > .container > ul > li:first-child { border-start-end-radius: 0; border-end-end-radius: 0; }
+    section.prices > .container > ul > li:last-child { border-start-start-radius: 0; border-end-start-radius: 0; }
+
+    /* The lifted plan is named by the data, not by its position in the row.
+       The white halo is what separates it from the plans it overlaps: the row
+       closes to `gap: 0` here, so a scaled card would otherwise sit straight
+       on its neighbours' edges with nothing between them. */
+    section.prices > .container > ul > li.featured {
+        z-index: 2;
+        transform: scale(1.08);
+        border-radius: var(--radius);
+        box-shadow: 0 0 0 0.25rem white;
+    }
+    /* `--light` is a translucent tint, so the lifted card would show the two
+       plans it overlaps straight through itself. This lays an opaque white
+       sheet over that tint, which is also why the card reads white rather
+       than tinted: `transform` makes it a stacking context, and inside one
+       the element's own background paints first, so a `z-index: -1` pseudo
+       lands above the tint and not beneath it. */
+    section.prices > .container > ul > li.featured::before,
+    section.prices > .container > ul > li.featured::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        background: var(--page);
+        border-radius: inherit;
+    }
+    section.prices > .container > ul > li.featured::after {
+        background: var(--light);
+    }
+}

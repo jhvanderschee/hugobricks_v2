@@ -1,0 +1,24 @@
+{{- /*
+  A blog post. Posts do not go through `section_map.html` the way an ordinary
+  page does: they are one article rather than a stack of bricks, and what makes
+  them one is where they live, not what is written in them. So the `post` brick
+  renders the page whole, and the call to action every post closes on is added
+  after it.
+
+  That call to action is written once, in `content/<lang>/bricks/cta.md`, and
+  shared by every post — the original theme's brick fallback. Its content has
+  to go through `inline_attributes.html` here, because the page being rendered
+  is not the one the markdown came from: `section_map.html` hoists the
+  attribute lists for an ordinary page, and nothing has hoisted these.
+*/ -}}
+{{ define "sections" }}
+    {{- partial "sections/post.html" (dict "Content" .Content "Name" "post" "Index" 0 "Page" .) -}}
+    {{- with site.GetPage "/bricks/cta" -}}
+        {{- partial "sections/cta.html" (dict
+            "Content" (partial "inline_attributes.html" .Content)
+            "Name" "cta"
+            "Index" 1
+            "Page" $)
+        -}}
+    {{- end -}}
+{{ end }}

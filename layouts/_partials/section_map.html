@@ -1,0 +1,132 @@
+{{- /*
+  Splits a page's content into sections on its horizontal rules and decides
+  which brick renders each one, using the rules in `params.sections`.
+
+  This is the single source of truth for that decision: `sections_logic.html`
+  ranges over the result to render the page, and `site/header.html` reads the
+  first entry to find out whether the page opens with a brick that paints a
+  full-bleed backdrop — which is what makes a transparent banner safe.
+
+  A rule looks like:
+
+      - title: header            # -> layouts/_partials/sections/header.html
+        has: img.background      # -> the section holds a background image
+        not_has: h2              # -> and holds no h2
+        is: :first-child         # -> and is the first section
+        not_is: :only-child      # -> and is not the only one
+
+  All four conditions are optional and every one that is set has to hold. A
+  rule with none of them set is skipped, because it would claim every section.
+
+  `has` / `not_has` take a comma-separated selector list — a tag, a `.class`
+  or an `#id`, in any combination of a tag with one of the two, each
+  optionally suffixed with `:first-child` or `:last-child` for the element the
+  section opens or closes on, see `section_has.html`. Everything listed must be
+  present, and `not_has` is the exact negation of `has`: `not_has: h1,
+  img.background` means "not (an h1 *and* a background image)", not "neither of
+  them". The classes are the ones the markdown put there, through the attribute
+  lists `inline_attributes.html` hoists: `![](/photo.jpg){:.background}` is
+  what `img.background` matches.
+
+  `is` / `not_is` take a position — `:first-child`, `:last-child`,
+  `:only-child`, `:nth-child(n)` (1-based), optionally wrapped in `:not(…)`,
+  see `section_position.html`.
+
+  Rules are evaluated top to bottom and the first match wins; a section
+  matching no rule falls back to `wide`, the plain prose brick — the safest
+  thing to do with markdown nobody claimed is to set it at reading measure.
+
+  Call it through `partialCached` — the page renders it twice.
+
+  @context {page} .
+  @returns {slice} one dict per section: Name, Content, Index
+*/ -}}
+
+{{- $page := . -}}
+{{- $rules := site.Params.sections | default slice -}}
+
+{{- $sections := slice -}}
+{{- range $part := split (partial "inline_attributes.html" $page.Content) "<hr>" -}}
+  {{- with trim $part "\n\r\t " -}}
+    {{- $sections = $sections | append . -}}
+  {{- end -}}
+{{- end -}}
+{{- $count := len $sections -}}
+
+{{- $out := slice -}}
+{{- range $i, $html := $sections -}}
+
+  {{- $name := "wide" -}}
+  {{- $matched := false -}}
+  {{- range $rule := $rules -}}
+    {{- if not $matched -}}
+      {{- $match := true -}}
+      {{- $tested := false -}}
+
+      {{- /* has / not_has: what the section is made of */ -}}
+      {{- with $rule.has -}}
+        {{- $tested = true -}}
+        {{- $match = and $match (partial "section_has.html" (dict "Html" $html "Selectors" .)) -}}
+      {{- end -}}
+      {{- with $rule.not_has -}}
+        {{- $tested = true -}}
+        {{- $match = and $match (not (partial "section_has.html" (dict "Html" $html "Selectors" .))) -}}
+      {{- end -}}
+
+      {{- /* is / not_is: where the section sits among the sections of this page */ -}}
+      {{- with $rule.is -}}
+        {{- $tested = true -}}
+        {{- $match = and $match (partial "section_position.html" (dict "Selector" . "Index" $i "Count" $count)) -}}
+      {{- end -}}
+      {{- with $rule.not_is -}}
+        {{- $tested = true -}}
+        {{- $match = and $match (not (partial "section_position.html" (dict "Selector" . "Index" $i "Count" $count))) -}}
+      {{- end -}}
+
+      {{- if not $tested -}}
+        {{- warnf "section_map: rule %q sets no condition and would claim every section — skipped" $rule.title -}}
+      {{- else if and $match $rule.title -}}
+        {{- $name = $rule.title -}}
+        {{- $matched = true -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+
+  {{- if not (templates.Exists (printf "_partials/sections/%s.html" $name)) -}}
+    {{- warnf "section_map: missing partial %q, falling back to sections/wide" $name -}}
+    {{- $name = "wide" -}}
+  {{- end -}}
+
+  {{- $out = $out | append (dict "Name" $name "Content" $html "Index" $i) -}}
+{{- end -}}
+
+{{- /*
+  The image bricks zig-zag: every other one sits on a tinted band. Which phase
+  a page starts on depends on what it opens with. After an `intro` the first
+  band is tinted, so the grey breaks up the white the intro ends on; after a
+  full-bleed `header` the first image stays white, so a tinted band does not
+  butt straight up against the hero. That is how the theme's own pages are
+  built — the home page opens `intro`, `image alt`, `image`, the demo pages
+  open `header`, `image`, `image alt`.
+
+  It cannot be written as a `has`/`is` rule, because it depends on the other
+  sections rather than on this one, so it is a pass over the routed list. The
+  two names are one brick with two faces: a rule naming either of them feeds
+  the same alternation.
+*/ -}}
+{{- $pair := slice "image" "image-alt" -}}
+{{- $tinted := false -}}
+{{- with $out -}}
+  {{- $tinted = eq (index . 0).Name "intro" -}}
+{{- end -}}
+{{- $zigzag := slice -}}
+{{- range $out -}}
+  {{- $section := . -}}
+  {{- if in $pair $section.Name -}}
+    {{- $section = merge $section (dict "Name" (cond $tinted "image-alt" "image")) -}}
+    {{- $tinted = not $tinted -}}
+  {{- end -}}
+  {{- $zigzag = $zigzag | append $section -}}
+{{- end -}}
+
+{{- return $zigzag -}}

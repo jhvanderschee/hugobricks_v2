@@ -1,0 +1,47 @@
+{{- /*
+  Renders `data/<lang>/reviews.yaml` as a list of testimonials
+  (name, function, image, description, stars).
+
+      {{< reviews >}}
+
+  Each testimonial is a `<blockquote>` inside a `<figure>` whose
+  `<figcaption>` names the reviewer, and the star rating is one element with
+  `role="img"` and a spelled-out label — five identical `<img alt="star">`
+  elements read as "star star star star star".
+
+  The five stars are empty `<span>`s rather than images. They are decorative
+  — the label above already says the rating — so this costs the page five
+  requests less per card, and lets the shape take `--accent` through a mask
+  instead of the theme's per-palette `filter` hack.
+
+  The `<ul class="reviews">` is also what routes the section: the `reviews`
+  rule in `params.sections` matches `ul.reviews`, so writing this shortcode
+  into a section is what picks the brick that wraps it.
+*/ -}}
+{{- $d := partial "data.html" .Page -}}
+{{- with $d.reviews -}}
+<ul class="reviews">
+    {{- range . -}}
+        {{- $stars := .stars | default 0 -}}
+        <li>
+            <figure>
+                {{ if gt $stars 0 }}
+                    <p class="stars" role="img" aria-label="Rated {{ $stars }} out of 5">
+                        {{- range $n := seq 5 -}}
+                            <span{{ if gt $n $stars }} class="empty"{{ end }}></span>
+                        {{- end -}}
+                    </p>
+                {{ end }}
+                <blockquote>{{ .description | markdownify }}</blockquote>
+                <figcaption>
+                    {{ with .image }}<img src="{{ . }}" alt="" width="52" height="52" class="avatar">{{ end }}
+                    <span>
+                        <strong>{{ .name }}</strong>
+                        {{ with .function }}<small>{{ . }}</small>{{ end }}
+                    </span>
+                </figcaption>
+            </figure>
+        </li>
+    {{- end -}}
+</ul>
+{{- end -}}

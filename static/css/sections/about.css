@@ -1,0 +1,17 @@
+/* -- brick: about --------------------------------------------------------
+   ![](/portrait.jpg)
+   # Hey, my name is …
+   Body copy.                                                             */
+
+section.about { text-align: center; }
+section.about p > img {
+    display: inline-block;
+    inline-size: 20rem;
+    max-inline-size: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-block: 0 1.5rem;
+}
+section.about h1 { font-size: clamp(2rem, 4vw, 2.6rem); }
+section.about ul.social { justify-content: center; }

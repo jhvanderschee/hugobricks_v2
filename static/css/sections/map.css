@@ -1,0 +1,38 @@
+/* -- brick: map ----------------------------------------------------------
+   ![](/map.png)
+   ## Contact us
+   Address lines.                                                         */
+
+section.map > .container {
+    display: flex;
+    justify-content: flex-end;
+    padding-block: 3rem;
+}
+section.map address {
+    min-inline-size: min(22rem, 100%);
+    margin: 0;
+    padding: 2.5rem 3rem;
+    background: var(--page);
+    border-radius: var(--radius);
+    box-shadow: 0 0 1.5rem rgb(0 0 0 / 0.05);
+}
+/* The pin, centred on the map. The theme tinted a black svg with a `filter`
+   hack spelled out once per palette; masking `--accent` through the same
+   shape is exact, and it is one rule instead of four. Only drawn when there
+   is a map to pin — a `map` brick with no image gets no floating marker.
+
+   `grid-area` is set here because the core's `section:has(> .backdrop) > *`
+   matches elements, and a pseudo-element is not one. It shares `z-index: -1`
+   with the backdrop and simply paints after it, so the pin sits on the map
+   while both stay behind the address. */
+section.map:has(.backdrop)::after {
+    content: "";
+    grid-area: 1 / 1;
+    z-index: -1;
+    background: var(--accent);
+    mask: url("/img/marker.svg") center / auto 4rem no-repeat;
+}
+
+@media (max-width: 55rem) {
+    section.map > .container { justify-content: center; }
+}

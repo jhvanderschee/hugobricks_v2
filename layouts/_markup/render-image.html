@@ -1,0 +1,16 @@
+{{- /*
+  Image render hook.
+
+  The counterpart to `render-link.html`: a plain `<img>` with the alt text the
+  markdown gave it, and no `class` or `id`. Those come from a kramdown-style
+  attribute list written after the image:
+
+      ![A red paraglider over the bay](/photo.jpg){:.background}
+
+  See `inline_attributes.html`, which hoists that list into this tag.
+
+  @context {image} .
+  @returns {string} one <img>
+*/ -}}
+<img src="{{ .Destination | safeURL }}" alt="{{ .PlainText }}"{{ with .Title }} title="{{ . }}"{{ end }}>
+{{- /* no trailing newline: a render hook writes inline content */ -}}

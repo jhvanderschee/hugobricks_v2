@@ -1,0 +1,55 @@
+{{- /*
+  The stylesheet.
+
+  It is authored as many small files under `static/css/` and shipped as one,
+  so splitting it costs nothing at request time — a `<link>` per brick, or a
+  chain of `@import`s, would trade one request for thirty.
+
+  Order is the cascade: tokens and faces first, then the shared core, then the
+  chrome, then the bricks. `sections/*.css` comes last so a brick can override
+  the core, and no brick file depends on the order of another.
+
+  In production the bundle is minified and fingerprinted, which is the cache
+  busting; in development the filename is stable, so a query string does it.
+
+  @context {page} .
+*/ -}}
+{{- /* TEMPORARY: flip to false to ship the core and the chrome without any
+       `sections/*.css`, to see what the bricks look like on the base styles
+       alone. Set it back to true — or delete these three lines and restore
+       the unconditional `append` — when you are done looking. */ -}}
+{{- $withSectionStyles := true -}}
+
+{{- $css := slice
+      (resources.Get "css/variables.css")
+      (resources.Get "css/fonts.css")
+      (resources.Get "css/style.css")
+      (resources.Get "css/header.css")
+      (resources.Get "css/footer.css") -}}
+{{- /* `data/settings.yaml` `intersectionobserver`: the sections fading in as
+       they scroll into view. Off, and the rules are not shipped at all — the
+       file is nothing but the animation, so there is nothing to leave in. */ -}}
+{{- if site.Data.settings.intersectionobserver -}}
+    {{- /* `with`, not a bare `append`: a `hugo server` that was already
+           running when this file was added does not know about it yet, and
+           appending the nil that `resources.Get` returns takes the whole
+           build down rather than dropping one stylesheet. Restart the server
+           and the rules appear. */ -}}
+    {{- with resources.Get "css/animations.css" -}}
+        {{- $css = $css | append . -}}
+    {{- end -}}
+{{- end -}}
+{{- if $withSectionStyles -}}
+    {{- $css = $css | append (resources.Match "css/sections/*.css") -}}
+{{- end -}}
+{{- /* Not `css/style.css`: `assetDir` is `static`, so the source files are
+       also published verbatim, and in development the bundle keeps its plain
+       name — a bundle called `css/style.css` would collide with the copy of
+       `static/css/style.css` at that same URL. */ -}}
+{{- $css = $css | resources.Concat "css/bundle.css" -}}
+{{- if hugo.IsProduction -}}
+    {{- $css = $css | minify | fingerprint -}}
+    <link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
+{{- else -}}
+    <link rel="stylesheet" href="{{ $css.RelPermalink }}?version={{ now.Unix }}">
+{{- end -}}

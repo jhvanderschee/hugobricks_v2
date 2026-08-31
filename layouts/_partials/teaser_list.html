@@ -1,0 +1,52 @@
+{{- /*
+  A grid of teaser cards, one per page handed in.
+
+  Shared by the `blog` and `services` shortcodes: a service reads exactly like
+  a post on a listing — a picture, a title, an opening line and a way in — so
+  it is the same card, the same `<ul class="posts">` and the same brick, which
+  is how the original theme lays out `/our-services/` too. Only the blog adds
+  a date, a tag filter and paging on top.
+
+  Each teaser is one link — picture and title together, so the whole card is
+  the target — then the optional date, the page's opening paragraph, and a
+  second link out. The title is a `<strong>` rather than a heading: a teaser is
+  a pointer to a page, not a section of this one, and a page of `<h3>`s that
+  lead somewhere else makes a confusing outline.
+
+  The summary is the page's first paragraph of prose rather than Hugo's
+  `.Summary`, which counts words from the top of the rendered page and so would
+  open with the breadcrumb trail and the title. `.Content` is cast to a string
+  first: `findRE` is handed `template.HTML` otherwise and quietly matches
+  nothing.
+
+  The `<ul class="posts">` is also what routes the section: the `posts` rule in
+  `params.sections` matches `ul.posts`.
+
+  @context {dict} . Pages (page slice), Dates (bool), PageSize (int, optional)
+*/ -}}
+{{- $icons := "/img/icons/material-symbols/200/rounded" -}}
+<ul class="posts"{{ with .PageSize }} data-pagesize="{{ . }}"{{ end }}>
+    {{- range .Pages -}}
+        {{- /* A page opens on its picture, and goldmark wraps a lone image in
+               a paragraph of its own, so the first `<p>` is not the first
+               sentence — it plainifies to nothing. Drop those first.
+               `delimit (first 1 …)` rather than a branch: a page with no prose
+               at all yields "" instead of an index out of range. `plainify`
+               drops the tags but leaves the entities goldmark put in — curly
+               quotes and ellipses — and printing those as text would show
+               `&lsquo;` on the card. */ -}}
+        {{- $prose := replaceRE `(?is)<p>\s*(?:<a\b[^>]*>\s*)?<img\b[^>]*>\s*(?:</a>\s*)?</p>` "" (string .Content) -}}
+        {{- $summary := trim (htmlUnescape (plainify (delimit (first 1 (findRE `(?is)<p>.*?</p>` $prose 1)) ""))) " \n\r\t" -}}
+        {{- $tags := slice -}}
+        {{- range .Params.tags -}}{{- with . -}}{{- $tags = $tags | append . -}}{{- end -}}{{- end -}}
+        <li{{ with $tags }} data-tags="{{ delimit . " " }}"{{ end }}>
+            <a href="{{ .RelPermalink }}">
+                {{ with .Params.image }}<img src="{{ . }}" alt="" width="600" height="400">{{ end }}
+                <strong>{{ .Title | safeHTML }}</strong>
+            </a>
+            {{ if $.Dates }}{{ with .Date }}<p class="meta"><span class="icon" style="--icon: url('{{ $icons }}/calendar_month-fill.svg')"></span><time datetime="{{ .Format "2006-01-02" }}">{{ . | time.Format ":date_medium" }}</time></p>{{ end }}{{ end }}
+            {{ with $summary }}<p>{{ . | truncate 190 }}</p>{{ end }}
+            <p><a class="button ghost smaller" href="{{ .RelPermalink }}">Read more</a></p>
+        </li>
+    {{- end -}}
+</ul>

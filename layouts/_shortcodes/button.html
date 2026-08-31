@@ -1,0 +1,25 @@
+{{- /*
+  A call-to-action link.
+
+      {{< button "Get started for free" "/get-started/" >}}
+      {{< button label="Contact us" url="/contact/" style="ghost" >}}
+
+  Deliberately has no inner text: referencing `.Inner` would make Hugo demand
+  a closing tag for every call, and the positional form above is what the
+  Hugobricks content is written in.
+
+  @param {string} [0|label]  the link text
+  @param {string} [1|url]    the link target
+  @param {string} [style]    ghost | secondary | secondary ghost
+  @param {string} [size]     smaller
+*/ -}}
+{{- $label := "" -}}
+{{- $url := "" -}}
+{{- if .IsNamedParams -}}
+    {{- $label = .Get "label" -}}
+    {{- $url = .Get "url" -}}
+{{- else -}}
+    {{- $label = .Get 0 -}}
+    {{- $url = .Get 1 -}}
+{{- end -}}
+<a class="button{{ with .Get "style" }} {{ . }}{{ end }}{{ with .Get "size" }} {{ . }}{{ end }}" href="{{ $url | default "#" }}">{{ $label }}</a>

@@ -1,0 +1,45 @@
+/* -- brick: reviews ------------------------------------------------------
+   Intro from the markdown, cards from data/<lang>/reviews.yaml.         */
+
+section.reviews li > figure {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    block-size: 100%;
+    margin: 0;
+    padding: 2.25rem 2rem;
+    background: var(--light);
+    border: 0.1rem solid var(--borderLight);
+    border-radius: var(--radius);
+}
+/* The rating. `--accent` masked through the star, the same trick the map
+   marker uses, rather than the theme's `filter: contrast() sepia()
+   hue-rotate()` hack respelled for each palette. */
+section.reviews .stars { display: flex; gap: 0.25rem; margin: 0; }
+section.reviews .stars span {
+    inline-size: 1rem;
+    block-size: 1rem;
+    background: var(--accent);
+    mask: url("/img/star.svg") center / contain no-repeat;
+}
+section.reviews .stars span.empty { background: var(--borderMedium); }
+section.reviews blockquote {
+    flex: 1;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    font-style: normal;
+}
+section.reviews figcaption {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0;
+    font-size: 1rem;
+    text-align: start;
+}
+/* Shape and crop come from `.avatar` in the core; only the size is the
+   brick's own. */
+section.reviews figcaption img { inline-size: 3.25rem; block-size: 3.25rem; margin: 0; }
+section.reviews figcaption strong { display: block; font-size: 1.1rem; line-height: 1.45; }
+section.reviews figcaption small { display: block; font-size: 1rem; line-height: 1.45; color: var(--textDarker); }

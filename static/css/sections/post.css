@@ -1,0 +1,88 @@
+/* -- brick: post ---------------------------------------------------------
+   A single article at reading measure: breadcrumbs and a centred title, the
+   byline, the featured image at a wider measure, then the body. The values
+   are the original theme's `section.post`.                               */
+
+section.post > .container { max-inline-size: 50rem; }
+/* The picture is allowed past the reading measure, so the article opens on
+   something wider than the column it is read in. */
+section.post > .container.wide { max-inline-size: 62rem; }
+
+section.post h1 { text-align: center; }
+/* A post with neither a date nor tags has no byline to space the title from. */
+section.post h1:last-child { margin-block-end: 3rem; }
+
+section.post .featuredimage {
+    inline-size: 100%;
+    aspect-ratio: 2;
+    object-fit: cover;
+    border-radius: var(--radius);
+    margin-block-end: 3rem;
+}
+
+/* The byline. `--textDarker` rather than the muted `--textMedium`: these are
+   facts about the post, not a caption. The negative top margin pulls it up
+   under the title, as in the theme. */
+section.post .meta {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    margin-block: -0.75rem 3rem;
+    font-size: 0.9rem;
+    color: var(--textDarker);
+}
+section.post .meta .entry { display: flex; align-items: center; gap: 0.4rem; }
+/* A tag reads as part of the byline, not as a link in a sentence — the
+   theme's `.meta a`. It still underlines on hover, so it is findable. */
+section.post .meta a { color: inherit; text-decoration: none; }
+@media (hover: hover) {
+    section.post .meta a:hover { text-decoration: underline; }
+}
+/* `--accent` masked through the glyph, the same trick the feature icons and
+   the review stars use, in place of the theme's per-palette `filter` hack. */
+section.post .meta .icon {
+    inline-size: 1rem;
+    block-size: 1rem;
+    position: relative;
+    inset-block-end: 0.1rem;
+    background: var(--textDarker);
+    mask: var(--icon) center / contain no-repeat;
+}
+
+/* The opening paragraph is the standfirst, set larger than the body. */
+section.post > .container > p:first-child,
+section.post > .container > p:first-child a {
+    color: var(--textDark);
+    font-size: 1.52rem;
+    line-height: 1.4;
+}
+
+/* Inside the article every heading drops a level. The page already has one
+   display heading — the title above — and a body-face `h2` at h3's size keeps
+   the article's own sections subordinate to it instead of competing. It is
+   what the original theme does with `.container.post h2` and `h3`, and what it
+   does for `section.docs` too.
+
+   The space above a heading is padding rather than margin so it cannot
+   collapse into the paragraph before it, which is the theme's trick as well;
+   `h2 + h3` drops it, because a subheading straight under its heading needs no
+   gap at all. */
+section.post > article h2 {
+    font-family: var(--fontBody);
+    font-size: 1.25rem;
+    line-height: 1.3;
+    font-weight: 700;
+    color: var(--textDark);
+    margin-block: 0 0.4rem;
+    padding-block-start: 1.5rem;
+}
+section.post > article h3 {
+    font-size: 1.1rem;
+    line-height: 1.4;
+    color: var(--textMedium);
+    margin-block: 0 0.2rem;
+    padding-block-start: 1rem;
+}
+section.post > article :is(h2, h3):first-child { padding-block-start: 0; }
+section.post > article h2 + h3 { padding-block-start: 0; }

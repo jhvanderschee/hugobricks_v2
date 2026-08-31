@@ -1,0 +1,41 @@
+{{- /*
+  Splits a collection brick's rendered content into its intro and its list.
+
+  Every collection brick — `features`, `team`, `blocks`, `reviews`, `prices`,
+  `posts`, `webshop` — is a centred intro above a grid, and the two want
+  different measures: the intro reads at `.container.small`, the grid runs the
+  full `.container`. Two containers rather than one, as in the original theme.
+
+  Constraining the prose inside the wide container instead would measure it
+  against the wrong box — it would come out one gutter wider than the theme's,
+  because `.container.small` spends its own padding on the gutter and a
+  `max-inline-size` on a child does not.
+
+  The split is at the first `<ul>`: everything before it is the intro,
+  everything from there on is the list, so nothing is dropped even if a brick
+  writes prose after its grid. A section with no list of its own is all intro,
+  and the brick appends whatever it builds from data.
+
+  A `<form>` before that `<ul>` goes with the list rather than the intro. That
+  is the `blog` shortcode's tag filter, which belongs over the grid it filters
+  and at the grid's measure, not centred in the prose column. No collection
+  brick puts a form in its intro, so the earlier of the two openings is always
+  where the list begins.
+
+  @context {string} . The rendered html of one section.
+  @returns {dict} Intro (string), List (string)
+*/ -}}
+{{- $html := string . -}}
+{{- $intro := $html -}}
+{{- $list := "" -}}
+{{- $parts := split $html "<ul" -}}
+{{- if gt (len $parts) 1 -}}
+    {{- $intro = index $parts 0 -}}
+    {{- $list = printf "<ul%s" (delimit (after 1 $parts) "<ul") -}}
+{{- end -}}
+{{- $forms := split $intro "<form" -}}
+{{- if gt (len $forms) 1 -}}
+    {{- $list = printf "<form%s%s" (delimit (after 1 $forms) "<form") $list -}}
+    {{- $intro = index $forms 0 -}}
+{{- end -}}
+{{- return dict "Intro" (trim $intro "\n\r\t ") "List" (trim $list "\n\r\t ") -}}

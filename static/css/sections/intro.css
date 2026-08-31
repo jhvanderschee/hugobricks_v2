@@ -1,0 +1,10 @@
+/* -- brick: intro --------------------------------------------------------
+   # Heading
+   One paragraph of lead copy.
+   [Call to action](/get-started/)
+   ![](/illustration.svg)                                                 */
+
+section.intro > .container:first-child {padding-top: 1rem;}
+section.intro { text-align: center; }
+section.intro h1 + p { margin-block-start: -0.25rem; }
+section.intro p > img { margin: 3rem auto 0; inline-size: min(38rem, 85%); }

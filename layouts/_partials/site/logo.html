@@ -1,0 +1,13 @@
+{{- /*
+  Site logo. A link, not a heading: the page heading lives in the content.
+
+  @context {dict} . Page, Logo (image path, may be empty)
+*/ -}}
+{{- $d := partial "data.html" .Page -}}
+<a class="logo" href="{{ "/" | relLangURL }}#top" rel="home">
+    {{ with .Logo }}<img src="{{ . }}" alt="" width="48" height="48">{{ end }}
+    <span>
+        <strong>{{ $d.general.title }}</strong>
+        {{ with $d.header.logo_subtitle }}<small>{{ . }}</small>{{ end }}
+    </span>
+</a>

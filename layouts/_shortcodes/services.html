@@ -1,0 +1,16 @@
+{{- /*
+  Renders the site's services as a grid of teaser cards.
+
+      {{< services >}}
+
+  The services are the pages of `content/<lang>/services/`, so a new service
+  appears here by existing rather than by being added to a hand-written list.
+
+  The cards are `teaser_list.html`, the same ones the blog uses, and they route
+  the section to the same `posts` brick — a service listing and a post listing
+  are the same thing with different pages in them, which is how the original
+  theme builds `/our-services/` too. No date: a service is not news.
+*/ -}}
+{{- with sort (where site.RegularPages "Section" "services") "Title" -}}
+    {{- partial "teaser_list.html" (dict "Pages" . "Dates" false) -}}
+{{- end -}}

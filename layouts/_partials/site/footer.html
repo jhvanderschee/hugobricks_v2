@@ -1,0 +1,47 @@
+{{- /*
+  The site contentinfo landmark. Menu, socials and colophon come from
+  `data/<lang>/footer.yaml`; the dark variant from `data/settings.yaml`, which
+  a page may override with `dark_footer` in its front matter — the same switch
+  the banner offers in `site/header.html`, so a page can pair a dark banner
+  with a light footer or the other way round.
+
+  Revised from the original theme: the link list is wrapped in a labelled
+  `<nav>`.
+
+  The language switcher is `site/languageswitch.html`, the same control the
+  banner carries — the theme's `<select>` that navigates on change, labelled
+  rather than nameless and driven from `site.js` rather than an inline
+  `onchange`. Here it wears "Change language"; in the banner, where there is
+  no room for it, the current language's code.
+
+  @context {page} .
+*/ -}}
+{{- $d := partial "data.html" . -}}
+{{- $s := site.Data.settings -}}
+{{- $dark := $s.dark_footer | default false -}}
+{{- if isset .Params "dark_footer" -}}
+    {{- $dark = .Params.dark_footer -}}
+{{- end -}}
+<footer class="sitefooter{{ if $dark }} dark{{ end }}">
+
+    <div class="container">
+        {{ partial "site/logo.html" (dict "Page" . "Logo" (or $d.footer.logo_image $s.favicon_image)) }}
+
+        {{ with $d.footer.menuitems }}
+            <nav aria-label="Footer">
+                {{ partial "site/menu.html" (dict "Page" $ "Items" .) }}
+            </nav>
+        {{ end }}
+
+        {{ partial "site/socials.html" . }}
+    </div>
+
+    <div class="colophon">
+        <div class="container">
+            {{ with $d.footer.footer_text }}<div>{{ . | markdownify }}</div>{{ end }}
+
+            {{ partial "site/languageswitch.html" (dict "Page" . "Label" "Change language") }}
+        </div>
+    </div>
+
+</footer>

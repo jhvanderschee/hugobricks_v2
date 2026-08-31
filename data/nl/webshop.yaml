@@ -1,0 +1,38 @@
+cart_link: /cart
+checkout_link: /checkout
+payment_link: /payment
+thankyou_link: /thankyou
+products_link: /webshop
+show_cart_icon: true
+send_order_to_mail: joost@vdschee.nl
+currency_code: EUR
+currency_symbol: €
+shipping:
+  active: true
+  options:
+    - title: Shipping NL
+      label: The Netherlands
+      price: 0
+    - title: Shipping EU
+      label: European Union
+      price: 7.5
+    - title: Shipping World
+      label: Rest of the world
+      price: 15
+custom_values:
+    - title: Gift wrapping
+      options:
+        - title: Not gift wrapped
+          value: no
+          price: 0
+        - title: Gift wrapped
+          value: yes
+          price: 2
+    - title: Custom engraving
+      options:
+        - title: 'No engraving'
+          value: no
+          price: 0
+        - title: 'Custom engraved'
+          value: yes
+          price: 20

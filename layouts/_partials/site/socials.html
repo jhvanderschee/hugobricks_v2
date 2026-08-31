@@ -1,0 +1,17 @@
+{{- /*
+  The social links from `data/<lang>/footer.yaml`.
+
+  Revised from the original theme: each icon link carries a real accessible
+  name in a visually hidden span, instead of leaning on the `alt` of a
+  decorative icon.
+
+  @context {page} .
+*/ -}}
+{{- $d := partial "data.html" . -}}
+{{- with $d.footer.socials -}}
+    <ul class="social" aria-label="Social media">
+        {{- range . -}}
+            <li><a class="button icon" href="{{ .link | safeURL }}" rel="noopener"><img src="{{ .logo_image }}" alt="" width="20" height="20"><span class="sr-only">{{ .title }}</span></a></li>
+        {{- end -}}
+    </ul>
+{{- end -}}

@@ -1,0 +1,15 @@
+{{- /*
+  Brick: image-alt
+  The `image` brick mirrored — picture first, prose second — on a tinted band.
+  Stack it between two `image` bricks to get the alternating zig-zag.
+
+  @context {dict} . Content, Name, Index, Page
+*/ -}}
+{{- $label := partial "section_label.html" .Content -}}
+{{- $parts := partial "split_media.html" .Content -}}
+<section class="image alt hasbackgroundcolor"{{ with $label }} aria-labelledby="{{ . }}"{{ end }}>
+    <div class="container twocols">
+        {{ with $parts.Media }}<figure class="media">{{ . | safeHTML }}</figure>{{ end }}
+        <div class="text">{{ $parts.Text | safeHTML }}</div>
+    </div>
+</section>

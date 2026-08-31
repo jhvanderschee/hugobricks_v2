@@ -1,0 +1,17 @@
+/* -- brick: checkout -----------------------------------------------------
+   Delivery details beside the order summary.                             */
+
+section.checkout > .container { display: grid; grid-template-columns: 2fr 1.1fr; gap: 3rem; }
+section.checkout > .container > h1 { grid-column: 1 / -1; }
+section.checkout .calculation {
+    background: var(--light);
+    border-radius: 0.25rem;
+    padding: 0.75rem 1rem;
+    text-align: end;
+}
+section.checkout .calculation span { float: inline-start; }
+section.checkout .calculation .sum { border-block-start: 0.1rem solid var(--borderMedium); margin-block-start: 0.35rem; padding-block-start: 0.1rem; }
+
+@media (max-width: 800px) {
+    section.checkout > .container { grid-template-columns: 1fr; max-inline-size: var(--measure-small); }
+}

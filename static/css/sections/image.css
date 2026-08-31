@@ -1,0 +1,49 @@
+/* -- brick: image --------------------------------------------
+   ## Heading
+   Body copy, a list, a link.
+   ![](/illustration.svg)
+
+   The partial has already lifted the image into its own <figure>, so the
+   two columns are two real elements and the reading order is honest.     */
+
+section.image {
+    background: var(--band, transparent);
+    border-block: var(--band-border, 0) solid var(--borderLight);
+}
+/* Copy beside a picture reads centred against it, where the core default
+   hangs both columns from the top. */
+section.image .twocols { align-items: center; }
+section.image .text { order: var(--text-order, 1); }
+section.image .text > :last-child { margin-block-end: 0; }
+section.image .media { order: var(--media-order, 2); margin: 0; text-align: center; }
+section.image .media img { margin: 0 auto; border-radius: var(--radius); }
+section.image .media img[src$=".svg"] { inline-size: 85%; border-radius: 0; }
+
+/* A run of plain `image` bricks zig-zags without being asked to: every second
+   brick of the run swaps its columns onto a tinted band. Any other brick ends
+   the run and the count starts over — an explicit `image-alt` included, since
+   that one paints its own band and would otherwise double up. Every link in
+   the chain adds a class, so the longer selector always outranks the shorter
+   one it also matches and the parity holds down the run; a run longer than six
+   keeps the parity of the sixth. */
+main > .image:not(.alt) + .image:not(.alt),
+main > .image:not(.alt) + .image:not(.alt) + .image:not(.alt) + .image:not(.alt),
+main > .image:not(.alt) + .image:not(.alt) + .image:not(.alt) + .image:not(.alt) + .image:not(.alt) + .image:not(.alt) {
+    --band: var(--light);
+    --band-border: 0.1rem;
+    --text-order: 2;
+    --media-order: 1;
+}
+main > .image:not(.alt) + .image:not(.alt) + .image:not(.alt),
+main > .image:not(.alt) + .image:not(.alt) + .image:not(.alt) + .image:not(.alt) + .image:not(.alt) {
+    --band: transparent;
+    --band-border: 0;
+    --text-order: 1;
+    --media-order: 2;
+}
+
+@media (max-width: 40rem) {
+    /* Keep the text first on small screens, whichever variant it is. */
+    section.image .text { order: 1; }
+    section.image .media { order: 2; }
+}

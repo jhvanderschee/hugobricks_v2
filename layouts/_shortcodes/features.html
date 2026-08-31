@@ -1,0 +1,27 @@
+{{- /*
+  Renders `data/<lang>/features.yaml` as a grid of icon features
+  (icon, title, description).
+
+      {{< features >}}
+
+  The icon is an empty `<span>` carrying its file in a custom property, not an
+  `<img>`: it is decorative, and drawing it as `--accent` masked through the
+  glyph lets it follow the palette. That is the same trick the review stars
+  use, in place of the theme's `filter: contrast() sepia() hue-rotate()` hack.
+
+  The `<ul class="features">` is also what routes the section: the `features`
+  rule in `params.sections` matches `ul.features`, so writing this shortcode
+  into a section is what picks the brick that wraps it.
+*/ -}}
+{{- $d := partial "data.html" .Page -}}
+{{- with $d.features -}}
+<ul class="features">
+    {{- range . -}}
+        <li>
+            {{ with .icon }}<span class="icon" style="--icon: url('{{ . }}')"></span>{{ end }}
+            <h3>{{ .title }}</h3>
+            {{ with .description }}<p>{{ . | markdownify }}</p>{{ end }}
+        </li>
+    {{- end -}}
+</ul>
+{{- end -}}
