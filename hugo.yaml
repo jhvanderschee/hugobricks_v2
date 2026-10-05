@@ -173,6 +173,9 @@ outputs:
   home:
     - html
     - rss
+    # `json` renders layouts/home.json, the page lookup the Usecue CMS uses
+    # for instant publishing.
+    - json
     # Search ships no index: `enable_search` in data/settings.yaml puts the
     # banner's search icon up, and the `/search` page it points to scopes a
-    # Google search to this site. A local `json` index would slot in here.
+    # Google search to this site.
