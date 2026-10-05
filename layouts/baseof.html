@@ -1,5 +1,5 @@
 {{- $d := partial "data.html" . -}}
-{{- $s := site.Data.settings -}}
+{{- $s := hugo.Data.settings -}}
 <!DOCTYPE html>
 {{- $color := or .Params.color_name $s.color_name -}}
 <html lang="{{ .Language.Lang }}"{{ with $color }} data-color="{{ . }}"{{ end }} class="{{ if .IsHome }}home {{ end }}{{ .Layout }} {{ with .File }}{{ if ne .BaseFileName `_index` }}{{ .Section }}{{ else }}list{{ end }}{{ end }}{{ if eq .Layout `error` }} home{{ end }} {{ .Language.Lang }}">

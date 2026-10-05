@@ -38,7 +38,7 @@
   @context {page} .
 */ -}}
 {{- $d := partial "data.html" . -}}
-{{- $s := site.Data.settings -}}
+{{- $s := hugo.Data.settings -}}
 
 {{- /* Bricks that paint a full-bleed backdrop, and so can carry the banner. */ -}}
 {{- $backdropBricks := slice "header" -}}

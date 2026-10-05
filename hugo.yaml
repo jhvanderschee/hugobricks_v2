@@ -7,28 +7,28 @@ assetDir: static
 
 languages:
   en:
-    languageCode: en
-    languageName: English
+    locale: en
+    label: English
     contentDir: content/en
     weight: 1
   nl:
-    languageCode: nl
-    languageName: Nederlands
+    locale: nl
+    label: Nederlands
     contentDir: content/nl
     weight: 2
   de:
-    languageCode: de
-    languageName: Deutsch
+    locale: de
+    label: Deutsch
     contentDir: content/de
     weight: 3
   cs:
-    languageCode: cs
-    languageName: Čeština
+    locale: cs
+    label: Čeština
     contentDir: content/cs
     weight: 4
   ko:
-    languageCode: ko
-    languageName: 한국어
+    locale: ko
+    label: 한국어
     contentDir: content/ko
     weight: 5
 

@@ -8,13 +8,13 @@ Hugobricks has been fully prepared to support a multilingual setup. In the docs 
 defaultContentLanguage: en
 languages:
   en:
-    languageCode: en
-    languageName: English
+    locale: en
+    label: English
     contentDir: content/en
     weight: 1
   nl:
-    languageCode: nl
-    languageName: Nederlands
+    locale: nl
+    label: Nederlands
     contentDir: content/nl
     weight: 2
 ```

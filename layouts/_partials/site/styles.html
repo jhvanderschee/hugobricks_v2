@@ -31,7 +31,7 @@
 {{- /* `data/settings.yaml` `intersectionobserver`: the sections fading in as
        they scroll into view. Off, and the rules are not shipped at all — the
        file is nothing but the animation, so there is nothing to leave in. */ -}}
-{{- if site.Data.settings.intersectionobserver -}}
+{{- if hugo.Data.settings.intersectionobserver -}}
     {{- /* `with`, not a bare `append`: a `hugo server` that was already
            running when this file was added does not know about it yet, and
            appending the nil that `resources.Get` returns takes the whole
@@ -44,7 +44,7 @@
 {{- /* `data/settings.yaml` `customcursor`: the dot that trails the mouse.
        Off, and nothing ships — the file is nothing but the cursor. The same
        `with` guard as above, for the same reason. */ -}}
-{{- if site.Data.settings.customcursor -}}
+{{- if hugo.Data.settings.customcursor -}}
     {{- with resources.Get "css/customcursor.css" -}}
         {{- $css = $css | append . -}}
     {{- end -}}

@@ -6,7 +6,7 @@
   apple-touch-icon and a generated site.webmanifest. Without that block the
   partial falls back to a single <link rel="icon"> from `favicon_image`.
 */ -}}
-{{- $s := site.Data.settings -}}
+{{- $s := hugo.Data.settings -}}
 {{- with $s.favicon -}}
     {{- $asset := "" -}}
     {{- with .asset }}{{ $asset = resources.Get . }}{{ end -}}

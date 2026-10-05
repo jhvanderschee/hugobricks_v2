@@ -17,7 +17,7 @@
   @context {page} .
 */ -}}
 {{- $d := partial "data.html" . -}}
-{{- $s := site.Data.settings -}}
+{{- $s := hugo.Data.settings -}}
 {{- $dark := $s.dark_footer | default false -}}
 {{- if isset .Params "dark_footer" -}}
     {{- $dark = .Params.dark_footer -}}

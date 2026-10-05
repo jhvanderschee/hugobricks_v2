@@ -1,7 +1,7 @@
 {{- /*
   Returns the data bundle for the language being rendered, so templates can
   say `{{ $d := partial "data.html" . }}{{ $d.general.title }}` instead of
-  repeating `(index site.Data site.Language.Lang)` everywhere.
+  repeating `(index hugo.Data site.Language.Lang)` everywhere.
 
   Bundles live in `data/<lang>/` — general, header, footer, openinghours,
   people, reviews, features, faqs, webshop and the three form definitions.
@@ -10,4 +10,4 @@
   @context {page} .
   @returns {map}
 */ -}}
-{{- return (index site.Data site.Language.Lang) -}}
+{{- return (index hugo.Data site.Language.Lang) -}}

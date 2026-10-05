@@ -38,7 +38,7 @@
 {{- with sort (uniq $tags) -}}
 <form class="filter">
     <label class="sr-only" for="tagfilter">{{ i18n "Filter posts by tag" }}</label>
-    <select id="tagfilter" data-numbers="{{ site.Data.settings.filter_has_numbers }}" data-label-stop="{{ i18n "Stop filtering on" }}">
+    <select id="tagfilter" data-numbers="{{ hugo.Data.settings.filter_has_numbers }}" data-label-stop="{{ i18n "Stop filtering on" }}">
         <option value="">{{ i18n "Filter tags" }}</option>
         {{- range $name := . -}}<option value="{{ $name }}">{{ $name }}</option>{{- end -}}
     </select>
@@ -46,6 +46,6 @@
 </form>
 {{- end -}}
 
-{{- partial "teaser_list.html" (dict "Pages" . "Dates" true "PageSize" site.Data.settings.page_size) -}}
+{{- partial "teaser_list.html" (dict "Pages" . "Dates" true "PageSize" hugo.Data.settings.page_size) -}}
 <p class="loadmore"><button type="button" class="button secondary ghost smaller" hidden>{{ i18n "Load more posts" }}…</button></p>
 {{- end -}}
