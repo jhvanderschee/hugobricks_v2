@@ -1,44 +1,61 @@
 /* ==========================================================================
    Chrome: the custom cursor — data/settings.yaml `customcursor`
 
-   A small dot that trails the pointer on a damped path, drawn in difference
-   blend so it reads on any ground. It swells into a ring over anything the
-   pointer cursor marks as clickable, and fades away while the mouse rests or
-   the page scrolls. `js/customcursor.js` steers it: it puts the `.cursordot`
-   element in the page, moves it by transform — its own compositor layer, so
-   following the mouse never restyles or relays the page — and flips the
-   state classes on body. When the script does not run — or declines to, on
-   touch or under `prefers-reduced-motion` — none of this exists.
+   A small dot that trails the pointer on a damped path. It swells into a
+   ring over anything clickable, and fades away while the mouse rests or the
+   page scrolls. `js/customcursor.js` steers it: it puts the `.cursordot`
+   element in the page, moves it with the `translate` property — its own
+   compositor layer, so following the mouse never restyles or relays the
+   page — and flips the state classes on body. When the script does not run
+   — or declines to, on touch or under `prefers-reduced-motion` — none of
+   this exists.
 
-   The blend has to sit on the moved element itself: a transform makes an
-   isolated group, so on a child of the moving element `difference` would
-   only ever see its transparent parent.
+   Everything that changes is compositor-only: the position (`translate`),
+   the swell (`scale`, on an element always drawn at ring size) and the fill
+   and fade (`opacity`). No blend mode — `difference` would have the browser
+   re-blend the dot against the page under it on every frame. Instead the dot
+   carries both a light and a dark edge, so it reads on any ground.
+
+   `translate` and `scale` are separate properties so the script and the
+   stylesheet never write the same one; translate applies after scale, so the
+   swell stays centred on the point.
    ========================================================================== */
 
 body.customcursor .cursordot {
+    --cursorsize: 3rem;
     position: fixed;
-    inset-block-start: 0;
-    inset-inline-start: 0;
+    inset-block-start: calc(var(--cursorsize) / -2);
+    inset-inline-start: calc(var(--cursorsize) / -2);
     z-index: 999;
-    inline-size: 0.8rem;
-    block-size: 0.8rem;
-    background: #fff;
+    inline-size: var(--cursorsize);
+    block-size: var(--cursorsize);
+    box-sizing: border-box;
     border: 0.12rem solid #fff;
     border-radius: 50%;
-    mix-blend-mode: difference;
+    box-shadow: 0 0 0 0.06rem #000, inset 0 0 0 0.06rem #000;
     pointer-events: none;
-    will-change: transform;
+    will-change: translate, scale, opacity;
     opacity: 0.35;
+    /* 0.8rem of 3rem: the dot at rest. */
+    scale: 0.2667;
     transition:
         opacity 0.5s ease-in-out,
-        inline-size 0.25s ease-in-out,
-        block-size 0.25s ease-in-out,
-        background 0.25s ease-in-out;
+        scale 0.25s ease-in-out;
+}
+/* The fill, faded rather than recoloured so the ring change stays off the
+   main thread too. It brings its own light edge, sized for the shrunken dot
+   (0.45rem at ring size is 0.12rem at rest), since the ring's border all but
+   vanishes at that scale. */
+body.customcursor .cursordot::before {
+    content: "";
+    position: absolute;
+    inset: -0.12rem;
+    border-radius: 50%;
+    background: #000;
+    box-shadow: inset 0 0 0 0.45rem #fff, 0 0 0 0.2rem #000;
+    transition: opacity 0.25s ease-in-out;
 }
 body.customcursor.hidecursor .cursordot { opacity: 0; }
 /* Over something clickable: the dot opens into a ring. */
-body.customcursor.cursorpointer .cursordot {
-    inline-size: 3rem;
-    block-size: 3rem;
-    background: transparent;
-}
+body.customcursor.cursorpointer .cursordot { scale: 1; }
+body.customcursor.cursorpointer .cursordot::before { opacity: 0; }
