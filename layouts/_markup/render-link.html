@@ -19,9 +19,11 @@
   @returns {string} one <a>
 */ -}}
 {{- $href := .Destination -}}
-{{- with resources.GetMatch $href -}}
-    {{- if and (eq .ResourceType "image") (ne .MediaType.SubType "svg") -}}
-        {{- $href = (.Fit "1600x1600 webp q50").RelPermalink -}}
+{{- if and $href (not (findRE `^([a-zA-Z][a-zA-Z0-9+.-]*:|//|#|\?)` $href 1)) -}}
+    {{- with resources.GetMatch $href -}}
+        {{- if and (eq .ResourceType "image") (ne .MediaType.SubType "svg") -}}
+            {{- $href = (.Fit "1600x1600 webp q50").RelPermalink -}}
+        {{- end -}}
     {{- end -}}
 {{- end -}}
 <a href="{{ $href | safeURL }}"{{ with .Title }} title="{{ . }}"{{ end }}>{{ .Text }}</a>
